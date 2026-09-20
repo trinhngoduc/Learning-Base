@@ -101,6 +101,101 @@ body.sidebar-collapsed #sidebar {
     backdrop-filter: blur(4px);
 }
 #iframeWrapper iframe { width: 100%; height: 100%; border: none; display: block; }
+
+/* ═══════════ PDF VIEWER ═══════════ */
+#pdfWrapper {
+    flex: 1; border-radius: 20px; overflow: hidden;
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    display: none; flex-direction: column;
+    background: rgba(20, 16, 40, 0.55);
+    backdrop-filter: blur(4px);
+    position: relative; min-height: 0;
+}
+#pdfToolbar {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 12px; flex-shrink: 0;
+    background: rgba(37, 31, 69, 0.75);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    flex-wrap: wrap;
+}
+.pdf-tbtn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+    padding: 6px 12px; border-radius: 10px;
+    font-size: 11px; font-weight: 700; font-family: inherit;
+    color: var(--muted); background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    cursor: pointer; transition: all 0.18s; white-space: nowrap;
+}
+.pdf-tbtn:hover {
+    background: rgba(139, 92, 246, 0.16);
+    border-color: rgba(139, 92, 246, 0.3);
+    color: var(--vio-l);
+}
+.pdf-tbtn:active { transform: scale(0.96); }
+.pdf-tbtn:disabled { opacity: 0.35; cursor: default; transform: none; }
+.pdf-zoomlabel {
+    font-size: 11px; font-weight: 800; color: var(--vio-l);
+    min-width: 46px; text-align: center; letter-spacing: 0.03em;
+}
+.pdf-pagetag {
+    font-size: 10px; font-weight: 700; color: var(--faint);
+    letter-spacing: 0.06em; text-transform: uppercase; margin-left: auto;
+}
+#pdfScroll {
+    flex: 1; overflow: auto; padding: 16px 12px 24px;
+    display: flex; flex-direction: column; align-items: center;
+    min-height: 0; -webkit-overflow-scrolling: touch;
+}
+#pdfPages {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 14px; width: 100%;
+}
+.pdf-page {
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 10px; background: #ffffff;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55);
+    overflow: hidden; max-width: 100%;
+}
+.pdf-page canvas { display: block; max-width: 100%; height: auto; }
+#pdfLoading {
+    position: absolute; inset: 0;
+    display: none; align-items: center; justify-content: center;
+    flex-direction: column; gap: 12px;
+    background: rgba(14, 10, 30, 0.82);
+    backdrop-filter: blur(6px);
+    z-index: 5; padding: 24px; text-align: center;
+    font-size: 12px; font-weight: 700; color: var(--vio-l);
+}
+.pdf-spinner {
+    width: 34px; height: 34px; border-radius: 9999px;
+    border: 3px solid rgba(139, 92, 246, 0.2);
+    border-top-color: #a78bfa;
+    animation: pdfspin 0.8s linear infinite;
+}
+@keyframes pdfspin { to { transform: rotate(360deg); } }
+
+/* ═══════════ TYPE SWITCH (MODAL) ═══════════ */
+.type-switch {
+    display: flex; gap: 6px; padding: 4px; border-radius: 14px;
+    background: rgba(0, 0, 0, 0.28);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+.type-opt {
+    flex: 1; padding: 9px 8px; border-radius: 11px;
+    border: 1px solid transparent; background: transparent;
+    color: var(--muted); font-family: inherit;
+    font-size: 11.5px; font-weight: 700; cursor: pointer;
+    transition: all 0.18s; white-space: nowrap;
+}
+.type-opt:hover { color: var(--text); background: rgba(255, 255, 255, 0.05); }
+.type-opt.active {
+    background: rgba(139, 92, 246, 0.28);
+    border-color: rgba(139, 92, 246, 0.42);
+    color: #fff;
+    box-shadow: 0 2px 12px rgba(139, 92, 246, 0.22);
+}
+
 #welcomeState {
     flex: 1; border-radius: 20px; overflow: hidden;
     border: 1px solid var(--glass-border);
@@ -183,6 +278,14 @@ body.sidebar-collapsed #sidebar {
 }
 .app-item:hover .drag-handle { opacity: 0.7; }
 .app-item:active .drag-handle { opacity: 1; }
+.pdf-tag {
+    display: inline-block; margin-left: 6px;
+    padding: 1px 5px; border-radius: 5px;
+    background: rgba(244, 114, 182, 0.15);
+    border: 1px solid rgba(244, 114, 182, 0.3);
+    color: #f9a8d4; font-size: 8px; font-weight: 800;
+    letter-spacing: 0.06em; vertical-align: middle;
+}
 .icon-btn {
     display: inline-flex; align-items: center; justify-content: center;
     padding: 7px; border-radius: 11px;
@@ -262,6 +365,7 @@ body.sidebar-collapsed #sidebar {
     backdrop-filter: blur(4px);
     border: 1px solid rgba(255, 255, 255, 0.06);
     cursor: pointer; transition: all 0.18s;
+    font-family: inherit;
 }
 .btn-sec:hover {
     background: rgba(255, 255, 255, 0.08);
@@ -341,6 +445,7 @@ body.sidebar-collapsed #sidebar {
     #headerCard { border-radius: 16px; height: 48px; padding: 0 10px; }
     #welcomeState { border-radius: 16px; padding: 24px; }
     #iframeWrapper { border-radius: 16px; }
+    #pdfWrapper { border-radius: 16px; }
 }
 .clock-center {
     display: inline-flex; align-items: center; gap: 8px;
@@ -403,7 +508,6 @@ body.sidebar-collapsed #sidebar {
 
 /* ═══════════════════════════════════════════════════════════
    LITE MODE — TỰ ĐỘNG ÁP DỤNG CHO MOBILE/TABLET (≤1024px)
-   Giúp máy yếu chạy mượt hơn — KHÔNG liên quan đến compact header
    ═══════════════════════════════════════════════════════════ */
 @media (max-width: 1024px) {
     * {
@@ -415,7 +519,7 @@ body.sidebar-collapsed #sidebar {
     #sidebarBackdrop { background: rgba(0, 0, 0, 0.88) !important; }
     #addModal, #editModal, #deleteConfirmModal { background: rgba(0, 0, 0, 0.88) !important; }
     body { background-image: none !important; }
-    #sidebar, #headerCard, #welcomeState, #iframeWrapper, .modal-card {
+    #sidebar, #headerCard, #welcomeState, #iframeWrapper, #pdfWrapper, .modal-card {
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5) !important;
     }
     .add-btn, .btn-pri, .btn-danger, .app-item.active { box-shadow: none !important; }
@@ -427,18 +531,15 @@ body.sidebar-collapsed #sidebar {
         color: #c4b5fd !important;
     }
     #appList { content-visibility: auto; contain-intrinsic-size: auto 300px; }
+    #pdfWrapper { background: #1a1530 !important; }
+    #pdfToolbar { background: #241d44 !important; }
+    .pdf-page { box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6) !important; }
 }
 
 /* ═══════════════════════════════════════════════════════════
    COMPACT MODE — CHỈ ÁP DỤNG CHO ĐIỆN THOẠI (≤767px)
-   Khi đã vào app:
-     - Header chỉ còn chip tên app căn giữa
-     - Bỏ khung bao quanh iframe, app tràn viền
-   Tablet (768-1024px) và PC (≥1025px): giữ nguyên giao diện đầy đủ
    ═══════════════════════════════════════════════════════════ */
 @media (max-width: 767px) {
-
-    /* ─── HEADER COMPACT ─── */
 
     body.has-active-app #headerCard {
         justify-content: center;
@@ -448,20 +549,17 @@ body.sidebar-collapsed #sidebar {
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
     }
 
-    /* Ẩn group center (clock) + right (trống) */
     body.has-active-app #headerCard > div:nth-child(2),
     body.has-active-app #headerCard > div:nth-child(3) {
         display: none !important;
     }
 
-    /* Ẩn nút ☰, breadcrumb Base, slash */
     body.has-active-app #headerCard .icon-btn,
     body.has-active-app #breadcrumbBase,
     body.has-active-app #breadcrumbSlash {
         display: none !important;
     }
 
-    /* Left group chiếm full width + căn giữa */
     body.has-active-app #headerCard > div:nth-child(1) {
         flex: 1 1 100%;
         justify-content: center;
@@ -474,7 +572,6 @@ body.sidebar-collapsed #sidebar {
         gap: 0;
     }
 
-    /* Chip tên app */
     body.has-active-app #currentAppName {
         cursor: pointer;
         user-select: none;
@@ -493,8 +590,6 @@ body.sidebar-collapsed #sidebar {
         background: rgba(139, 92, 246, 0.32);
     }
 
-    /* ─── BỎ KHUNG BAO QUANH IFRAME ─── */
-
     body.has-active-app #mainArea {
         padding: 8px;
         gap: 8px;
@@ -506,9 +601,21 @@ body.sidebar-collapsed #sidebar {
         border-radius: 16px !important;
         background: transparent !important;
     }
+    body.has-active-app #pdfWrapper {
+        border: none !important;
+        box-shadow: none !important;
+        border-radius: 16px !important;
+        background: transparent !important;
+    }
+    body.has-active-app #pdfToolbar {
+        border-radius: 12px;
+        padding: 6px 8px;
+        gap: 6px;
+    }
+    #pdfScroll { padding: 10px 6px 20px; }
+    .pdf-pagetag { display: none; }
 }
 
-/* Ngoài mobile (≥768px): chip không bấm được, header luôn đầy đủ */
 @media (min-width: 768px) {
     #currentAppName { cursor: default !important; }
 }
@@ -533,7 +640,7 @@ body.sidebar-collapsed #sidebar {
             </div>
         </div>
         <div class="env-warning" id="envWarning">
-            ⚠ Bạn đang mở bằng <b>file://</b>. Đồng bộ trong iframe sẽ bị chặn. Hãy chạy qua local server (VD: <code>python -m http.server 8000</code>).
+            ⚠ Bạn đang mở bằng <b>file://</b>. Đồng bộ trong iframe và xem PDF sẽ bị chặn. Hãy chạy qua local server (VD: <code>python -m http.server 8000</code>).
         </div>
     </div>
 
@@ -630,11 +737,34 @@ body.sidebar-collapsed #sidebar {
     <div id="iframeWrapper">
         <iframe id="appFrame" src="" allow="clipboard-write"></iframe>
     </div>
+
+    <!-- ═══════════ PDF VIEWER ═══════════ -->
+    <div id="pdfWrapper">
+        <div id="pdfToolbar">
+            <button class="pdf-tbtn" id="pdfZoomOut" title="Thu nhỏ">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+            <span class="pdf-zoomlabel" id="pdfZoomLabel">100%</span>
+            <button class="pdf-tbtn" id="pdfZoomIn" title="Phóng to">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+            <button class="pdf-tbtn" id="pdfFitWidth" title="Vừa chiều rộng">↔ Vừa khổ</button>
+            <button class="pdf-tbtn" id="pdfOpenTab" title="Mở trong tab mới">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                Tab mới
+            </button>
+            <span class="pdf-pagetag" id="pdfPageTag"></span>
+        </div>
+        <div id="pdfScroll">
+            <div id="pdfPages"></div>
+        </div>
+        <div id="pdfLoading"></div>
+    </div>
 </div>
 
 <!-- MODAL: THÊM -->
 <div id="addModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:60;align-items:center;justify-content:center;padding:16px;">
-    <div class="modal-card" style="width:100%;max-width:440px;padding:24px;">
+    <div class="modal-card" style="width:100%;max-width:440px;padding:24px;max-height:92vh;overflow-y:auto;">
         <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:16px;margin-bottom:20px;border-bottom:1px solid rgba(255,255,255,0.06);">
             <span style="font-size:11px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#a78bfa;display:flex;align-items:center;gap:7px;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -649,12 +779,24 @@ body.sidebar-collapsed #sidebar {
             </button>
         </div>
         <div style="display:flex;flex-direction:column;gap:16px;">
+            <div>
+                <label class="mlabel">Loại ứng dụng</label>
+                <div class="type-switch" id="addTypeSwitch">
+                    <button type="button" class="type-opt active" data-type="html" onclick="setModalType('add','html')">🌐 Trang HTML</button>
+                    <button type="button" class="type-opt" data-type="pdf" onclick="setModalType('add','pdf')">📄 Tài liệu PDF</button>
+                </div>
+                <input type="hidden" id="addType" value="html">
+            </div>
             <div><label class="mlabel">Biểu tượng (Emoji)</label><input class="modal-input" id="appEmoji" placeholder="📚  📝  💡  🎯"></div>
             <div><label class="mlabel">Tên ứng dụng</label><input class="modal-input" id="appName" placeholder="Ví dụ: Luyện Đề Cambridge"></div>
             <div>
                 <label class="mlabel">Đường dẫn tệp tin</label>
                 <input class="modal-input" id="appPath" placeholder="Exam.html hoặc index.html">
-                <p style="font-size:10px;color:#334155;margin-top:6px;">Tệp phải nằm cùng thư mục với Dashboard.</p>
+                <p id="addPathHint" style="font-size:10px;color:#334155;margin-top:6px;">Tệp phải nằm cùng thư mục với Dashboard.</p>
+                <div id="addPdfPickRow" style="display:none;margin-top:10px;">
+                    <input type="file" id="addPdfFile" accept="application/pdf,.pdf" style="display:none;">
+                    <button type="button" class="btn-sec" onclick="document.getElementById('addPdfFile').click()">📎 Chọn tệp PDF để lấy tên…</button>
+                </div>
             </div>
         </div>
         <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.05);">
@@ -666,7 +808,7 @@ body.sidebar-collapsed #sidebar {
 
 <!-- MODAL: SỬA -->
 <div id="editModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:60;align-items:center;justify-content:center;padding:16px;">
-    <div class="modal-card" style="width:100%;max-width:440px;padding:24px;">
+    <div class="modal-card" style="width:100%;max-width:440px;padding:24px;max-height:92vh;overflow-y:auto;">
         <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:16px;margin-bottom:20px;border-bottom:1px solid rgba(255,255,255,0.06);">
             <span style="font-size:11px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#a78bfa;display:flex;align-items:center;gap:7px;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -681,9 +823,25 @@ body.sidebar-collapsed #sidebar {
         </div>
         <div style="display:flex;flex-direction:column;gap:16px;">
             <input type="hidden" id="editAppId">
+            <div>
+                <label class="mlabel">Loại ứng dụng</label>
+                <div class="type-switch" id="editTypeSwitch">
+                    <button type="button" class="type-opt active" data-type="html" onclick="setModalType('edit','html')">🌐 Trang HTML</button>
+                    <button type="button" class="type-opt" data-type="pdf" onclick="setModalType('edit','pdf')">📄 Tài liệu PDF</button>
+                </div>
+                <input type="hidden" id="editType" value="html">
+            </div>
             <div><label class="mlabel">Biểu tượng</label><input class="modal-input" id="editAppEmoji" placeholder="📚  📝  💡"></div>
             <div><label class="mlabel">Tên ứng dụng</label><input class="modal-input" id="editAppName"></div>
-            <div><label class="mlabel">Đường dẫn</label><input class="modal-input" id="editAppPath"></div>
+            <div>
+                <label class="mlabel">Đường dẫn</label>
+                <input class="modal-input" id="editAppPath">
+                <p id="editPathHint" style="font-size:10px;color:#334155;margin-top:6px;">Tệp phải nằm cùng thư mục với Dashboard.</p>
+                <div id="editPdfPickRow" style="display:none;margin-top:10px;">
+                    <input type="file" id="editPdfFile" accept="application/pdf,.pdf" style="display:none;">
+                    <button type="button" class="btn-sec" onclick="document.getElementById('editPdfFile').click()">📎 Chọn tệp PDF để lấy tên…</button>
+                </div>
+            </div>
         </div>
         <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.05);">
             <button class="btn-sec" onclick="closeEditModal()">Hủy</button>
@@ -770,6 +928,7 @@ try {
 } catch (e) {}
 
 let currentActiveAppId = null;
+let currentAppIsPdf = false;
 let dragIndex = null;
 let cloudAppsLoaded = false;
 let cloudFieldsLoaded = false;
@@ -1015,6 +1174,7 @@ function writeValue(el, val) {
 function applyFieldsToIframe() {
     if (!currentIframeDoc) return;
     if (_applyingFromCloud) return;
+    if (currentAppIsPdf) return;
 
     try {
         const iframeDoc = currentIframeDoc;
@@ -1071,12 +1231,15 @@ function bindIframe() {
     if (currentFieldObserver) { currentFieldObserver.disconnect(); currentFieldObserver = null; }
     currentIframeDoc = null;
 
+    if (currentAppIsPdf) return;
+
     const iframe = document.getElementById('appFrame');
     if (!iframe) return;
 
     try {
         const doc = iframe.contentDocument || iframe.contentWindow.document;
         if (!doc) return;
+        if (!doc.querySelector) return;
         currentIframeDoc = doc;
 
         const handler = function (e) {
@@ -1145,7 +1308,246 @@ window.addEventListener('message', function (e) {
     }
 });
 
-/* K) NGÀY / GIỜ / QUOTE / SIDEBAR */
+/* ═══════════════════════════════════════════════════════════
+   K) PDF VIEWER (PDF.js)
+   ═══════════════════════════════════════════════════════════ */
+const PDFJS_VER = '3.11.174';
+const PDFJS_BASE = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/' + PDFJS_VER + '/';
+
+let pdfLibPromise = null;
+let pdfDoc = null;
+let pdfScale = 1;          // hệ số zoom tương đối so với "vừa khổ"
+let pdfBaseScale = 1;      // scale để vừa chiều rộng
+let pdfObserver = null;
+let pdfRenderToken = 0;
+let pdfCurrentUrl = null;
+let pdfResizeTimer = null;
+
+function loadPdfJs() {
+    if (pdfLibPromise) return pdfLibPromise;
+    pdfLibPromise = new Promise(function (resolve, reject) {
+        if (window.pdfjsLib) { resolve(window.pdfjsLib); return; }
+        const s = document.createElement('script');
+        s.src = PDFJS_BASE + 'pdf.min.js';
+        s.onload = function () {
+            const lib = window.pdfjsLib;
+            if (!lib) { reject(new Error('Không nạp được thư viện PDF.js')); return; }
+            try { lib.GlobalWorkerOptions.workerSrc = PDFJS_BASE + 'pdf.worker.min.js'; } catch (e) {}
+            resolve(lib);
+        };
+        s.onerror = function () { reject(new Error('Không tải được PDF.js từ CDN')); };
+        document.head.appendChild(s);
+    });
+    return pdfLibPromise;
+}
+
+function closePdf() {
+    pdfRenderToken++;
+    pdfCurrentUrl = null;
+    if (pdfObserver) { pdfObserver.disconnect(); pdfObserver = null; }
+    if (pdfDoc) { try { pdfDoc.destroy(); } catch (e) {} pdfDoc = null; }
+    const pages = document.getElementById('pdfPages');
+    if (pages) pages.innerHTML = '';
+    const loading = document.getElementById('pdfLoading');
+    if (loading) { loading.style.display = 'none'; loading.innerHTML = ''; }
+    const tag = document.getElementById('pdfPageTag');
+    if (tag) tag.textContent = '';
+}
+
+function setPdfZoomLabel() {
+    const el = document.getElementById('pdfZoomLabel');
+    if (el) el.textContent = Math.round(pdfScale * 100) + '%';
+}
+
+async function openPdf(path) {
+    const wrap = document.getElementById('pdfWrapper');
+    const pagesEl = document.getElementById('pdfPages');
+    const loading = document.getElementById('pdfLoading');
+    const scroll = document.getElementById('pdfScroll');
+
+    wrap.style.display = 'flex';
+    pagesEl.innerHTML = '';
+    loading.style.display = 'flex';
+    loading.innerHTML = '<div class="pdf-spinner"></div><div>Đang tải PDF…</div>';
+    document.getElementById('pdfPageTag').textContent = '';
+
+    if (pdfObserver) { pdfObserver.disconnect(); pdfObserver = null; }
+    if (pdfDoc) { try { pdfDoc.destroy(); } catch (e) {} pdfDoc = null; }
+
+    pdfScale = 1;
+    setPdfZoomLabel();
+    pdfCurrentUrl = path;
+    const token = ++pdfRenderToken;
+
+    // Cho layout ổn định trước khi đo chiều rộng
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+    let lib;
+    try {
+        lib = await loadPdfJs();
+    } catch (err) {
+        if (token !== pdfRenderToken) return;
+        showPdfError(path, 'Không nạp được thư viện xem PDF. Kiểm tra kết nối mạng rồi thử lại.');
+        return;
+    }
+
+    try {
+        const task = lib.getDocument({
+            url: path,
+            cMapUrl: PDFJS_BASE + 'cmaps/',
+            cMapPacked: true,
+            withCredentials: false
+        });
+        const doc = await task.promise;
+        if (token !== pdfRenderToken || pdfCurrentUrl !== path) {
+            try { doc.destroy(); } catch (e) {}
+            return;
+        }
+        pdfDoc = doc;
+        const tag = document.getElementById('pdfPageTag');
+        if (tag) tag.textContent = doc.numPages + ' trang';
+        loading.style.display = 'none';
+        loading.innerHTML = '';
+        await renderPdfAll(token);
+    } catch (err) {
+        if (token !== pdfRenderToken) return;
+        console.error('[LB] PDF error:', err);
+        let msg = 'Không đọc được tệp PDF này.';
+        if (location.protocol === 'file:') {
+            msg = 'Trình duyệt chặn đọc tệp khi mở bằng file://. Hãy chạy qua local server (VD: python -m http.server 8000) hoặc mở PDF trong tab mới.';
+        } else if (String(err && err.message || '').toLowerCase().indexOf('cors') !== -1) {
+            msg = 'Tệp PDF bị chặn bởi CORS. Hãy đặt PDF cùng thư mục với Dashboard.';
+        } else if (String(err && err.name || '') === 'MissingPDFException' || String(err && err.message || '').indexOf('Missing') !== -1) {
+            msg = 'Không tìm thấy tệp. Kiểm tra lại đường dẫn đã đúng chưa.';
+        }
+        showPdfError(path, msg);
+    }
+}
+
+function showPdfError(path, msg) {
+    const loading = document.getElementById('pdfLoading');
+    loading.style.display = 'flex';
+    loading.innerHTML = '';
+
+    const box = document.createElement('div');
+    box.style.cssText = 'max-width:360px;display:flex;flex-direction:column;gap:12px;align-items:center;';
+
+    const title = document.createElement('div');
+    title.style.cssText = 'font-size:14px;font-weight:800;color:#f87171;';
+    title.textContent = 'Không xem được PDF';
+
+    const desc = document.createElement('div');
+    desc.style.cssText = 'font-size:11.5px;color:#94a3b8;line-height:1.65;font-weight:500;';
+    desc.textContent = msg;
+
+    const a = document.createElement('a');
+    a.href = path;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.className = 'btn-pri';
+    a.style.cssText = 'text-decoration:none;display:inline-block;';
+    a.textContent = 'Mở PDF trong tab mới';
+
+    box.appendChild(title);
+    box.appendChild(desc);
+    box.appendChild(a);
+    loading.appendChild(box);
+}
+
+async function renderPdfAll(token) {
+    const pagesEl = document.getElementById('pdfPages');
+    const scroll = document.getElementById('pdfScroll');
+    if (!pdfDoc || !pagesEl || !scroll) return;
+
+    if (pdfObserver) { pdfObserver.disconnect(); pdfObserver = null; }
+    pagesEl.innerHTML = '';
+
+    const avail = Math.max(240, scroll.clientWidth - 32);
+    const firstPage = await pdfDoc.getPage(1);
+    if (token !== pdfRenderToken) return;
+    const vp1 = firstPage.getViewport({ scale: 1 });
+    pdfBaseScale = avail / vp1.width;
+
+    pdfObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            const holder = entry.target;
+            pdfObserver.unobserve(holder);
+            renderPdfPage(holder);
+        });
+    }, { root: scroll, rootMargin: '400px 0px' });
+
+    for (let i = 1; i <= pdfDoc.numPages; i++) {
+        if (token !== pdfRenderToken) return;
+        let page;
+        try { page = await pdfDoc.getPage(i); } catch (e) { continue; }
+        const vp = page.getViewport({ scale: 1 });
+        const s = pdfBaseScale * pdfScale;
+
+        const holder = document.createElement('div');
+        holder.className = 'pdf-page';
+        holder.dataset.page = String(i);
+        holder._page = page;
+        holder._scale = s;
+
+        const canvas = document.createElement('canvas');
+        canvas.style.width  = Math.floor(vp.width  * s) + 'px';
+        canvas.style.height = Math.floor(vp.height * s) + 'px';
+        canvas.width  = Math.floor(vp.width  * s);
+        canvas.height = Math.floor(vp.height * s);
+
+        holder.appendChild(canvas);
+        pagesEl.appendChild(holder);
+        pdfObserver.observe(holder);
+    }
+}
+
+async function renderPdfPage(holder) {
+    if (holder.dataset.rendered === '1') return;
+    holder.dataset.rendered = '1';
+    try {
+        const page = holder._page || (pdfDoc && await pdfDoc.getPage(parseInt(holder.dataset.page, 10)));
+        if (!page) return;
+        const scale = holder._scale || 1;
+        const viewport = page.getViewport({ scale: scale });
+        const canvas = holder.querySelector('canvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+        canvas.width  = Math.floor(viewport.width  * dpr);
+        canvas.height = Math.floor(viewport.height * dpr);
+        canvas.style.width  = Math.floor(viewport.width) + 'px';
+        canvas.style.height = Math.floor(viewport.height) + 'px';
+
+        const renderTask = page.render({
+            canvasContext: ctx,
+            viewport: viewport,
+            transform: dpr !== 1 ? [dpr, 0, 0, dpr, 0, 0] : null
+        });
+        await renderTask.promise;
+    } catch (e) {
+        // render bị huỷ khi zoom/đổi tài liệu → bỏ qua
+    }
+}
+
+function pdfZoom(factor) {
+    if (!pdfDoc) return;
+    pdfScale = Math.min(5, Math.max(0.25, pdfScale * factor));
+    setPdfZoomLabel();
+    const token = ++pdfRenderToken;
+    renderPdfAll(token);
+}
+
+function pdfFitWidth() {
+    if (!pdfDoc) return;
+    pdfScale = 1;
+    setPdfZoomLabel();
+    const token = ++pdfRenderToken;
+    renderPdfAll(token);
+}
+
+/* L) NGÀY / GIỜ / QUOTE / SIDEBAR */
 function updateDate() {
     const days = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
     const now = new Date();
@@ -1173,11 +1575,6 @@ function toggleSidebar() {
     else document.body.classList.toggle('sidebar-open');
 }
 
-/* ══════════════════════════════════════════════════════════
-   XỬ LÝ BẤM VÀO CHIP TÊN APP
-   → Mobile + đã vào app: mở sidebar drawer để chọn app khác
-   → Nơi khác: không làm gì
-   ══════════════════════════════════════════════════════════ */
 function handleChipClick(e) {
     if (!document.body.classList.contains('has-active-app')) return;
     if (window.innerWidth > 767) return;
@@ -1191,16 +1588,27 @@ function goHome() {
     updateDate();
     document.getElementById('welcomeState').style.display = 'flex';
     document.getElementById('iframeWrapper').style.display = 'none';
+    document.getElementById('pdfWrapper').style.display = 'none';
     document.getElementById('currentAppName').innerHTML =
         '<span style="font-size:11px;color:#475569;font-style:italic;font-weight:500;">Chưa chọn ứng dụng</span>';
     document.getElementById('appFrame').src = 'about:blank';
     currentActiveAppId = null;
+    currentAppIsPdf = false;
     currentIframeDoc = null;
     if (currentFieldObserver) { currentFieldObserver.disconnect(); currentFieldObserver = null; }
+    closePdf();
     document.querySelectorAll('.app-item').forEach(b => b.classList.remove('active'));
 }
 
-/* L) RENDER APPS */
+/* M) PDF HELPERS */
+function isPdfApp(app) {
+    if (!app) return false;
+    if (app.type === 'pdf') return true;
+    if (app.type === 'html') return false;
+    return /\.pdf(\?|#|$)/i.test(String(app.path || ''));
+}
+
+/* N) RENDER APPS */
 function renderApps() {
     const list = document.getElementById('appList');
     if (!list) return;
@@ -1214,6 +1622,7 @@ function renderApps() {
     }
 
     userApps.forEach((app, idx) => {
+        const pdf = isPdfApp(app);
         const btn = document.createElement('div');
         btn.className = 'app-item' + (app.id === currentActiveAppId ? ' active' : '');
         btn.draggable = true;
@@ -1225,7 +1634,9 @@ function renderApps() {
                 '<span class="drag-handle" style="font-size:12px;">⠿</span>' +
                 '<span style="font-size:20px;flex-shrink:0;line-height:1;user-select:none;">' + escapeHtml(app.emoji) + '</span>' +
                 '<div style="overflow:hidden;min-width:0;">' +
-                    '<div style="font-size:12px;font-weight:700;color:#e2e8f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + escapeHtml(app.name) + '</div>' +
+                    '<div style="font-size:12px;font-weight:700;color:#e2e8f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' +
+                        escapeHtml(app.name) + (pdf ? '<span class="pdf-tag">PDF</span>' : '') +
+                    '</div>' +
                     '<div style="font-size:10px;color:#475569;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px;">' + escapeHtml(app.path) + '</div>' +
                 '</div>' +
             '</div>' +
@@ -1252,7 +1663,7 @@ function renderApps() {
         btn.addEventListener('click', e => {
             if (e.target.closest('.edit-btn') || e.target.closest('.del-btn') || e.target.closest('.app-actions')) return;
             if (btn.classList.contains('dragging')) return;
-            activateApp(app.id, app.path, btn, app.name, app.emoji);
+            activateApp(app, btn);
         });
 
         list.appendChild(btn);
@@ -1261,27 +1672,46 @@ function renderApps() {
     document.getElementById('statAppCount').textContent = userApps.length;
 }
 
-function activateApp(id, path, el, name, emoji) {
+function buildAppChip(emoji, name) {
+    return '<span class="app-chip">' +
+        '<span style="font-size:14px;flex-shrink:0;line-height:1;user-select:none;">' + escapeHtml(emoji || '💡') + '</span>' +
+        '<span style="font-size:11px;font-weight:700;color:#c4b5fd;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + escapeHtml(name) + '</span>' +
+    '</span>';
+}
+
+function activateApp(app, el) {
+    if (!app) return;
+    const pdf = isPdfApp(app);
+
     document.body.classList.add('has-active-app');
-    currentActiveAppId = id;
+    currentActiveAppId = app.id;
+    currentAppIsPdf = pdf;
     document.querySelectorAll('.app-item').forEach(b => b.classList.remove('active'));
     if (el) el.classList.add('active');
 
-    document.getElementById('currentAppName').innerHTML =
-        '<span class="app-chip">' +
-            '<span style="font-size:14px;flex-shrink:0;line-height:1;user-select:none;">' + escapeHtml(emoji || '💡') + '</span>' +
-            '<span style="font-size:11px;font-weight:700;color:#c4b5fd;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + escapeHtml(name) + '</span>' +
-        '</span>';
+    document.getElementById('currentAppName').innerHTML = buildAppChip(app.emoji, app.name);
 
     if (window.innerWidth >= 768) document.body.classList.add('sidebar-collapsed');
     else document.body.classList.remove('sidebar-open');
 
     document.getElementById('welcomeState').style.display = 'none';
-    document.getElementById('iframeWrapper').style.display = 'block';
-    document.getElementById('appFrame').src = path;
+
+    if (pdf) {
+        document.getElementById('iframeWrapper').style.display = 'none';
+        document.getElementById('pdfWrapper').style.display = 'flex';
+        document.getElementById('appFrame').src = 'about:blank';
+        currentIframeDoc = null;
+        if (currentFieldObserver) { currentFieldObserver.disconnect(); currentFieldObserver = null; }
+        openPdf(app.path);
+    } else {
+        document.getElementById('pdfWrapper').style.display = 'none';
+        document.getElementById('iframeWrapper').style.display = 'block';
+        closePdf();
+        document.getElementById('appFrame').src = app.path;
+    }
 }
 
-/* M) DRAG & DROP */
+/* O) DRAG & DROP */
 function handleDragStart(e) {
     const item = e.target.closest('.app-item');
     if (!item) return;
@@ -1323,14 +1753,43 @@ function handleDrop(e) {
     showToast('✅ Đã sắp xếp lại thứ tự!');
 }
 
-/* N) MODALS */
+/* P) MODAL TYPE SWITCH */
+function setModalType(which, type) {
+    const isPdf = type === 'pdf';
+    const hidden = document.getElementById(which + 'Type');
+    if (hidden) hidden.value = type;
+
+    const sw = document.getElementById(which + 'TypeSwitch');
+    if (sw) {
+        sw.querySelectorAll('.type-opt').forEach(b => {
+            b.classList.toggle('active', b.dataset.type === type);
+        });
+    }
+
+    const pick = document.getElementById(which + 'PdfPickRow');
+    if (pick) pick.style.display = isPdf ? 'block' : 'none';
+
+    const hint = document.getElementById(which + 'PathHint');
+    if (hint) {
+        hint.textContent = isPdf
+            ? 'Tệp PDF phải nằm cùng thư mục với Dashboard (VD: DeThi.pdf).'
+            : 'Tệp phải nằm cùng thư mục với Dashboard.';
+    }
+
+    const pathInput = document.getElementById(which === 'add' ? 'appPath' : 'editAppPath');
+    if (pathInput) pathInput.placeholder = isPdf ? 'DeThi.pdf' : 'Exam.html hoặc index.html';
+}
+
+/* Q) MODALS */
 function openAddModal() {
+    setModalType('add', 'html');
     document.getElementById('addModal').style.display = 'flex';
     setTimeout(() => document.getElementById('appName').focus(), 60);
 }
 function closeAddModal() {
     document.getElementById('addModal').style.display = 'none';
     ['appEmoji', 'appName', 'appPath'].forEach(id => document.getElementById(id).value = '');
+    setModalType('add', 'html');
 }
 function openEditModal(id) {
     const app = userApps.find(a => a.id === id);
@@ -1339,6 +1798,7 @@ function openEditModal(id) {
     document.getElementById('editAppEmoji').value = app.emoji;
     document.getElementById('editAppName').value = app.name;
     document.getElementById('editAppPath').value = app.path;
+    setModalType('edit', isPdfApp(app) ? 'pdf' : 'html');
     document.getElementById('editModal').style.display = 'flex';
     setTimeout(() => document.getElementById('editAppName').focus(), 60);
 }
@@ -1349,19 +1809,32 @@ function saveEditApp() {
     const emoji = document.getElementById('editAppEmoji').value.trim() || '💡';
     const name = document.getElementById('editAppName').value.trim();
     const path = document.getElementById('editAppPath').value.trim();
+    const type = document.getElementById('editType').value === 'pdf' ? 'pdf' : 'html';
     if (!name || !path) { showToast('Điền đủ thông tin nhé!', 'error'); return; }
     const i = userApps.findIndex(a => a.id === id);
     if (i !== -1) {
-        userApps[i] = Object.assign({}, userApps[i], { emoji, name, path });
+        userApps[i] = Object.assign({}, userApps[i], { emoji, name, path, type });
         persistApps();
         renderApps();
+
         if (currentActiveAppId === id) {
-            document.getElementById('currentAppName').innerHTML =
-                '<span class="app-chip">' +
-                    '<span style="font-size:14px;flex-shrink:0;">' + escapeHtml(emoji) + '</span>' +
-                    '<span style="font-size:11px;font-weight:700;color:#c4b5fd;">' + escapeHtml(name) + '</span>' +
-                '</span>';
-            document.getElementById('appFrame').src = path;
+            const updated = userApps[i];
+            document.getElementById('currentAppName').innerHTML = buildAppChip(emoji, name);
+            if (isPdfApp(updated)) {
+                document.getElementById('iframeWrapper').style.display = 'none';
+                document.getElementById('pdfWrapper').style.display = 'flex';
+                document.getElementById('appFrame').src = 'about:blank';
+                currentAppIsPdf = true;
+                currentIframeDoc = null;
+                if (currentFieldObserver) { currentFieldObserver.disconnect(); currentFieldObserver = null; }
+                openPdf(updated.path);
+            } else {
+                document.getElementById('pdfWrapper').style.display = 'none';
+                document.getElementById('iframeWrapper').style.display = 'block';
+                closePdf();
+                currentAppIsPdf = false;
+                document.getElementById('appFrame').src = updated.path;
+            }
         }
         closeEditModal();
         showToast('Đã lưu thay đổi!');
@@ -1386,81 +1859,18 @@ function saveNewApp() {
     const emoji = document.getElementById('appEmoji').value.trim() || '💡';
     const name = document.getElementById('appName').value.trim();
     const path = document.getElementById('appPath').value.trim();
+    const type = document.getElementById('addType').value === 'pdf' ? 'pdf' : 'html';
     if (!name || !path) { showToast('Điền đủ thông tin nhé!', 'error'); return; }
-    userApps.push({ id: 'app-' + Date.now(), emoji, name, path });
+    userApps.push({ id: 'app-' + Date.now(), emoji, name, path, type });
     persistApps();
     renderApps();
     closeAddModal();
-    showToast('Đã thêm ứng dụng!');
+    showToast(type === 'pdf' ? 'Đã thêm tài liệu PDF!' : 'Đã thêm ứng dụng!');
 }
 
-/* O) TOAST */
+/* R) TOAST */
 function showToast(msg, type) {
     type = type || 'success';
     const c = document.getElementById('toastContainer');
     const t = document.createElement('div');
-    t.className = 'toast';
-    t.style.cssText = 'opacity:0;transform:translateY(8px);';
-    const col = type === 'error' ? '#f87171' : '#34d399';
-    const ico = type === 'error' ? 'alert' : 'check';
-    t.innerHTML = svgIcon(ico, 16, col) + '<span>' + msg + '</span>';
-    c.appendChild(t);
-    requestAnimationFrame(() => {
-        t.style.transition = 'all 0.3s ease';
-        t.style.opacity = '1';
-        t.style.transform = 'translateY(0)';
-    });
-    setTimeout(() => {
-        t.style.opacity = '0';
-        t.style.transform = 'translateY(-8px)';
-        setTimeout(() => t.remove(), 300);
-    }, 3000);
-}
-
-/* P) BOOT */
-document.addEventListener('DOMContentLoaded', function () {
-    renderApps();
-    loadRandomQuote();
-    updateDate();
-    updateClock();
-    setInterval(updateDate, 60000);
-    setInterval(updateClock, 1000);
-
-    if (location.protocol === 'file:') {
-        const w = document.getElementById('envWarning');
-        if (w) w.style.display = 'block';
-        setSyncBadge('err', 'File://');
-    }
-
-    document.getElementById('appFrame').addEventListener('load', bindIframe);
-
-    window.addEventListener('pageshow', function () {
-        setTimeout(applyFieldsToIframe, 150);
-    });
-
-    ['addModal', 'editModal', 'deleteConfirmModal'].forEach(function (mid) {
-        const m = document.getElementById(mid);
-        m.addEventListener('click', e => { if (e.target === m) m.style.display = 'none'; });
-    });
-
-    document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') {
-            document.getElementById('addModal').style.display = 'none';
-            document.getElementById('editModal').style.display = 'none';
-            document.getElementById('deleteConfirmModal').style.display = 'none';
-        }
-    });
-
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        window._deferredPrompt = e;
-    });
-
-    if ('serviceWorker' in navigator && location.protocol !== 'file:') {
-        navigator.serviceWorker.register('sw.js').catch(() => {});
-    }
-});
-</script>
-
-</body>
-</html>
+    t.className
