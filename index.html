@@ -912,8 +912,68 @@ body.sidebar-open #sidebarBackdrop { opacity: 1; pointer-events: auto; }
         max-width: none !important;
         height: calc(100dvh - 16px) !important;
         max-height: none !important;
-        padding: 16px !important;
-        border-radius: 18px !important;
+        padding: 12px !important;
+        border-radius: 16px !important;
+        gap: 0;
+    }
+    #quotesModal > .modal-card > div:first-child {
+        padding-bottom: 10px !important;
+        margin-bottom: 10px !important;
+    }
+    #quotesModalBody {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+        overflow: hidden !important;
+        min-height: 0;
+    }
+    #quotesModalBody > div:first-child {
+        flex: 0 0 30%;
+        max-height: none !important;
+        min-height: 130px;
+        overflow: hidden;
+    }
+    #quotePreviewPanel { margin-bottom: 8px !important; }
+    #quotePreview {
+        min-height: 64px;
+        max-height: 92px;
+        overflow: hidden;
+        padding: 10px 12px;
+    }
+    #quotesList {
+        min-height: 0 !important;
+        overflow-y: auto !important;
+    }
+    #quotesModalBody > div:last-child {
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow-y: auto;
+        padding: 10px 2px 4px 0;
+        border-top: 1px solid rgba(255, 255, 255, 0.07);
+    }
+    #quotesModalBody > div:last-child > div {
+        gap: 10px !important;
+    }
+    #quotesModal .type-switch,
+    #quotesModal .src-btn,
+    #quotesModal .lang-trigger,
+    #quotesModal .modal-input {
+        min-height: 42px;
+    }
+    #quotesModal textarea.modal-input {
+        min-height: 92px !important;
+        height: auto;
+    }
+    #quotesModal #quoteInputText {
+        min-height: 130px !important;
+    }
+    #quotesModal .src-btn {
+        padding: 8px 4px;
+        font-size: 10px !important;
+    }
+    #quotesModal .bold-hint { margin-top: 4px; }
+    #quotesModalBody > div:last-child > div > div:last-child {
+        padding-bottom: env(safe-area-inset-bottom);
     }
 }
 
