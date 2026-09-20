@@ -14,8 +14,11 @@
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Cdefs%3E%3ClinearGradient%20id='g'%20x1='0'%20y1='0'%20x2='1'%20y2='1'%3E%3Cstop%20offset='0'%20stop-color='%23a855f7'/%3E%3Cstop%20offset='1'%20stop-color='%23ec4899'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width='100'%20height='100'%20rx='24'%20fill='%230e0a1e'/%3E%3Ccircle%20cx='50'%20cy='50'%20r='34'%20fill='none'%20stroke='url(%23g)'%20stroke-width='5.5'/%3E%3Cellipse%20cx='50'%20cy='50'%20rx='14'%20ry='34'%20fill='none'%20stroke='url(%23g)'%20stroke-width='5.5'/%3E%3Cpath%20d='M%2016%2050%20L%2084%2050'%20stroke='url(%23g)'%20stroke-width='5.5'%20stroke-linecap='round'/%3E%3C/svg%3E" />
 <link rel="manifest" href='data:application/manifest+json,{"name":"Learning Base","short_name":"LearningBase","start_url":".","display":"standalone","background_color":"%230e0a1e","theme_color":"%238b5cf6","orientation":"any"}' />
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
@@ -28,10 +31,11 @@
     --pink: #f472b6; --pink-l: #fbcfe8;
     --text: #e2e8f0; --muted: #94a3b8; --faint: #475569;
     --sidebar-width: 272px;
+    --font-base: 'Inter', 'Noto Sans JP', system-ui, -apple-system, sans-serif;
 }
 html, body { height: 100%; overflow: hidden; }
 body {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: var(--font-base);
     background: var(--base); color: var(--text);
     display: flex; flex-direction: row;
     background-image:
@@ -43,10 +47,8 @@ body {
 ::-webkit-scrollbar-thumb { background: rgba(139, 92, 246, 0.4); border-radius: 99px; }
 
 #sidebar {
-    position: fixed;
-    left: 12px; top: 12px;
-    height: calc(100vh - 24px);
-    width: var(--sidebar-width);
+    position: fixed; left: 12px; top: 12px;
+    height: calc(100vh - 24px); width: var(--sidebar-width);
     border-radius: 24px;
     background: var(--glass-bg);
     backdrop-filter: blur(var(--glass-blur));
@@ -62,25 +64,18 @@ body {
 body.sidebar-open #sidebar { transform: translateX(0); }
 
 #sidebarResizer {
-    position: absolute;
-    top: 0; right: -3px;
+    position: absolute; top: 0; right: -3px;
     width: 10px; height: 100%;
-    cursor: col-resize;
-    z-index: 5;
-    background: transparent;
-    touch-action: none;
+    cursor: col-resize; z-index: 5;
+    background: transparent; touch-action: none;
     -webkit-tap-highlight-color: transparent;
 }
 #sidebarResizer::after {
-    content: '';
-    position: absolute;
-    top: 50%; right: 4px;
-    transform: translateY(-50%);
-    width: 3px; height: 48px;
-    border-radius: 3px;
+    content: ''; position: absolute;
+    top: 50%; right: 4px; transform: translateY(-50%);
+    width: 3px; height: 48px; border-radius: 3px;
     background: linear-gradient(180deg, transparent, rgba(139, 92, 246, 0.55), transparent);
-    opacity: 0;
-    transition: opacity 0.2s ease, height 0.2s ease;
+    opacity: 0; transition: opacity 0.2s, height 0.2s;
 }
 #sidebar:hover #sidebarResizer::after,
 #sidebarResizer.dragging::after { opacity: 1; }
@@ -96,10 +91,8 @@ body.sidebar-open #sidebar { transform: translateX(0); }
 }
 #mainArea {
     flex: 1; display: flex; flex-direction: column;
-    min-width: 0;
-    padding: 12px;
-    gap: 10px; height: 100vh; overflow: hidden;
-    width: 100%;
+    min-width: 0; padding: 12px; gap: 10px;
+    height: 100vh; overflow: hidden; width: 100%;
 }
 #headerCard {
     background: var(--glass-bg);
@@ -109,7 +102,6 @@ body.sidebar-open #sidebar { transform: translateX(0); }
     border-radius: 20px; height: 52px; flex-shrink: 0;
     display: flex; align-items: center; justify-content: space-between;
     padding: 0 14px; gap: 10px; box-shadow: var(--glass-shadow);
-    transition: height 0.25s ease, padding 0.25s ease;
 }
 #iframeWrapper {
     flex: 1; border-radius: 20px; overflow: hidden;
@@ -119,7 +111,6 @@ body.sidebar-open #sidebar { transform: translateX(0); }
     backdrop-filter: blur(4px);
 }
 #iframeWrapper iframe { width: 100%; height: 100%; border: none; display: block; }
-
 #pdfWrapper, #imageWrapper {
     flex: 1; border-radius: 20px; overflow: hidden;
     border: 1px solid var(--glass-border);
@@ -150,7 +141,6 @@ body.sidebar-open #sidebar { transform: translateX(0); }
     color: var(--vio-l);
 }
 .pdf-tbtn:active { transform: scale(0.96); }
-.pdf-tbtn:disabled { opacity: 0.35; cursor: default; transform: none; }
 .pdf-zoomlabel {
     font-size: 11px; font-weight: 800; color: var(--vio-l);
     min-width: 46px; text-align: center; letter-spacing: 0.03em;
@@ -159,19 +149,13 @@ body.sidebar-open #sidebar { transform: translateX(0); }
     font-size: 10px; font-weight: 700; color: var(--faint);
     letter-spacing: 0.06em; text-transform: uppercase; margin-left: auto;
 }
-
 #pdfScroll {
     flex: 1; overflow: auto; padding: 16px 12px 24px;
     min-height: 0; -webkit-overflow-scrolling: touch;
 }
 #pdfPages {
-    width: fit-content;
-    min-width: 100%;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 14px;
+    width: fit-content; min-width: 100%; margin: 0 auto;
+    display: flex; flex-direction: column; align-items: center; gap: 14px;
 }
 .pdf-page {
     flex-shrink: 0;
@@ -197,24 +181,17 @@ body.sidebar-open #sidebar { transform: translateX(0); }
     animation: pdfspin 0.8s linear infinite;
 }
 @keyframes pdfspin { to { transform: rotate(360deg); } }
-
 #imageScroll {
     flex: 1; overflow: auto; padding: 16px;
     min-height: 0; -webkit-overflow-scrolling: touch;
-    display: flex;
-    align-items: safe center;
-    justify-content: safe center;
+    display: flex; align-items: safe center; justify-content: safe center;
 }
 #imageDisplay {
-    display: block;
-    max-width: none;
-    max-height: none;
+    display: block; max-width: none; max-height: none;
     border-radius: 8px;
     box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55);
-    user-select: none;
-    -webkit-user-drag: none;
-    cursor: zoom-in;
-    will-change: width;
+    user-select: none; -webkit-user-drag: none;
+    cursor: zoom-in; will-change: width;
 }
 .img-error {
     max-width: 360px; display: flex; flex-direction: column;
@@ -243,7 +220,6 @@ body.sidebar-open #sidebar { transform: translateX(0); }
     color: #fff;
     box-shadow: 0 2px 12px rgba(139, 92, 246, 0.22);
 }
-
 #welcomeState {
     flex: 1; border-radius: 20px; overflow: hidden;
     border: 1px solid var(--glass-border);
@@ -289,65 +265,82 @@ body.sidebar-open #sidebar { transform: translateX(0); }
     border: 1px solid rgba(139, 92, 246, 0.15);
 }
 
-/* QUOTE — rõ ràng hơn, rộng 50% màn hình */
+/* ═══════════════════════════════════════════════════════════
+   QUOTE BLOCK — click để mở modal quản lý
+   ═══════════════════════════════════════════════════════════ */
 #quoteBlock {
-    width: 50vw;
-    max-width: 720px;
-    min-width: 280px;
-    position: relative;
-    z-index: 1;
-    padding: 0 8px;
-    margin: 0 auto;
+    width: 50vw; max-width: 720px; min-width: 280px;
+    position: relative; z-index: 1;
+    padding: 8px 8px; margin: 0 auto;
+    text-align: left;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    border-radius: 12px;
 }
-#quoteEn {
+#quoteBlock:hover {
+    opacity: 0.88;
+}
+#quoteBlock.empty:hover {
+    opacity: 1;
+}
+#quoteText {
     font-size: clamp(15px, 1.5vw, 19px);
-    font-weight: 800;
-    font-style: italic;
-    line-height: 1.55;
-    color: #f1f5f9;
+    font-weight: 800; font-style: italic;
+    line-height: 1.55; color: #f1f5f9;
     letter-spacing: -0.005em;
     text-shadow: 0 1px 12px rgba(196, 181, 253, 0.25);
+    word-break: break-word;
 }
-#quoteVi {
+#quoteTrans {
     font-size: clamp(12.5px, 1.1vw, 15px);
-    font-weight: 600;
-    font-style: italic;
-    line-height: 1.6;
-    color: #cbd5e1;
-    margin-top: 14px;
-}
-#quoteAuthor {
-    display: block;
-    font-size: 10.5px;
-    font-weight: 800;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: #a78bfa;
-    margin-top: 18px;
-}
-#quoteBlock.empty #quoteEn {
-    color: #475569;
-    font-weight: 600;
-    font-size: 13px;
-    text-shadow: none;
-    font-style: italic;
-}
-#quoteBlock.empty #quoteVi {
-    display: none;
-}
-#quoteBlock.empty #quoteAuthor {
-    color: #475569;
-    letter-spacing: 0.1em;
-    font-size: 10px;
+    font-weight: 600; font-style: italic;
+    line-height: 1.6; color: #cbd5e1;
+    margin-top: 14px; word-break: break-word;
 }
 
-/* Item trong danh sách câu nói (modal) */
+.quote-attr-inline {
+    display: block; text-align: center;
+    font-size: 10.5px; font-weight: 800;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: #a78bfa; margin-top: 18px;
+}
+
+.quote-credit-wrap {
+    text-align: right;
+    margin-top: 18px;
+}
+.quote-credit {
+    display: inline-block;
+    text-align: center;
+}
+.quote-credit-source {
+    font-size: 11.5px; font-weight: 800;
+    letter-spacing: 0.03em; color: #a78bfa;
+    font-style: normal;
+}
+.quote-credit-author {
+    font-size: 10.5px; font-weight: 800;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: #c4b5fd; margin-top: 5px;
+}
+
+#quoteBlock.empty #quoteText {
+    color: #475569; font-weight: 600; font-size: 13px;
+    text-shadow: none; font-style: italic; text-align: center;
+}
+#quoteBlock.empty #quoteTrans,
+#quoteBlock.empty .quote-credit-wrap,
+#quoteBlock.empty .quote-attr-inline { display: none; }
+
+#quoteBlock.lang-ja #quoteText {
+    font-size: clamp(18px, 1.8vw, 23px);
+    line-height: 1.75; letter-spacing: 0.02em;
+}
+#quoteBlock.lang-ja #quoteTrans { line-height: 1.7; letter-spacing: 0.01em; }
+
 .quote-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 12px 14px;
-    border-radius: 12px;
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 12px 14px; border-radius: 12px;
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.06);
     transition: all 0.18s;
@@ -355,6 +348,99 @@ body.sidebar-open #sidebar { transform: translateX(0); }
 .quote-item:hover {
     background: rgba(139, 92, 246, 0.08);
     border-color: rgba(139, 92, 246, 0.2);
+}
+.quote-item-text {
+    font-size: 12.5px; font-weight: 700; color: #e2e8f0;
+    font-style: italic; line-height: 1.5; word-break: break-word;
+}
+.quote-item-trans {
+    font-size: 11px; color: #94a3b8; font-style: italic;
+    margin-top: 4px; line-height: 1.5; word-break: break-word;
+}
+.quote-item-meta {
+    font-size: 9px; font-weight: 800;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: #a78bfa; margin-top: 6px;
+}
+
+.src-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+    padding: 7px 10px; border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--muted);
+    font-family: inherit; font-size: 11px; font-weight: 700;
+    cursor: pointer; transition: all 0.15s;
+    white-space: nowrap; flex: 1;
+}
+.src-btn:hover { color: var(--text); background: rgba(255, 255, 255, 0.06); }
+.src-btn.active {
+    background: rgba(139, 92, 246, 0.22);
+    border-color: rgba(139, 92, 246, 0.4);
+    color: #fff;
+}
+
+.lang-dropdown { position: relative; }
+.lang-trigger {
+    width: 100%; display: flex; align-items: center; gap: 8px;
+    padding: 10px 14px;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    color: var(--text); font-family: inherit;
+    font-size: 13px; font-weight: 500;
+    cursor: pointer; text-align: left;
+    transition: border-color 0.18s, box-shadow 0.18s;
+}
+.lang-trigger:hover { border-color: rgba(139, 92, 246, 0.25); }
+.lang-dropdown.open .lang-trigger {
+    border-color: rgba(139, 92, 246, 0.4);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.08);
+}
+.lang-flag { font-size: 14px; flex-shrink: 0; line-height: 1; }
+.lang-label { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lang-chevron {
+    color: var(--muted); flex-shrink: 0;
+    transition: transform 0.2s;
+}
+.lang-dropdown.open .lang-chevron { transform: rotate(180deg); }
+
+.lang-menu {
+    position: absolute; top: calc(100% + 6px); left: 0; right: 0;
+    background: #221c42;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px; padding: 6px;
+    z-index: 100;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
+    opacity: 0; pointer-events: none;
+    transform: translateY(-6px);
+    transition: opacity 0.15s, transform 0.15s;
+    max-height: 260px; overflow-y: auto;
+}
+.lang-dropdown.open .lang-menu {
+    opacity: 1; pointer-events: auto; transform: translateY(0);
+}
+.lang-option {
+    width: 100%; display: flex; align-items: center; gap: 9px;
+    padding: 9px 12px; background: transparent; border: none;
+    border-radius: 8px; color: var(--text);
+    font-family: inherit; font-size: 12.5px; font-weight: 500;
+    cursor: pointer; text-align: left;
+    transition: background 0.15s, color 0.15s;
+}
+.lang-option:hover { background: rgba(139, 92, 246, 0.15); }
+.lang-option.active {
+    background: rgba(139, 92, 246, 0.22);
+    color: #fff; font-weight: 700;
+}
+.lang-option .lang-flag { font-size: 14px; }
+
+#quotePreview {
+    padding: 14px 16px;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    min-height: 60px;
 }
 
 .app-item {
@@ -365,11 +451,7 @@ body.sidebar-open #sidebar { transform: translateX(0); }
     transition: all 0.18s ease; position: relative;
     background: transparent; user-select: none;
 }
-.app-item:hover {
-    background: rgba(139, 92, 246, 0.10);
-    border-color: rgba(139, 92, 246, 0.2);
-    color: var(--text);
-}
+.app-item:hover { background: rgba(139, 92, 246, 0.10); border-color: rgba(139, 92, 246, 0.2); color: var(--text); }
 .app-item.active {
     background: rgba(139, 92, 246, 0.18);
     border-color: rgba(139, 92, 246, 0.3);
@@ -381,7 +463,6 @@ body.sidebar-open #sidebar { transform: translateX(0); }
     border-color: rgba(139, 92, 246, 0.6);
     background: rgba(139, 92, 246, 0.15);
     transform: scale(1.01);
-    box-shadow: 0 0 20px rgba(139, 92, 246, 0.15);
 }
 .app-item.dragging { opacity: 0.4; transform: scale(0.96); }
 .app-actions { opacity: 0; transition: opacity 0.15s ease; display: flex; gap: 2px; }
@@ -393,7 +474,6 @@ body.sidebar-open #sidebar { transform: translateX(0); }
     margin-right: 4px; flex-shrink: 0;
 }
 .app-item:hover .drag-handle { opacity: 0.7; }
-.app-item:active .drag-handle { opacity: 1; }
 .pdf-tag, .img-tag {
     display: inline-block; margin-left: 6px;
     padding: 1px 5px; border-radius: 5px;
@@ -499,12 +579,10 @@ body.sidebar-open #sidebar { transform: translateX(0); }
     background: rgba(220, 38, 38, 0.25);
     border: 1px solid rgba(248, 113, 113, 0.15);
     cursor: pointer; transition: all 0.18s;
-    box-shadow: 0 2px 12px rgba(220, 38, 38, 0.15);
     font-family: inherit;
 }
 .btn-danger:hover {
     opacity: 0.85; transform: translateY(-1px);
-    box-shadow: 0 4px 20px rgba(220, 38, 38, 0.25);
     border-color: rgba(248, 113, 113, 0.3);
 }
 .modal-card {
@@ -529,6 +607,7 @@ body.sidebar-open #sidebar { transform: translateX(0); }
     box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.08);
 }
 .modal-input::placeholder { color: #475569; }
+textarea.modal-input { resize: vertical; min-height: 60px; line-height: 1.5; }
 .mlabel {
     display: block; margin-bottom: 7px;
     font-size: 10px; font-weight: 800;
@@ -557,15 +636,10 @@ body.sidebar-open #sidebar { transform: translateX(0); }
     background: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    z-index: 45;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
+    z-index: 45; opacity: 0;
+    pointer-events: none; transition: opacity 0.3s ease;
 }
-body.sidebar-open #sidebarBackdrop {
-    opacity: 1;
-    pointer-events: auto;
-}
+body.sidebar-open #sidebarBackdrop { opacity: 1; pointer-events: auto; }
 
 @media (max-width: 767px) {
     #sidebar {
@@ -577,17 +651,22 @@ body.sidebar-open #sidebarBackdrop {
     #mainArea { padding: 8px; }
     #headerCard { border-radius: 16px; height: 48px; padding: 0 10px; }
     #welcomeState { border-radius: 16px; padding: 24px; }
-    #iframeWrapper { border-radius: 16px; }
-    #pdfWrapper, #imageWrapper { border-radius: 16px; }
+    #iframeWrapper, #pdfWrapper, #imageWrapper { border-radius: 16px; }
 
-    #quoteBlock {
-        width: 92vw;
-        max-width: none;
-        min-width: 0;
+    #quoteBlock { width: 92vw; max-width: none; min-width: 0; }
+    #quoteText { font-size: 15px; }
+    #quoteBlock.lang-ja #quoteText { font-size: 18px; }
+    #quoteTrans { font-size: 13px; }
+    .quote-attr-inline { font-size: 10px; }
+    .quote-credit-source { font-size: 11px; }
+    .quote-credit-author { font-size: 10px; }
+
+    #quotesModalBody {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+        overflow-y: auto !important;
     }
-    #quoteEn { font-size: 15px; }
-    #quoteVi { font-size: 13px; }
-    #quoteAuthor { font-size: 10px; }
+    #quotesModalBody > div:first-child { max-height: 200px; }
 }
 .clock-center {
     display: inline-flex; align-items: center; gap: 8px;
@@ -624,8 +703,7 @@ body.sidebar-open #sidebarBackdrop {
 .sync-badge.err { background: rgba(239, 68, 68, 0.12); border-color: rgba(239, 68, 68, 0.25); color: #f87171; }
 .env-warning {
     display: none;
-    margin: 10px 12px 0;
-    padding: 9px 12px;
+    margin: 10px 12px 0; padding: 9px 12px;
     border-radius: 12px;
     background: rgba(251, 191, 36, 0.1);
     border: 1px solid rgba(251, 191, 36, 0.3);
@@ -657,42 +735,31 @@ body.sidebar-open #sidebarBackdrop {
     #pdfToolbar, #imageToolbar { background: #241d44 !important; }
     .pdf-page { box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6) !important; }
     #imageDisplay { box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6) !important; }
+    .lang-menu { background: #1f1a3a !important; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.8) !important; }
 }
 
 @media (max-width: 767px) {
     body.has-active-app #headerCard {
         justify-content: center;
-        padding: 0 10px;
-        height: 44px;
+        padding: 0 10px; height: 44px;
         border-radius: 14px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
     }
     body.has-active-app #headerCard > div:nth-child(2),
-    body.has-active-app #headerCard > div:nth-child(3) {
-        display: none !important;
-    }
+    body.has-active-app #headerCard > div:nth-child(3) { display: none !important; }
     body.has-active-app #headerCard .icon-btn,
     body.has-active-app #breadcrumbBase,
-    body.has-active-app #breadcrumbSlash {
-        display: none !important;
-    }
+    body.has-active-app #breadcrumbSlash { display: none !important; }
     body.has-active-app #headerCard > div:nth-child(1) {
-        flex: 1 1 100%;
-        justify-content: center;
-        gap: 0;
-        max-width: 100%;
+        flex: 1 1 100%; justify-content: center; gap: 0; max-width: 100%;
     }
     body.has-active-app #headerCard > div:nth-child(1) nav {
-        justify-content: center;
-        width: 100%;
-        gap: 0;
+        justify-content: center; width: 100%; gap: 0;
     }
     body.has-active-app #currentAppName {
-        cursor: pointer;
-        user-select: none;
+        cursor: pointer; user-select: none;
         -webkit-tap-highlight-color: transparent;
-        justify-content: center;
-        width: 100%;
+        justify-content: center; width: 100%;
     }
     body.has-active-app .app-chip {
         max-width: 92vw;
@@ -700,24 +767,17 @@ body.sidebar-open #sidebarBackdrop {
         background: rgba(139, 92, 246, 0.22);
         border-color: rgba(139, 92, 246, 0.35);
     }
-    body.has-active-app .app-chip:active {
-        transform: scale(0.97);
-        background: rgba(139, 92, 246, 0.32);
-    }
+    body.has-active-app .app-chip:active { transform: scale(0.97); }
     body.has-active-app #mainArea { padding: 8px; gap: 8px; }
     body.has-active-app #iframeWrapper,
     body.has-active-app #pdfWrapper,
     body.has-active-app #imageWrapper {
-        border: none !important;
-        box-shadow: none !important;
-        border-radius: 16px !important;
-        background: transparent !important;
+        border: none !important; box-shadow: none !important;
+        border-radius: 16px !important; background: transparent !important;
     }
     body.has-active-app #pdfToolbar,
     body.has-active-app #imageToolbar {
-        border-radius: 12px;
-        padding: 6px 8px;
-        gap: 6px;
+        border-radius: 12px; padding: 6px 8px; gap: 6px;
     }
     #pdfScroll { padding: 10px 6px 20px; }
     .pdf-pagetag { display: none; }
@@ -737,24 +797,17 @@ body.sidebar-open #sidebarBackdrop {
     <div id="sidebarResizer" title="Kéo để thay đổi chiều rộng"></div>
 
     <div class="sidebar-header">
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;user-select:none;">
-            <div style="display:flex;align-items:center;gap:12px;min-width:0;">
-                <div style="width:40px;height:40px;border-radius:14px;background:rgba(139,92,246,0.2);border:1px solid rgba(139,92,246,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c4b5fd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
-                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-                    </svg>
-                </div>
-                <div style="min-width:0;">
-                    <div style="font-size:13px;font-weight:900;letter-spacing:0.08em;text-transform:uppercase;color:#e2e8f0;line-height:1.2;">Learning Base</div>
-                    <div style="font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#f472b6;margin-top:2px;">Hệ sinh thái học tập</div>
-                </div>
-            </div>
-            <button class="icon-btn" id="quoteManagerBtn" onclick="openQuotesModal()" title="Quản lý câu nói">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+        <div style="display:flex;align-items:center;gap:12px;user-select:none;">
+            <div style="width:40px;height:40px;border-radius:14px;background:rgba(139,92,246,0.2);border:1px solid rgba(139,92,246,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c4b5fd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
                 </svg>
-            </button>
+            </div>
+            <div style="min-width:0;">
+                <div style="font-size:13px;font-weight:900;letter-spacing:0.08em;text-transform:uppercase;color:#e2e8f0;line-height:1.2;">Learning Base</div>
+                <div style="font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#f472b6;margin-top:2px;">Hệ sinh thái học tập</div>
+            </div>
         </div>
         <div class="env-warning" id="envWarning">
             ⚠ Bạn đang mở bằng <b>file://</b>. Đồng bộ trong iframe và xem PDF sẽ bị chặn. Hãy chạy qua local server (VD: <code>python -m http.server 8000</code>).
@@ -833,10 +886,10 @@ body.sidebar-open #sidebarBackdrop {
 
         <div class="gdiv" style="position:relative;z-index:1;"></div>
 
-        <div id="quoteBlock">
-            <p id="quoteEn">"..."</p>
-            <p id="quoteVi">(đang tải...)</p>
-            <span id="quoteAuthor">— ... —</span>
+        <div id="quoteBlock" title="Bấm để quản lý câu nói">
+            <p id="quoteText"></p>
+            <p id="quoteTrans"></p>
+            <div id="quoteAttr"></div>
         </div>
 
         <div style="display:flex;gap:10px;margin-top:32px;position:relative;z-index:1;">
@@ -857,55 +910,44 @@ body.sidebar-open #sidebarBackdrop {
 
     <div id="pdfWrapper">
         <div id="pdfToolbar">
-            <button class="pdf-tbtn" id="pdfZoomOut" title="Thu nhỏ">−</button>
+            <button class="pdf-tbtn" id="pdfZoomOut">−</button>
             <span class="pdf-zoomlabel" id="pdfZoomLabel">100%</span>
-            <button class="pdf-tbtn" id="pdfZoomIn" title="Phóng to">+</button>
-            <button class="pdf-tbtn" id="pdfFitWidth" title="Vừa chiều rộng">↔ Vừa khổ</button>
-            <button class="pdf-tbtn" id="pdfOpenTab" title="Mở trong tab mới">
+            <button class="pdf-tbtn" id="pdfZoomIn">+</button>
+            <button class="pdf-tbtn" id="pdfFitWidth">↔ Vừa khổ</button>
+            <button class="pdf-tbtn" id="pdfOpenTab">
                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
                 Tab mới
             </button>
             <span class="pdf-pagetag" id="pdfPageTag"></span>
         </div>
-        <div id="pdfScroll">
-            <div id="pdfPages"></div>
-        </div>
+        <div id="pdfScroll"><div id="pdfPages"></div></div>
         <div id="pdfLoading"></div>
     </div>
 
     <div id="imageWrapper">
         <div id="imageToolbar">
-            <button class="pdf-tbtn" id="imgZoomOut" title="Thu nhỏ">−</button>
+            <button class="pdf-tbtn" id="imgZoomOut">−</button>
             <span class="pdf-zoomlabel" id="imgZoomLabel">100%</span>
-            <button class="pdf-tbtn" id="imgZoomIn" title="Phóng to">+</button>
-            <button class="pdf-tbtn" id="imgFitScreen" title="Vừa khung">⊡ Vừa khung</button>
-            <button class="pdf-tbtn" id="imgActualSize" title="Kích thước thật">1:1</button>
-            <button class="pdf-tbtn" id="imgOpenTab" title="Mở trong tab mới">
+            <button class="pdf-tbtn" id="imgZoomIn">+</button>
+            <button class="pdf-tbtn" id="imgFitScreen">⊡ Vừa khung</button>
+            <button class="pdf-tbtn" id="imgActualSize">1:1</button>
+            <button class="pdf-tbtn" id="imgOpenTab">
                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
                 Tab mới
             </button>
             <span class="pdf-pagetag" id="imgInfo"></span>
         </div>
-        <div id="imageScroll">
-            <img id="imageDisplay" src="" alt="">
-        </div>
+        <div id="imageScroll"><img id="imageDisplay" src="" alt=""></div>
     </div>
 </div>
 
-<!-- MODAL: THÊM -->
+<!-- MODAL: THÊM APP -->
 <div id="addModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:60;align-items:center;justify-content:center;padding:16px;">
     <div class="modal-card" style="width:100%;max-width:440px;padding:24px;max-height:92vh;overflow-y:auto;">
         <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:16px;margin-bottom:20px;border-bottom:1px solid rgba(255,255,255,0.06);">
-            <span style="font-size:11px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#a78bfa;display:flex;align-items:center;gap:7px;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
-                    <line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/>
-                </svg>Thêm Ứng Dụng
-            </span>
+            <span style="font-size:11px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#a78bfa;">Thêm Ứng Dụng</span>
             <button class="icon-btn" onclick="closeAddModal()">
-                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
         </div>
         <div style="display:flex;flex-direction:column;gap:16px;">
@@ -937,19 +979,13 @@ body.sidebar-open #sidebarBackdrop {
     </div>
 </div>
 
-<!-- MODAL: SỬA -->
+<!-- MODAL: SỬA APP -->
 <div id="editModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:60;align-items:center;justify-content:center;padding:16px;">
     <div class="modal-card" style="width:100%;max-width:440px;padding:24px;max-height:92vh;overflow-y:auto;">
         <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:16px;margin-bottom:20px;border-bottom:1px solid rgba(255,255,255,0.06);">
-            <span style="font-size:11px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#a78bfa;display:flex;align-items:center;gap:7px;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
-                </svg>Chỉnh Sửa
-            </span>
+            <span style="font-size:11px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#a78bfa;">Chỉnh Sửa</span>
             <button class="icon-btn" onclick="closeEditModal()">
-                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
         </div>
         <div style="display:flex;flex-direction:column;gap:16px;">
@@ -963,12 +999,12 @@ body.sidebar-open #sidebarBackdrop {
                 </div>
                 <input type="hidden" id="editType" value="html">
             </div>
-            <div><label class="mlabel">Biểu tượng</label><input class="modal-input" id="editAppEmoji" placeholder="📚  📝  💡"></div>
+            <div><label class="mlabel">Biểu tượng</label><input class="modal-input" id="editAppEmoji"></div>
             <div><label class="mlabel">Tên ứng dụng</label><input class="modal-input" id="editAppName"></div>
             <div>
                 <label class="mlabel">Đường dẫn</label>
                 <input class="modal-input" id="editAppPath">
-                <p id="editPathHint" style="font-size:10px;color:#334155;margin-top:6px;">Tệp phải nằm cùng thư mục với Dashboard.</p>
+                <p id="editPathHint" style="font-size:10px;color:#334155;margin-top:6px;"></p>
                 <div style="margin-top:10px;">
                     <input type="file" id="editFilePicker" style="display:none;">
                     <button type="button" class="btn-sec" id="editPickBtn" onclick="document.getElementById('editFilePicker').click()">📎 Chọn tệp…</button>
@@ -1002,7 +1038,7 @@ body.sidebar-open #sidebarBackdrop {
 
 <!-- MODAL: QUẢN LÝ CÂU NÓI -->
 <div id="quotesModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:60;align-items:center;justify-content:center;padding:16px;">
-    <div class="modal-card" style="width:100%;max-width:620px;padding:24px;max-height:92vh;display:flex;flex-direction:column;">
+    <div class="modal-card" style="width:100%;max-width:min(90vw, 1800px);padding:22px;max-height:92vh;display:flex;flex-direction:column;overflow:hidden;">
         <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:14px;margin-bottom:14px;border-bottom:1px solid rgba(255,255,255,0.06);flex-shrink:0;">
             <span style="font-size:11px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#a78bfa;display:flex;align-items:center;gap:7px;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1010,32 +1046,96 @@ body.sidebar-open #sidebarBackdrop {
                 </svg>Quản lý câu nói
             </span>
             <button class="icon-btn" onclick="closeQuotesModal()">
-                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
         </div>
 
-        <div id="quotesList" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding-right:4px;min-height:120px;max-height:42vh;"></div>
-
-        <div style="border-top:1px solid rgba(255,255,255,0.06);margin-top:16px;padding-top:16px;flex-shrink:0;">
-            <div style="display:flex;flex-direction:column;gap:10px;">
-                <div>
-                    <label class="mlabel">Câu tiếng Anh</label>
-                    <input class="modal-input" id="quoteInputEn" placeholder="The beautiful thing about learning is...">
+        <div id="quotesModalBody" style="display:grid;grid-template-columns:1fr 1.15fr;gap:16px;flex:1;min-height:0;overflow:hidden;">
+            <div style="display:flex;flex-direction:column;min-height:0;">
+                <div style="margin-bottom:8px;">
+                    <span class="mlabel" style="margin:0;">Danh sách (<span id="quoteCount">0</span>)</span>
                 </div>
-                <div>
-                    <label class="mlabel">Dịch tiếng Việt</label>
-                    <input class="modal-input" id="quoteInputVi" placeholder="Điều tuyệt vời của việc học là...">
-                </div>
-                <div>
-                    <label class="mlabel">Tác giả</label>
-                    <input class="modal-input" id="quoteInputAuthor" placeholder="B.B. King">
-                </div>
+                <div id="quotesList" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding-right:4px;min-height:150px;"></div>
             </div>
-            <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:14px;">
-                <button class="btn-sec" id="quoteCancelBtn" onclick="resetQuoteForm()" style="display:none;">Hủy sửa</button>
-                <button class="btn-pri" id="quoteSaveBtn" onclick="saveQuote()">Thêm câu nói</button>
+
+            <div style="display:flex;flex-direction:column;min-height:0;overflow-y:auto;padding-right:6px;">
+                <div style="display:flex;flex-direction:column;gap:12px;">
+
+                    <div>
+                        <label class="mlabel">Ngôn ngữ chính</label>
+                        <div class="lang-dropdown" id="langDropdown">
+                            <button type="button" class="lang-trigger" onclick="toggleLangDropdown(event)">
+                                <span class="lang-flag" id="langFlag">🌐</span>
+                                <span class="lang-label" id="langLabel">Tự động nhận diện</span>
+                                <svg class="lang-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                            </button>
+                            <div class="lang-menu" id="langMenu">
+                                <button type="button" class="lang-option active" data-value="auto" onclick="selectLang('auto')">
+                                    <span class="lang-flag">🌐</span><span>Tự động nhận diện</span>
+                                </button>
+                                <button type="button" class="lang-option" data-value="en" onclick="selectLang('en')">
+                                    <span class="lang-flag">🇬🇧</span><span>Tiếng Anh</span>
+                                </button>
+                                <button type="button" class="lang-option" data-value="vi" onclick="selectLang('vi')">
+                                    <span class="lang-flag">🇻🇳</span><span>Tiếng Việt</span>
+                                </button>
+                                <button type="button" class="lang-option" data-value="ja" onclick="selectLang('ja')">
+                                    <span class="lang-flag">🇯🇵</span><span>Tiếng Nhật</span>
+                                </button>
+                            </div>
+                        </div>
+                        <input type="hidden" id="quoteLang" value="auto">
+                    </div>
+
+                    <div>
+                        <label class="mlabel">Nguồn</label>
+                        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;">
+                            <button type="button" class="src-btn active" data-src="personal" onclick="setQuoteSource('personal')">💭 Cá nhân</button>
+                            <button type="button" class="src-btn" data-src="famous" onclick="setQuoteSource('famous')">⭐ Nổi tiếng</button>
+                            <button type="button" class="src-btn" data-src="proverb" onclick="setQuoteSource('proverb')">🏛️ Tục ngữ</button>
+                            <button type="button" class="src-btn" data-src="movie" onclick="setQuoteSource('movie')">🎬 Phim</button>
+                            <button type="button" class="src-btn" data-src="book" onclick="setQuoteSource('book')">📖 Sách</button>
+                            <button type="button" class="src-btn" data-src="music" onclick="setQuoteSource('music')">🎵 Nhạc</button>
+                        </div>
+                        <input type="hidden" id="quoteSource" value="personal">
+                    </div>
+
+                    <div>
+                        <label class="mlabel">Câu gốc <span style="color:#f472b6;">*</span></label>
+                        <textarea class="modal-input" id="quoteInputText" rows="2" placeholder="May the Force be with you / 挑戦し続けろ / Nước chảy đá mòn"></textarea>
+                    </div>
+
+                    <div>
+                        <label class="mlabel">Bản dịch (tùy chọn)</label>
+                        <textarea class="modal-input" id="quoteInputTrans" rows="2" placeholder="Cầu Thần lực ở bên bạn."></textarea>
+                    </div>
+
+                    <div id="quoteSourceFields" style="display:none;flex-direction:column;gap:12px;">
+                        <div>
+                            <label class="mlabel" id="quoteTitleLabel">Tên tác phẩm</label>
+                            <input class="modal-input" id="quoteInputTitle" placeholder="Star Wars">
+                        </div>
+                        <div>
+                            <label class="mlabel">Năm (tùy chọn)</label>
+                            <input class="modal-input" id="quoteInputYear" placeholder="1977">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="mlabel" id="quoteAuthorLabel">Tác giả / Người nói</label>
+                        <input class="modal-input" id="quoteInputAuthor" placeholder="Han Solo">
+                    </div>
+
+                    <div>
+                        <label class="mlabel">Xem trước</label>
+                        <div id="quotePreview"></div>
+                    </div>
+
+                    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px;">
+                        <button class="btn-sec" id="quoteCancelBtn" onclick="resetQuoteForm()" style="display:none;">Hủy sửa</button>
+                        <button class="btn-pri" id="quoteSaveBtn" onclick="saveQuote()">Thêm câu nói</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -1047,7 +1147,7 @@ body.sidebar-open #sidebarBackdrop {
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
 <script>
-/* A) FIREBASE INIT */
+/* A) FIREBASE */
 const firebaseConfig = {
     apiKey: "AIzaSyDExTCzqNMwKLTHCG92W2HGzKrkXlA_MlM",
     authDomain: "learning-base-5d0a0.firebaseapp.com",
@@ -1060,12 +1160,11 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 db.enablePersistence({ synchronizeTabs: true }).catch(err => console.warn("Persistence:", err.code));
-
-const APPS_DOC  = db.collection("learning_data").doc("user_apps");
-const FIELD_DOC = db.collection("learning_data").doc("user_fields");
+const APPS_DOC   = db.collection("learning_data").doc("user_apps");
+const FIELD_DOC  = db.collection("learning_data").doc("user_fields");
 const QUOTES_DOC = db.collection("learning_data").doc("user_quotes");
 
-/* B) SVG ICONS */
+/* B) SVG + helpers */
 const SVG_PATHS = {
     edit:  '<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>',
     trash: '<polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/>',
@@ -1088,27 +1187,16 @@ function escapeHtml(str) {
 /* C) STATE */
 const LS_APPS = 'my_learning_hub_apps_v3';
 const LS_FIELDS = 'my_learning_hub_fields_v3';
-const LS_QUOTES = 'my_learning_hub_quotes_v1';
+const LS_QUOTES = 'my_learning_hub_quotes_v2';
 const LS_SIDEBAR_W = 'sidebar_width_v1';
 const LS_SIDEBAR_OPEN = 'sidebar_open_v1';
 
 let userApps = [];
-try {
-    const cached = JSON.parse(localStorage.getItem(LS_APPS));
-    if (Array.isArray(cached)) userApps = cached;
-} catch (e) {}
-
+try { const c = JSON.parse(localStorage.getItem(LS_APPS)); if (Array.isArray(c)) userApps = c; } catch (e) {}
 let fieldState = {};
-try {
-    const f = JSON.parse(localStorage.getItem(LS_FIELDS));
-    if (f && typeof f === 'object') fieldState = f;
-} catch (e) {}
-
+try { const f = JSON.parse(localStorage.getItem(LS_FIELDS)); if (f && typeof f === 'object') fieldState = f; } catch (e) {}
 let userQuotes = [];
-try {
-    const q = JSON.parse(localStorage.getItem(LS_QUOTES));
-    if (Array.isArray(q)) userQuotes = q;
-} catch (e) {}
+try { const q = JSON.parse(localStorage.getItem(LS_QUOTES)); if (Array.isArray(q)) userQuotes = q; } catch (e) {}
 
 let currentActiveAppId = null;
 let currentAppKind = null;
@@ -1120,6 +1208,7 @@ let currentFieldObserver = null;
 let currentIframeDoc = null;
 let _applyingFromCloud = false;
 let editingQuoteId = null;
+let currentQuoteSource = 'personal';
 
 /* D) SYNC BADGE */
 let savingTimeout = null;
@@ -1137,56 +1226,33 @@ function flashSaving() {
     savingTimeout = setTimeout(() => setSyncBadge('ok', '☁ Đã đồng bộ'), 700);
 }
 
-/* E) LOCAL PERSIST */
-function saveAppsLocal() {
-    try { localStorage.setItem(LS_APPS, JSON.stringify(userApps)); } catch (e) {}
-}
-function saveFieldsLocal() {
-    try { localStorage.setItem(LS_FIELDS, JSON.stringify(fieldState)); } catch (e) {}
-}
-function saveQuotesLocal() {
-    try { localStorage.setItem(LS_QUOTES, JSON.stringify(userQuotes)); } catch (e) {}
-}
+/* E) LOCAL */
+function saveAppsLocal() { try { localStorage.setItem(LS_APPS, JSON.stringify(userApps)); } catch (e) {} }
+function saveFieldsLocal() { try { localStorage.setItem(LS_FIELDS, JSON.stringify(fieldState)); } catch (e) {} }
+function saveQuotesLocal() { try { localStorage.setItem(LS_QUOTES, JSON.stringify(userQuotes)); } catch (e) {} }
 
-/* F) CLOUD WRITES */
+/* F) CLOUD */
 function saveAppsCloud() {
     if (!cloudAppsLoaded) return;
     flashSaving();
-    APPS_DOC.set({
-        list: userApps,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-    }).then(() => setSyncBadge('ok', '☁ Đã đồng bộ'))
-      .catch(err => {
-          console.error('Lỗi lưu apps:', err);
-          setSyncBadge('err', 'Lỗi đồng bộ');
-      });
+    APPS_DOC.set({ list: userApps, updatedAt: firebase.firestore.FieldValue.serverTimestamp() })
+        .then(() => setSyncBadge('ok', '☁ Đã đồng bộ'))
+        .catch(err => { console.error(err); setSyncBadge('err', 'Lỗi đồng bộ'); });
 }
 function saveQuotesCloud() {
     if (!cloudQuotesLoaded) return;
     flashSaving();
-    QUOTES_DOC.set({
-        list: userQuotes,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-    }).then(() => setSyncBadge('ok', '☁ Đã đồng bộ'))
-      .catch(err => {
-          console.error('Lỗi lưu quotes:', err);
-          setSyncBadge('err', 'Lỗi đồng bộ');
-      });
+    QUOTES_DOC.set({ list: userQuotes, updatedAt: firebase.firestore.FieldValue.serverTimestamp() })
+        .then(() => setSyncBadge('ok', '☁ Đã đồng bộ'))
+        .catch(err => { console.error(err); setSyncBadge('err', 'Lỗi đồng bộ'); });
 }
-function persistApps() {
-    saveAppsLocal();
-    saveAppsCloud();
-}
-function persistQuotes() {
-    saveQuotesLocal();
-    saveQuotesCloud();
-}
+function persistApps() { saveAppsLocal(); saveAppsCloud(); }
+function persistQuotes() { saveQuotesLocal(); saveQuotesCloud(); }
 
 const pendingFieldWrites = {};
 function saveField(key, value) {
     fieldState[key] = value;
     saveFieldsLocal();
-
     clearTimeout(pendingFieldWrites[key]);
     pendingFieldWrites[key] = setTimeout(() => {
         flashSaving();
@@ -1195,40 +1261,25 @@ function saveField(key, value) {
         update.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
         FIELD_DOC.set(update, { merge: true })
             .then(() => setSyncBadge('ok', '☁ Đã đồng bộ'))
-            .catch(err => {
-                console.error('Lỗi lưu field:', err);
-                setSyncBadge('err', 'Lỗi đồng bộ');
-            });
+            .catch(err => { console.error(err); setSyncBadge('err', 'Lỗi đồng bộ'); });
     }, 400);
 }
 
-/* G) LISTEN CLOUD - APPS LIST */
+/* G) LISTEN APPS */
 APPS_DOC.onSnapshot(function (doc) {
     if (doc.metadata && doc.metadata.hasPendingWrites) return;
-
     if (doc.exists) {
         const data = doc.data();
         const cloudList = Array.isArray(data.list) ? data.list : [];
-
         if (!cloudAppsLoaded) {
             cloudAppsLoaded = true;
-            if (cloudList.length === 0 && userApps.length > 0) {
-                saveAppsCloud();
-                renderApps();
-                return;
-            }
-            if (cloudList.length > 0) {
-                userApps = cloudList;
-                saveAppsLocal();
-            }
+            if (cloudList.length === 0 && userApps.length > 0) { saveAppsCloud(); renderApps(); return; }
+            if (cloudList.length > 0) { userApps = cloudList; saveAppsLocal(); }
             renderApps();
             return;
         }
-
         if (JSON.stringify(cloudList) !== JSON.stringify(userApps)) {
-            userApps = cloudList;
-            saveAppsLocal();
-            renderApps();
+            userApps = cloudList; saveAppsLocal(); renderApps();
         }
     } else {
         if (!cloudAppsLoaded) {
@@ -1237,199 +1288,111 @@ APPS_DOC.onSnapshot(function (doc) {
             renderApps();
         }
     }
-}, err => {
-    console.warn('Apps listener error:', err);
-    cloudAppsLoaded = true;
-    setSyncBadge('err', 'Offline');
-    renderApps();
-});
+}, err => { console.warn(err); cloudAppsLoaded = true; setSyncBadge('err', 'Offline'); renderApps(); });
 
-/* H) LISTEN CLOUD - FIELDS STATE */
+/* H) LISTEN FIELDS */
 FIELD_DOC.onSnapshot(function (doc) {
     if (doc.metadata && doc.metadata.hasPendingWrites) return;
-    if (!doc.exists) {
-        cloudFieldsLoaded = true;
-        return;
-    }
+    if (!doc.exists) { cloudFieldsLoaded = true; return; }
     const data = doc.data();
     let changed = false;
     for (const k in data) {
         if (k === 'updatedAt') continue;
-        if (fieldState[k] !== data[k]) {
-            fieldState[k] = data[k];
-            changed = true;
-        }
+        if (fieldState[k] !== data[k]) { fieldState[k] = data[k]; changed = true; }
     }
-    if (changed) {
-        saveFieldsLocal();
-        applyFieldsToIframe();
-    }
-    if (!cloudFieldsLoaded) {
-        cloudFieldsLoaded = true;
-        setSyncBadge('ok', '☁ Đã đồng bộ');
-    }
-}, err => console.warn('Fields listener error:', err));
+    if (changed) { saveFieldsLocal(); applyFieldsToIframe(); }
+    if (!cloudFieldsLoaded) { cloudFieldsLoaded = true; setSyncBadge('ok', '☁ Đã đồng bộ'); }
+}, err => console.warn(err));
 
-/* H2) LISTEN CLOUD - QUOTES */
+/* H2) LISTEN QUOTES */
 QUOTES_DOC.onSnapshot(function (doc) {
     if (doc.metadata && doc.metadata.hasPendingWrites) return;
-
     if (doc.exists) {
         const data = doc.data();
         const list = Array.isArray(data.list) ? data.list : [];
-
         if (!cloudQuotesLoaded) {
             cloudQuotesLoaded = true;
-            // Nếu cloud rỗng + local có → đẩy local lên
-            if (list.length === 0 && userQuotes.length > 0) {
-                saveQuotesCloud();
-                loadRandomQuote();
-                return;
-            }
-            // Cloud có → ưu tiên cloud
-            if (list.length > 0) {
-                userQuotes = list;
-                saveQuotesLocal();
-            } else {
-                // Cloud rỗng, local cũng rỗng → giữ nguyên []
-                userQuotes = [];
-                saveQuotesLocal();
-            }
+            if (list.length === 0 && userQuotes.length > 0) { saveQuotesCloud(); loadRandomQuote(); return; }
+            if (list.length > 0) { userQuotes = list; saveQuotesLocal(); }
+            else { userQuotes = []; saveQuotesLocal(); }
             loadRandomQuote();
             return;
         }
-
         if (JSON.stringify(list) !== JSON.stringify(userQuotes)) {
-            userQuotes = list;
-            saveQuotesLocal();
-            loadRandomQuote();
+            userQuotes = list; saveQuotesLocal(); loadRandomQuote();
         }
     } else {
         if (!cloudQuotesLoaded) {
             cloudQuotesLoaded = true;
-            // Doc chưa tồn tại — nếu local có thì đẩy lên, không thì thôi
             if (userQuotes.length > 0) saveQuotesCloud();
             loadRandomQuote();
         }
     }
-}, err => {
-    console.warn('Quotes listener error:', err);
-    cloudQuotesLoaded = true;
-    loadRandomQuote();
-});
+}, err => { console.warn(err); cloudQuotesLoaded = true; loadRandomQuote(); });
 
-/* I) IFRAME FIELD SCANNER */
+/* I) IFRAME SCANNER */
 const SKIP_TYPES = ['file', 'submit', 'button', 'reset', 'image', 'password', 'hidden'];
 function isField(el) {
     if (!el || !el.tagName) return false;
     const tag = el.tagName.toLowerCase();
     if (tag === 'textarea' || tag === 'select') return true;
     if (tag !== 'input') return false;
-    if (SKIP_TYPES.indexOf(el.type) !== -1) {
-        return el.dataset && el.dataset.saveKey ? true : false;
-    }
+    if (SKIP_TYPES.indexOf(el.type) !== -1) return el.dataset && el.dataset.saveKey ? true : false;
     return true;
 }
 function collectFields(root) {
     if (!root) return [];
-    return Array.prototype.filter.call(
-        root.querySelectorAll('input, textarea, select'),
-        isField
-    );
+    return Array.prototype.filter.call(root.querySelectorAll('input, textarea, select'), isField);
 }
-
 function makeFieldKey(el, index) {
     const appId = currentActiveAppId || 'app';
     let localKey;
     if (el.dataset && el.dataset.saveKey) localKey = 'sk:' + el.dataset.saveKey;
     else if (el.id) localKey = 'id:' + el.id;
     else if (el.name) {
-        if (el.type === 'radio' || el.type === 'checkbox')
-            localKey = 'nm:' + el.name + '|v:' + (el.value || '');
-        else
-            localKey = 'nm:' + el.name;
-    }
-    else {
+        if (el.type === 'radio' || el.type === 'checkbox') localKey = 'nm:' + el.name + '|v:' + (el.value || '');
+        else localKey = 'nm:' + el.name;
+    } else {
         const tag = el.tagName.toLowerCase();
         const type = el.type || '';
         localKey = 'pos:' + tag + '|' + type + '|' + index;
     }
     return appId + '::' + localKey;
 }
-
 function readValue(el) {
     if (el.type === 'checkbox') return !!el.checked;
-    if (el.type === 'radio')    return el.checked ? el.value : undefined;
-    if (el.tagName.toLowerCase() === 'select' && el.multiple) {
-        return Array.prototype.map.call(el.selectedOptions, o => o.value);
-    }
+    if (el.type === 'radio') return el.checked ? el.value : undefined;
+    if (el.tagName.toLowerCase() === 'select' && el.multiple) return Array.prototype.map.call(el.selectedOptions, o => o.value);
     return el.value;
 }
-
 function fireEvents(el) {
     try { el.dispatchEvent(new Event('change', { bubbles: true })); }
-    catch (e) {
-        try {
-            const ev = document.createEvent('HTMLEvents');
-            ev.initEvent('change', true, false);
-            el.dispatchEvent(ev);
-        } catch (_) {}
-    }
+    catch (e) { try { const ev = document.createEvent('HTMLEvents'); ev.initEvent('change', true, false); el.dispatchEvent(ev); } catch (_) {} }
     try { el.dispatchEvent(new Event('input', { bubbles: true })); }
-    catch (e) {
-        try {
-            const ev = document.createEvent('HTMLEvents');
-            ev.initEvent('input', true, false);
-            el.dispatchEvent(ev);
-        } catch (_) {}
-    }
+    catch (e) { try { const ev = document.createEvent('HTMLEvents'); ev.initEvent('input', true, false); el.dispatchEvent(ev); } catch (_) {} }
 }
-
 function writeValue(el, val) {
     if (val === undefined || val === null) return false;
     const tag = el.tagName.toLowerCase();
     let changed = false;
-
-    if (el.type === 'checkbox') {
-        const b = !!val;
-        if (el.checked !== b) { el.checked = b; changed = true; }
-    } else if (el.type === 'radio') {
-        const b = (el.value === val);
-        if (el.checked !== b) { el.checked = b; changed = true; }
-    } else if (tag === 'select') {
+    if (el.type === 'checkbox') { const b = !!val; if (el.checked !== b) { el.checked = b; changed = true; } }
+    else if (el.type === 'radio') { const b = (el.value === val); if (el.checked !== b) { el.checked = b; changed = true; } }
+    else if (tag === 'select') {
         if (el.multiple && Array.isArray(val)) {
-            Array.prototype.forEach.call(el.options, o => {
-                const should = val.indexOf(o.value) !== -1;
-                if (o.selected !== should) { o.selected = should; changed = true; }
-            });
-        } else {
-            if (el.value !== val) { el.value = val; changed = true; }
-        }
-    } else {
-        if (el.value !== val) { el.value = val; changed = true; }
-    }
-
+            Array.prototype.forEach.call(el.options, o => { const should = val.indexOf(o.value) !== -1; if (o.selected !== should) { o.selected = should; changed = true; } });
+        } else if (el.value !== val) { el.value = val; changed = true; }
+    } else if (el.value !== val) { el.value = val; changed = true; }
     if (changed) fireEvents(el);
     return changed;
 }
-
 function applyFieldsToIframe() {
-    if (!currentIframeDoc) return;
-    if (_applyingFromCloud) return;
-    if (currentAppKind !== 'html') return;
-
+    if (!currentIframeDoc || _applyingFromCloud || currentAppKind !== 'html') return;
     try {
         const iframeDoc = currentIframeDoc;
         const fields = collectFields(iframeDoc);
         const active = iframeDoc.activeElement;
-
         const radioGroups = {};
-        fields.forEach(el => {
-            if (el.type === 'radio' && el.name) {
-                (radioGroups[el.name] = radioGroups[el.name] || []).push(el);
-            }
-        });
-
+        fields.forEach(el => { if (el.type === 'radio' && el.name) (radioGroups[el.name] = radioGroups[el.name] || []).push(el); });
         _applyingFromCloud = true;
         try {
             fields.forEach((el, index) => {
@@ -1440,50 +1403,33 @@ function applyFieldsToIframe() {
                 const val = fieldState[key];
                 if (val !== undefined) writeValue(el, val);
             });
-
             Object.keys(radioGroups).forEach(name => {
                 const radios = radioGroups[name];
                 let cloudVal, hasCloud = false;
                 radios.forEach(el => {
                     const key = makeFieldKey(el, fields.indexOf(el));
-                    if (fieldState[key] !== undefined) {
-                        hasCloud = true;
-                        cloudVal = fieldState[key];
-                    }
+                    if (fieldState[key] !== undefined) { hasCloud = true; cloudVal = fieldState[key]; }
                 });
                 if (!hasCloud) return;
                 radios.forEach(el => {
                     if (active && active === el) return;
                     const should = (el.value === cloudVal);
-                    if (el.checked !== should) {
-                        el.checked = should;
-                        fireEvents(el);
-                    }
+                    if (el.checked !== should) { el.checked = should; fireEvents(el); }
                 });
             });
-        } finally {
-            _applyingFromCloud = false;
-        }
-    } catch (e) {
-        console.warn('[LB] applyFieldsToIframe:', e);
-    }
+        } finally { _applyingFromCloud = false; }
+    } catch (e) { console.warn(e); }
 }
-
 function bindIframe() {
     if (currentFieldObserver) { currentFieldObserver.disconnect(); currentFieldObserver = null; }
     currentIframeDoc = null;
-
     if (currentAppKind !== 'html') return;
-
     const iframe = document.getElementById('appFrame');
     if (!iframe) return;
-
     try {
         const doc = iframe.contentDocument || iframe.contentWindow.document;
-        if (!doc) return;
-        if (!doc.querySelector) return;
+        if (!doc || !doc.querySelector) return;
         currentIframeDoc = doc;
-
         const handler = function (e) {
             if (_applyingFromCloud) return;
             const el = e.target;
@@ -1497,10 +1443,8 @@ function bindIframe() {
             if (val === undefined) return;
             saveField(key, val);
         };
-
         doc.addEventListener('change', handler, true);
-        doc.addEventListener('input',  handler, true);
-
+        doc.addEventListener('input', handler, true);
         currentFieldObserver = new MutationObserver(function (mutations) {
             let hasNew = false;
             for (let i = 0; i < mutations.length && !hasNew; i++) {
@@ -1514,48 +1458,28 @@ function bindIframe() {
             }
             if (hasNew) applyFieldsToIframe();
         });
-        currentFieldObserver.observe(doc.body || doc.documentElement, {
-            childList: true, subtree: true
-        });
-
+        currentFieldObserver.observe(doc.body || doc.documentElement, { childList: true, subtree: true });
         applyFieldsToIframe();
         setTimeout(applyFieldsToIframe, 300);
         setTimeout(applyFieldsToIframe, 1000);
-    } catch (e) {
-        console.warn('[LB] Không thể truy cập iframe (khác origin?):', e);
-    }
+    } catch (e) { console.warn(e); }
 }
 
-/* J) POSTMESSAGE API CHO APP CON (LBSync) */
+/* J) POSTMESSAGE */
 window.addEventListener('message', function (e) {
     const d = e.data;
     if (!d || typeof d !== 'object') return;
     const appId = currentActiveAppId || 'app';
-
-    if (d.type === 'LB_SAVE' && typeof d.key === 'string') {
-        const key = appId + '::custom::' + d.key;
-        saveField(key, d.value);
-    }
-
+    if (d.type === 'LB_SAVE' && typeof d.key === 'string') saveField(appId + '::custom::' + d.key, d.value);
     if (d.type === 'LB_LOAD' && typeof d.key === 'string') {
-        const key = appId + '::custom::' + d.key;
         const source = e.source;
-        if (source && source.postMessage) {
-            source.postMessage({
-                type: 'LB_VALUE',
-                key: d.key,
-                value: fieldState[key]
-            }, '*');
-        }
+        if (source && source.postMessage) source.postMessage({ type: 'LB_VALUE', key: d.key, value: fieldState[appId + '::custom::' + d.key] }, '*');
     }
 });
 
-/* ═══════════════════════════════════════════════════════════
-   K) PDF VIEWER
-   ═══════════════════════════════════════════════════════════ */
+/* K) PDF */
 const PDFJS_VER = '3.11.174';
 const PDFJS_BASE = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/' + PDFJS_VER + '/';
-
 let pdfLibPromise = null;
 let pdfDoc = null;
 let pdfScale = 1;
@@ -1573,137 +1497,89 @@ function loadPdfJs() {
         s.src = PDFJS_BASE + 'pdf.min.js';
         s.onload = function () {
             const lib = window.pdfjsLib;
-            if (!lib) { reject(new Error('Không nạp được thư viện PDF.js')); return; }
+            if (!lib) { reject(new Error('No pdfjsLib')); return; }
             try { lib.GlobalWorkerOptions.workerSrc = PDFJS_BASE + 'pdf.worker.min.js'; } catch (e) {}
             resolve(lib);
         };
-        s.onerror = function () { reject(new Error('Không tải được PDF.js từ CDN')); };
+        s.onerror = function () { reject(new Error('Load failed')); };
         document.head.appendChild(s);
     });
     return pdfLibPromise;
 }
-
 function closePdf() {
     pdfRenderToken++;
-    pdfCurrentUrl = null;
-    pdfFitScale = 0;
+    pdfCurrentUrl = null; pdfFitScale = 0;
     if (pdfObserver) { pdfObserver.disconnect(); pdfObserver = null; }
     if (pdfDoc) { try { pdfDoc.destroy(); } catch (e) {} pdfDoc = null; }
-    const pages = document.getElementById('pdfPages');
-    if (pages) pages.innerHTML = '';
-    const loading = document.getElementById('pdfLoading');
-    if (loading) { loading.style.display = 'none'; loading.innerHTML = ''; }
-    const tag = document.getElementById('pdfPageTag');
-    if (tag) tag.textContent = '';
+    const pages = document.getElementById('pdfPages'); if (pages) pages.innerHTML = '';
+    const loading = document.getElementById('pdfLoading'); if (loading) { loading.style.display = 'none'; loading.innerHTML = ''; }
+    const tag = document.getElementById('pdfPageTag'); if (tag) tag.textContent = '';
 }
-
 function setPdfZoomLabel() {
     const el = document.getElementById('pdfZoomLabel');
     if (el) el.textContent = Math.round(pdfScale * 100) + '%';
 }
-
 async function openPdf(path) {
     const wrap = document.getElementById('pdfWrapper');
     const pagesEl = document.getElementById('pdfPages');
     const loading = document.getElementById('pdfLoading');
-
     wrap.style.display = 'flex';
     pagesEl.innerHTML = '';
     loading.style.display = 'flex';
     loading.innerHTML = '<div class="pdf-spinner"></div><div>Đang tải PDF…</div>';
     document.getElementById('pdfPageTag').textContent = '';
-
     if (pdfObserver) { pdfObserver.disconnect(); pdfObserver = null; }
     if (pdfDoc) { try { pdfDoc.destroy(); } catch (e) {} pdfDoc = null; }
-
-    pdfScale = 1;
-    pdfFitScale = 0;
+    pdfScale = 1; pdfFitScale = 0;
     setPdfZoomLabel();
     pdfCurrentUrl = path;
     const token = ++pdfRenderToken;
-
     await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
-
     let lib;
-    try {
-        lib = await loadPdfJs();
-    } catch (err) {
+    try { lib = await loadPdfJs(); }
+    catch (err) {
         if (token !== pdfRenderToken) return;
-        showPdfError(path, 'Không nạp được thư viện xem PDF. Kiểm tra kết nối mạng rồi thử lại.');
+        showPdfError(path, 'Không nạp được thư viện xem PDF. Kiểm tra kết nối mạng.');
         return;
     }
-
     try {
-        const task = lib.getDocument({
-            url: path,
-            cMapUrl: PDFJS_BASE + 'cmaps/',
-            cMapPacked: true,
-            withCredentials: false
-        });
+        const task = lib.getDocument({ url: path, cMapUrl: PDFJS_BASE + 'cmaps/', cMapPacked: true, withCredentials: false });
         const doc = await task.promise;
-        if (token !== pdfRenderToken || pdfCurrentUrl !== path) {
-            try { doc.destroy(); } catch (e) {}
-            return;
-        }
+        if (token !== pdfRenderToken || pdfCurrentUrl !== path) { try { doc.destroy(); } catch (e) {} return; }
         pdfDoc = doc;
         const tag = document.getElementById('pdfPageTag');
         if (tag) tag.textContent = doc.numPages + ' trang';
-        loading.style.display = 'none';
-        loading.innerHTML = '';
+        loading.style.display = 'none'; loading.innerHTML = '';
         await renderPdfAll(token);
     } catch (err) {
         if (token !== pdfRenderToken) return;
-        console.error('[LB] PDF error:', err);
         let msg = 'Không đọc được tệp PDF này.';
-        if (location.protocol === 'file:') {
-            msg = 'Trình duyệt chặn đọc tệp khi mở bằng file://. Hãy chạy qua local server (VD: python -m http.server 8000) hoặc mở PDF trong tab mới.';
-        } else if (String(err && err.message || '').toLowerCase().indexOf('cors') !== -1) {
-            msg = 'Tệp PDF bị chặn bởi CORS. Hãy đặt PDF cùng thư mục với Dashboard.';
-        } else if (String(err && err.name || '') === 'MissingPDFException' || String(err && err.message || '').indexOf('Missing') !== -1) {
-            msg = 'Không tìm thấy tệp. Kiểm tra lại đường dẫn đã đúng chưa.';
-        }
+        if (location.protocol === 'file:') msg = 'Trình duyệt chặn đọc tệp khi mở bằng file://. Hãy chạy qua local server hoặc mở PDF trong tab mới.';
+        else if (String(err && err.message || '').toLowerCase().indexOf('cors') !== -1) msg = 'Tệp PDF bị chặn bởi CORS. Hãy đặt PDF cùng thư mục với Dashboard.';
         showPdfError(path, msg);
     }
 }
-
 function showPdfError(path, msg) {
     const loading = document.getElementById('pdfLoading');
     loading.style.display = 'flex';
     loading.innerHTML = '';
-
     const box = document.createElement('div');
     box.style.cssText = 'max-width:360px;display:flex;flex-direction:column;gap:12px;align-items:center;';
-
-    const title = document.createElement('div');
-    title.style.cssText = 'font-size:14px;font-weight:800;color:#f87171;';
-    title.textContent = 'Không xem được PDF';
-
-    const desc = document.createElement('div');
-    desc.style.cssText = 'font-size:11.5px;color:#94a3b8;line-height:1.65;font-weight:500;';
-    desc.textContent = msg;
-
+    box.innerHTML = '<div style="font-size:14px;font-weight:800;color:#f87171;">Không xem được PDF</div>' +
+                    '<div style="font-size:11.5px;color:#94a3b8;line-height:1.65;font-weight:500;">' + escapeHtml(msg) + '</div>';
     const a = document.createElement('a');
-    a.href = path;
-    a.target = '_blank';
-    a.rel = 'noopener';
-    a.className = 'btn-pri';
+    a.href = path; a.target = '_blank'; a.rel = 'noopener'; a.className = 'btn-pri';
     a.style.cssText = 'text-decoration:none;display:inline-block;';
     a.textContent = 'Mở PDF trong tab mới';
-
-    box.appendChild(title);
-    box.appendChild(desc);
     box.appendChild(a);
     loading.appendChild(box);
 }
-
 async function renderPdfAll(token) {
     const pagesEl = document.getElementById('pdfPages');
     const scroll = document.getElementById('pdfScroll');
     if (!pdfDoc || !pagesEl || !scroll) return;
-
     if (pdfObserver) { pdfObserver.disconnect(); pdfObserver = null; }
     pagesEl.innerHTML = '';
-
     if (!pdfFitScale) {
         const padding = 24;
         const avail = Math.max(240, scroll.clientWidth - padding);
@@ -1712,7 +1588,6 @@ async function renderPdfAll(token) {
         const vp1 = firstPage.getViewport({ scale: 1 });
         pdfFitScale = avail / vp1.width;
     }
-
     pdfObserver = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
             if (!entry.isIntersecting) return;
@@ -1721,34 +1596,28 @@ async function renderPdfAll(token) {
             renderPdfPage(holder);
         });
     }, { root: scroll, rootMargin: '400px 0px' });
-
     for (let i = 1; i <= pdfDoc.numPages; i++) {
         if (token !== pdfRenderToken) return;
         let page;
         try { page = await pdfDoc.getPage(i); } catch (e) { continue; }
         const vp = page.getViewport({ scale: 1 });
         const s = pdfFitScale * pdfScale;
-        const w = Math.floor(vp.width  * s);
+        const w = Math.floor(vp.width * s);
         const h = Math.floor(vp.height * s);
-
         const holder = document.createElement('div');
         holder.className = 'pdf-page';
         holder.dataset.page = String(i);
         holder._page = page;
         holder._scale = s;
-
         const canvas = document.createElement('canvas');
-        canvas.style.width  = w + 'px';
+        canvas.style.width = w + 'px';
         canvas.style.height = h + 'px';
-        canvas.width  = w;
-        canvas.height = h;
-
+        canvas.width = w; canvas.height = h;
         holder.appendChild(canvas);
         pagesEl.appendChild(holder);
         pdfObserver.observe(holder);
     }
 }
-
 async function renderPdfPage(holder) {
     if (holder.dataset.rendered === '1') return;
     holder.dataset.rendered = '1';
@@ -1761,207 +1630,128 @@ async function renderPdfPage(holder) {
         if (!canvas) return;
         const ctx = canvas.getContext('2d');
         const dpr = Math.min(window.devicePixelRatio || 1, 2);
-
-        canvas.width  = Math.floor(viewport.width  * dpr);
+        canvas.width = Math.floor(viewport.width * dpr);
         canvas.height = Math.floor(viewport.height * dpr);
-        canvas.style.width  = Math.floor(viewport.width) + 'px';
+        canvas.style.width = Math.floor(viewport.width) + 'px';
         canvas.style.height = Math.floor(viewport.height) + 'px';
-
-        const renderTask = page.render({
-            canvasContext: ctx,
-            viewport: viewport,
-            transform: dpr !== 1 ? [dpr, 0, 0, dpr, 0, 0] : null
-        });
-        await renderTask.promise;
+        await page.render({ canvasContext: ctx, viewport: viewport, transform: dpr !== 1 ? [dpr, 0, 0, dpr, 0, 0] : null }).promise;
     } catch (e) {}
 }
-
 async function pdfZoomAt(newScale, clientX, clientY) {
     if (!pdfDoc) return;
     newScale = Math.min(8, Math.max(0.2, newScale));
     if (Math.abs(newScale - pdfScale) < 0.0001) return;
-
     const scroll = document.getElementById('pdfScroll');
     const scrollRect = scroll.getBoundingClientRect();
-
     let anchorX, anchorY;
-    if (clientX === undefined || clientY === undefined) {
-        anchorX = scrollRect.width / 2;
-        anchorY = scrollRect.height / 2;
-    } else {
-        anchorX = clientX - scrollRect.left;
-        anchorY = clientY - scrollRect.top;
-    }
-
+    if (clientX === undefined || clientY === undefined) { anchorX = scrollRect.width / 2; anchorY = scrollRect.height / 2; }
+    else { anchorX = clientX - scrollRect.left; anchorY = clientY - scrollRect.top; }
     const contentX = scroll.scrollLeft + anchorX;
     const contentY = scroll.scrollTop + anchorY;
-
     const ratio = newScale / pdfScale;
     pdfScale = newScale;
     setPdfZoomLabel();
-
     const token = ++pdfRenderToken;
     await renderPdfAll(token);
     if (token !== pdfRenderToken) return;
-
     scroll.scrollLeft = contentX * ratio - anchorX;
-    scroll.scrollTop  = contentY * ratio - anchorY;
+    scroll.scrollTop = contentY * ratio - anchorY;
 }
+function pdfZoom(factor, clientX, clientY) { if (!pdfDoc) return; pdfZoomAt(pdfScale * factor, clientX, clientY); }
+function pdfFitWidth(clientX, clientY) { if (!pdfDoc) return; pdfZoomAt(1, clientX, clientY); }
 
-function pdfZoom(factor, clientX, clientY) {
-    if (!pdfDoc) return;
-    pdfZoomAt(pdfScale * factor, clientX, clientY);
-}
-
-function pdfFitWidth(clientX, clientY) {
-    if (!pdfDoc) return;
-    pdfZoomAt(1, clientX, clientY);
-}
-
-/* L) IMAGE VIEWER */
+/* L) IMAGE */
 let imgCurrentUrl = null;
 let imgNaturalW = 0, imgNaturalH = 0;
 let imgZoomLevel = 1;
-
 function closeImage() {
-    imgCurrentUrl = null;
-    imgNaturalW = 0;
-    imgNaturalH = 0;
-    imgZoomLevel = 1;
+    imgCurrentUrl = null; imgNaturalW = 0; imgNaturalH = 0; imgZoomLevel = 1;
     const img = document.getElementById('imageDisplay');
     if (img) { img.onload = null; img.onerror = null; img.src = ''; img.style.width = ''; img.style.height = ''; }
     const scroll = document.getElementById('imageScroll');
     if (scroll) {
-        const errBox = scroll.querySelector('.img-error');
-        if (errBox) errBox.remove();
+        const errBox = scroll.querySelector('.img-error'); if (errBox) errBox.remove();
         if (img) img.style.display = '';
     }
-    const info = document.getElementById('imgInfo');
-    if (info) info.textContent = '';
-    const lbl = document.getElementById('imgZoomLabel');
-    if (lbl) lbl.textContent = '100%';
+    const info = document.getElementById('imgInfo'); if (info) info.textContent = '';
+    const lbl = document.getElementById('imgZoomLabel'); if (lbl) lbl.textContent = '100%';
 }
-
 function openImage(path) {
     const wrap = document.getElementById('imageWrapper');
     const scroll = document.getElementById('imageScroll');
     const img = document.getElementById('imageDisplay');
-
     wrap.style.display = 'flex';
-    imgCurrentUrl = path;
-    imgNaturalW = 0;
-    imgNaturalH = 0;
-    imgZoomLevel = 1;
-
-    const errBox = scroll.querySelector('.img-error');
-    if (errBox) errBox.remove();
+    imgCurrentUrl = path; imgNaturalW = 0; imgNaturalH = 0; imgZoomLevel = 1;
+    const errBox = scroll.querySelector('.img-error'); if (errBox) errBox.remove();
     img.style.display = '';
-
     document.getElementById('imgInfo').textContent = '';
     document.getElementById('imgZoomLabel').textContent = '100%';
-
     img.onload = function () {
         imgNaturalW = img.naturalWidth;
         imgNaturalH = img.naturalHeight;
-        document.getElementById('imgInfo').textContent =
-            imgNaturalW + ' × ' + imgNaturalH;
+        document.getElementById('imgInfo').textContent = imgNaturalW + ' × ' + imgNaturalH;
         imgFitToScreen();
     };
-    img.onerror = function () {
-        showImageError(path);
-    };
+    img.onerror = function () { showImageError(path); };
     img.src = path;
 }
-
 function showImageError(path) {
     const scroll = document.getElementById('imageScroll');
     const img = document.getElementById('imageDisplay');
     if (!scroll) return;
     img.style.display = 'none';
-    const oldErr = scroll.querySelector('.img-error');
-    if (oldErr) oldErr.remove();
-
+    const oldErr = scroll.querySelector('.img-error'); if (oldErr) oldErr.remove();
     let msg = 'Không tải được ảnh.';
-    if (location.protocol === 'file:') {
-        msg = 'Trình duyệt có thể chặn khi mở bằng file://. Hãy chạy qua local server hoặc mở ảnh trong tab mới.';
-    }
-
+    if (location.protocol === 'file:') msg = 'Trình duyệt có thể chặn khi mở bằng file://. Hãy chạy qua local server hoặc mở ảnh trong tab mới.';
     const box = document.createElement('div');
     box.className = 'img-error';
-    box.innerHTML =
-        '<div class="img-error-title">Không xem được ảnh</div>' +
-        '<div class="img-error-desc">' + escapeHtml(msg) + '</div>';
-
+    box.innerHTML = '<div class="img-error-title">Không xem được ảnh</div>' +
+                    '<div class="img-error-desc">' + escapeHtml(msg) + '</div>';
     const a = document.createElement('a');
-    a.href = path;
-    a.target = '_blank';
-    a.rel = 'noopener';
-    a.className = 'btn-pri';
+    a.href = path; a.target = '_blank'; a.rel = 'noopener'; a.className = 'btn-pri';
     a.textContent = 'Mở ảnh trong tab mới';
     box.appendChild(a);
-
     scroll.appendChild(box);
 }
-
 function applyImageSize() {
     const img = document.getElementById('imageDisplay');
     if (!img || !imgNaturalW) return;
-    img.style.width  = Math.round(imgNaturalW * imgZoomLevel) + 'px';
+    img.style.width = Math.round(imgNaturalW * imgZoomLevel) + 'px';
     img.style.height = 'auto';
-    document.getElementById('imgZoomLabel').textContent =
-        Math.round(imgZoomLevel * 100) + '%';
+    document.getElementById('imgZoomLabel').textContent = Math.round(imgZoomLevel * 100) + '%';
     updateImageCursor();
 }
-
 function updateImageCursor() {
     const img = document.getElementById('imageDisplay');
     if (!img) return;
     if (!imgNaturalW) { img.style.cursor = 'default'; return; }
     img.style.cursor = (Math.abs(imgZoomLevel - 1) < 0.01) ? 'zoom-out' : 'zoom-in';
 }
-
 function imgSetZoom(newZoom, clientX, clientY) {
     if (!imgNaturalW) return;
     newZoom = Math.min(8, Math.max(0.05, newZoom));
     if (Math.abs(newZoom - imgZoomLevel) < 0.0001) return;
-
     const img = document.getElementById('imageDisplay');
     const scroll = document.getElementById('imageScroll');
     const scrollRect = scroll.getBoundingClientRect();
-
     let ax, ay;
-    if (clientX === undefined || clientY === undefined) {
-        ax = scrollRect.left + scrollRect.width / 2;
-        ay = scrollRect.top + scrollRect.height / 2;
-    } else {
-        ax = clientX;
-        ay = clientY;
-    }
-
+    if (clientX === undefined || clientY === undefined) { ax = scrollRect.left + scrollRect.width / 2; ay = scrollRect.top + scrollRect.height / 2; }
+    else { ax = clientX; ay = clientY; }
     const imgRectBefore = img.getBoundingClientRect();
-    const relX = imgRectBefore.width  > 0 ? (ax - imgRectBefore.left) / imgRectBefore.width  : 0.5;
-    const relY = imgRectBefore.height > 0 ? (ay - imgRectBefore.top)  / imgRectBefore.height : 0.5;
-
+    const relX = imgRectBefore.width > 0 ? (ax - imgRectBefore.left) / imgRectBefore.width : 0.5;
+    const relY = imgRectBefore.height > 0 ? (ay - imgRectBefore.top) / imgRectBefore.height : 0.5;
     imgZoomLevel = newZoom;
     applyImageSize();
-
     const imgRectAfter = img.getBoundingClientRect();
     const anchorAfterX = imgRectAfter.left + relX * imgRectAfter.width;
-    const anchorAfterY = imgRectAfter.top  + relY * imgRectAfter.height;
-
+    const anchorAfterY = imgRectAfter.top + relY * imgRectAfter.height;
     const dx = anchorAfterX - ax;
     const dy = anchorAfterY - ay;
     if (Math.abs(dx) > 0.5) scroll.scrollLeft += dx;
-    if (Math.abs(dy) > 0.5) scroll.scrollTop  += dy;
-
+    if (Math.abs(dy) > 0.5) scroll.scrollTop += dy;
     updateImageCursor();
 }
-
-function imgZoomBy(factor, clientX, clientY) {
-    if (!imgNaturalW) return;
-    imgSetZoom(imgZoomLevel * factor, clientX, clientY);
-}
-
+function imgZoomBy(factor, clientX, clientY) { if (!imgNaturalW) return; imgSetZoom(imgZoomLevel * factor, clientX, clientY); }
 function imgFitToScreen() {
     if (!imgNaturalW) return;
     const scroll = document.getElementById('imageScroll');
@@ -1969,89 +1759,114 @@ function imgFitToScreen() {
     const availH = scroll.clientHeight - 32;
     imgZoomLevel = Math.min(availW / imgNaturalW, availH / imgNaturalH, 1);
     applyImageSize();
-    scroll.scrollLeft = 0;
-    scroll.scrollTop = 0;
+    scroll.scrollLeft = 0; scroll.scrollTop = 0;
+}
+function imgActualSize(clientX, clientY) { if (!imgNaturalW) return; imgSetZoom(1, clientX, clientY); }
+
+/* M) QUOTE LANG + RENDER */
+function detectLang(text) {
+    if (!text) return 'en';
+    const s = String(text);
+    if (/[\u3040-\u309F\u30A0-\u30FF]/.test(s)) return 'ja';
+    if (/[ăâđêôơưĂÂĐÊÔƠƯáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ]/i.test(s)) return 'vi';
+    return 'en';
+}
+function getQuoteMarks(lang) {
+    if (lang === 'ja') return { open: '「', close: '」' };
+    if (lang === 'en') return { open: '"', close: '"' };
+    return { open: '', close: '' };
+}
+function isWorkSource(type) { return type === 'movie' || type === 'book' || type === 'music'; }
+
+function renderQuoteBlock(q) {
+    const block = document.getElementById('quoteBlock');
+    const elText = document.getElementById('quoteText');
+    const elTrans = document.getElementById('quoteTrans');
+    const elAttr = document.getElementById('quoteAttr');
+    if (!block || !elText || !elTrans || !elAttr) return;
+
+    if (!q) {
+        block.classList.add('empty');
+        block.classList.remove('lang-ja');
+        elText.textContent = 'Chưa có câu nói nào — bấm vào đây để thêm';
+        elTrans.textContent = '';
+        elAttr.innerHTML = '';
+        return;
+    }
+    block.classList.remove('empty');
+
+    let lang = q.lang && q.lang !== 'auto' ? q.lang : detectLang(q.text);
+    if (lang === 'ja') block.classList.add('lang-ja');
+    else block.classList.remove('lang-ja');
+
+    const marks = getQuoteMarks(lang);
+    elText.textContent = marks.open + q.text + marks.close;
+
+    if (q.translation && q.translation.trim()) {
+        elTrans.textContent = '(' + q.translation + ')';
+        elTrans.style.display = '';
+    } else {
+        elTrans.textContent = '';
+        elTrans.style.display = 'none';
+    }
+
+    const isWork = isWorkSource(q.sourceType) && q.sourceTitle && q.sourceTitle.trim();
+    if (isWork) {
+        const srcLine = '"' + escapeHtml(q.sourceTitle) + (q.year ? ' · ' + escapeHtml(q.year) : '') + '"';
+        const authorLine = q.author && q.author.trim() ? '— ' + escapeHtml(q.author) + ' —' : '';
+        elAttr.innerHTML = '<div class="quote-credit-wrap">' +
+            '<div class="quote-credit">' +
+                '<div class="quote-credit-source">' + srcLine + '</div>' +
+                (authorLine ? '<div class="quote-credit-author">' + authorLine + '</div>' : '') +
+            '</div>' +
+        '</div>';
+    } else {
+        if (q.author && q.author.trim()) {
+            elAttr.innerHTML = '<div class="quote-attr-inline">— ' + escapeHtml(q.author) + ' —</div>';
+        } else {
+            elAttr.innerHTML = '';
+        }
+    }
 }
 
-function imgActualSize(clientX, clientY) {
-    if (!imgNaturalW) return;
-    imgSetZoom(1, clientX, clientY);
+function loadRandomQuote() {
+    if (!userQuotes || userQuotes.length === 0) { renderQuoteBlock(null); return; }
+    const q = userQuotes[Math.floor(Math.random() * userQuotes.length)];
+    renderQuoteBlock(q);
 }
 
-/* M) NGÀY / GIỜ / QUOTE */
+/* N) DATE/TIME */
 function updateDate() {
     const days = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
     const now = new Date();
     const el = document.getElementById('currentDateDisplay');
-    if (el) el.textContent =
-        days[now.getDay()] + ', ' +
+    if (el) el.textContent = days[now.getDay()] + ', ' +
         String(now.getDate()).padStart(2, '0') + '/' +
         String(now.getMonth() + 1).padStart(2, '0') + '/' +
         now.getFullYear();
 }
-
-function loadRandomQuote() {
-    const block = document.getElementById('quoteBlock');
-    const en = document.getElementById('quoteEn');
-    const vi = document.getElementById('quoteVi');
-    const au = document.getElementById('quoteAuthor');
-    if (!en || !vi || !au || !block) return;
-
-    if (!userQuotes || userQuotes.length === 0) {
-        block.classList.add('empty');
-        en.textContent = 'Chưa có câu nói nào — mở thư viện (☰) để thêm';
-        vi.textContent = '';
-        au.textContent = '';
-        return;
-    }
-
-    block.classList.remove('empty');
-    const q = userQuotes[Math.floor(Math.random() * userQuotes.length)];
-    en.textContent = '"' + q.en + '"';
-    vi.textContent = '(' + q.vi + ')';
-    au.textContent = '— ' + q.author + ' —';
-}
-
 function updateClock() {
     const now = new Date();
-    const time = now.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
     const el = document.getElementById('clockTime');
-    if (el) el.textContent = time;
+    if (el) el.textContent = now.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
 }
 
-/* SIDEBAR — TOGGLE, RESIZE, BACKDROP */
-function toggleSidebar() {
-    document.body.classList.toggle('sidebar-open');
-    saveSidebarState();
-}
-function openSidebar() {
-    document.body.classList.add('sidebar-open');
-    saveSidebarState();
-}
-function closeSidebar() {
-    document.body.classList.remove('sidebar-open');
-    saveSidebarState();
-}
+/* O) SIDEBAR */
+function toggleSidebar() { document.body.classList.toggle('sidebar-open'); saveSidebarState(); }
+function openSidebar() { document.body.classList.add('sidebar-open'); saveSidebarState(); }
+function closeSidebar() { document.body.classList.remove('sidebar-open'); saveSidebarState(); }
 function saveSidebarState() {
-    try {
-        localStorage.setItem(LS_SIDEBAR_OPEN,
-            document.body.classList.contains('sidebar-open') ? '1' : '0');
-    } catch (e) {}
+    try { localStorage.setItem(LS_SIDEBAR_OPEN, document.body.classList.contains('sidebar-open') ? '1' : '0'); } catch (e) {}
 }
 function initSidebarResize() {
     const resizer = document.getElementById('sidebarResizer');
     const sidebar = document.getElementById('sidebar');
     if (!resizer || !sidebar) return;
-
-    let isResizing = false;
-    let startX = 0;
-    let startW = 0;
-
+    let isResizing = false, startX = 0, startW = 0;
     function start(e) {
         if (e.touches && e.touches.length !== 1) return;
         const pt = e.touches ? e.touches[0] : e;
-        isResizing = true;
-        startX = pt.clientX;
+        isResizing = true; startX = pt.clientX;
         startW = sidebar.getBoundingClientRect().width;
         resizer.classList.add('dragging');
         document.body.style.cursor = 'col-resize';
@@ -2063,8 +1878,7 @@ function initSidebarResize() {
         const pt = e.touches ? e.touches[0] : e;
         const dx = pt.clientX - startX;
         const maxW = Math.min(window.innerWidth - 24, 900);
-        let w = startW + dx;
-        w = Math.max(200, Math.min(maxW, w));
+        let w = Math.max(200, Math.min(maxW, startW + dx));
         document.documentElement.style.setProperty('--sidebar-width', w + 'px');
         if (e.preventDefault) e.preventDefault();
     }
@@ -2074,16 +1888,11 @@ function initSidebarResize() {
         resizer.classList.remove('dragging');
         document.body.style.cursor = '';
         document.body.style.userSelect = '';
-        try {
-            const w = sidebar.getBoundingClientRect().width;
-            localStorage.setItem(LS_SIDEBAR_W, String(Math.round(w)));
-        } catch (e) {}
+        try { localStorage.setItem(LS_SIDEBAR_W, String(Math.round(sidebar.getBoundingClientRect().width))); } catch (e) {}
     }
-
     resizer.addEventListener('mousedown', start);
     document.addEventListener('mousemove', move);
     document.addEventListener('mouseup', end);
-
     resizer.addEventListener('touchstart', start, { passive: false });
     document.addEventListener('touchmove', move, { passive: false });
     document.addEventListener('touchend', end);
@@ -2092,9 +1901,7 @@ function initSidebarResize() {
 function loadSidebarWidth() {
     try {
         const w = parseFloat(localStorage.getItem(LS_SIDEBAR_W));
-        if (w >= 200 && w <= 900) {
-            document.documentElement.style.setProperty('--sidebar-width', w + 'px');
-        }
+        if (w >= 200 && w <= 900) document.documentElement.style.setProperty('--sidebar-width', w + 'px');
     } catch (e) {}
 }
 function restoreSidebarState() {
@@ -2113,13 +1920,11 @@ function clampSidebarWidth() {
     const w = Math.max(200, Math.min(maxW, cur));
     document.documentElement.style.setProperty('--sidebar-width', w + 'px');
 }
-
 function handleChipClick(e) {
     if (!document.body.classList.contains('has-active-app')) return;
     if (e && e.target && (e.target.closest('button') || e.target.closest('a'))) return;
     openSidebar();
 }
-
 function goHome() {
     document.body.classList.remove('has-active-app');
     loadRandomQuote();
@@ -2135,12 +1940,11 @@ function goHome() {
     currentAppKind = null;
     currentIframeDoc = null;
     if (currentFieldObserver) { currentFieldObserver.disconnect(); currentFieldObserver = null; }
-    closePdf();
-    closeImage();
+    closePdf(); closeImage();
     document.querySelectorAll('.app-item').forEach(b => b.classList.remove('active'));
 }
 
-/* N) TYPE HELPERS */
+/* P) TYPE */
 function isPdfApp(app) {
     if (!app) return false;
     if (app.type === 'pdf') return true;
@@ -2159,38 +1963,32 @@ function getAppKind(app) {
     return 'html';
 }
 
-/* O) RENDER APPS */
+/* Q) APPS */
 function renderApps() {
     const list = document.getElementById('appList');
     if (!list) return;
     list.innerHTML = '';
-
     if (userApps.length === 0) {
         const empty = document.createElement('div');
         empty.style.cssText = 'padding:18px 10px;text-align:center;font-size:11px;color:#475569;font-style:italic;line-height:1.6;';
         empty.textContent = 'Chưa có ứng dụng nào. Bấm "Thêm Ứng Dụng Mới" ở dưới nhé!';
         list.appendChild(empty);
     }
-
     userApps.forEach((app, idx) => {
         const kind = getAppKind(app);
         const tag = kind === 'pdf' ? '<span class="pdf-tag">PDF</span>'
-                  : kind === 'image' ? '<span class="img-tag">ẢNH</span>'
-                  : '';
+                  : kind === 'image' ? '<span class="img-tag">ẢNH</span>' : '';
         const btn = document.createElement('div');
         btn.className = 'app-item' + (app.id === currentActiveAppId ? ' active' : '');
         btn.draggable = true;
         btn.dataset.index = idx;
         btn.dataset.id = app.id;
-
         btn.innerHTML =
             '<div style="display:flex;align-items:center;gap:8px;overflow:hidden;flex:1;min-width:0;">' +
                 '<span class="drag-handle" style="font-size:12px;">⠿</span>' +
                 '<span style="font-size:20px;flex-shrink:0;line-height:1;user-select:none;">' + escapeHtml(app.emoji) + '</span>' +
                 '<div style="overflow:hidden;min-width:0;">' +
-                    '<div style="font-size:12px;font-weight:700;color:#e2e8f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' +
-                        escapeHtml(app.name) + tag +
-                    '</div>' +
+                    '<div style="font-size:12px;font-weight:700;color:#e2e8f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + escapeHtml(app.name) + tag + '</div>' +
                     '<div style="font-size:10px;color:#475569;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px;">' + escapeHtml(app.path) + '</div>' +
                 '</div>' +
             '</div>' +
@@ -2198,60 +1996,42 @@ function renderApps() {
                 '<button class="icon-btn edit-btn" title="Sửa" style="padding:5px;border-radius:9px;">' + svgIcon('edit', 12) + '</button>' +
                 '<button class="icon-btn danger del-btn" title="Xóa" style="padding:5px;border-radius:9px;">' + svgIcon('trash', 12) + '</button>' +
             '</div>';
-
-        btn.querySelector('.edit-btn').addEventListener('click', ev => {
-            ev.stopPropagation();
-            openEditModal(app.id);
-        });
-        btn.querySelector('.del-btn').addEventListener('click', ev => {
-            ev.stopPropagation();
-            askDeleteApp(app.id, app.name);
-        });
-
+        btn.querySelector('.edit-btn').addEventListener('click', ev => { ev.stopPropagation(); openEditModal(app.id); });
+        btn.querySelector('.del-btn').addEventListener('click', ev => { ev.stopPropagation(); askDeleteApp(app.id, app.name); });
         btn.addEventListener('dragstart', handleDragStart);
         btn.addEventListener('dragend', handleDragEnd);
         btn.addEventListener('dragover', handleDragOver);
         btn.addEventListener('dragleave', handleDragLeave);
         btn.addEventListener('drop', handleDrop);
-
         btn.addEventListener('click', e => {
             if (e.target.closest('.edit-btn') || e.target.closest('.del-btn') || e.target.closest('.app-actions')) return;
             if (btn.classList.contains('dragging')) return;
             activateApp(app, btn);
         });
-
         list.appendChild(btn);
     });
-
     document.getElementById('statAppCount').textContent = userApps.length;
 }
-
 function buildAppChip(emoji, name) {
     return '<span class="app-chip">' +
         '<span style="font-size:14px;flex-shrink:0;line-height:1;user-select:none;">' + escapeHtml(emoji || '💡') + '</span>' +
         '<span style="font-size:11px;font-weight:700;color:#c4b5fd;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + escapeHtml(name) + '</span>' +
     '</span>';
 }
-
 function activateApp(app, el) {
     if (!app) return;
     const kind = getAppKind(app);
-
     document.body.classList.add('has-active-app');
     currentActiveAppId = app.id;
     currentAppKind = kind;
     document.querySelectorAll('.app-item').forEach(b => b.classList.remove('active'));
     if (el) el.classList.add('active');
-
     document.getElementById('currentAppName').innerHTML = buildAppChip(app.emoji, app.name);
-
     closeSidebar();
-
     document.getElementById('welcomeState').style.display = 'none';
     document.getElementById('iframeWrapper').style.display = 'none';
     document.getElementById('pdfWrapper').style.display = 'none';
     document.getElementById('imageWrapper').style.display = 'none';
-
     if (kind === 'pdf') {
         document.getElementById('appFrame').src = 'about:blank';
         currentIframeDoc = null;
@@ -2267,20 +2047,17 @@ function activateApp(app, el) {
         document.getElementById('imageWrapper').style.display = 'flex';
         openImage(app.path);
     } else {
-        closePdf();
-        closeImage();
+        closePdf(); closeImage();
         document.getElementById('iframeWrapper').style.display = 'block';
         document.getElementById('appFrame').src = app.path;
     }
 }
 
-/* P) DRAG & DROP */
+/* R) DRAG */
 function handleDragStart(e) {
     const item = e.target.closest('.app-item');
     if (!item) return;
-    if (e.target.closest('.edit-btn') || e.target.closest('.del-btn') || e.target.closest('.app-actions')) {
-        e.preventDefault(); return;
-    }
+    if (e.target.closest('.edit-btn') || e.target.closest('.del-btn') || e.target.closest('.app-actions')) { e.preventDefault(); return; }
     dragIndex = parseInt(item.dataset.index, 10);
     item.classList.add('dragging');
     e.dataTransfer.effectAllowed = 'move';
@@ -2311,25 +2088,17 @@ function handleDrop(e) {
     if (dragIndex === null || dragIndex === dropIdx || isNaN(dropIdx)) return;
     const moved = userApps.splice(dragIndex, 1)[0];
     userApps.splice(dropIdx, 0, moved);
-    persistApps();
-    renderApps();
+    persistApps(); renderApps();
     showToast('✅ Đã sắp xếp lại thứ tự!');
 }
 
-/* Q) MODAL TYPE SWITCH */
+/* S) APP MODAL */
 function setModalType(which, type) {
     if (type !== 'html' && type !== 'pdf' && type !== 'image') type = 'html';
-
     const hidden = document.getElementById(which + 'Type');
     if (hidden) hidden.value = type;
-
     const sw = document.getElementById(which + 'TypeSwitch');
-    if (sw) {
-        sw.querySelectorAll('.type-opt').forEach(b => {
-            b.classList.toggle('active', b.dataset.type === type);
-        });
-    }
-
+    if (sw) sw.querySelectorAll('.type-opt').forEach(b => b.classList.toggle('active', b.dataset.type === type));
     const picker = document.getElementById(which + 'FilePicker');
     const pickBtn = document.getElementById(which + 'PickBtn');
     if (picker) {
@@ -2342,17 +2111,12 @@ function setModalType(which, type) {
         else if (type === 'image') pickBtn.textContent = '📎 Chọn ảnh để lấy tên…';
         else pickBtn.textContent = '📎 Chọn tệp HTML để lấy tên…';
     }
-
     const hint = document.getElementById(which + 'PathHint');
     if (hint) {
-        if (type === 'pdf')
-            hint.textContent = 'Tệp PDF phải nằm cùng thư mục với Dashboard (VD: DeThi.pdf).';
-        else if (type === 'image')
-            hint.textContent = 'Ảnh phải nằm cùng thư mục với Dashboard (VD: avatar.png).';
-        else
-            hint.textContent = 'Tệp HTML phải nằm cùng thư mục với Dashboard.';
+        if (type === 'pdf') hint.textContent = 'Tệp PDF phải nằm cùng thư mục với Dashboard (VD: DeThi.pdf).';
+        else if (type === 'image') hint.textContent = 'Ảnh phải nằm cùng thư mục với Dashboard (VD: avatar.png).';
+        else hint.textContent = 'Tệp HTML phải nằm cùng thư mục với Dashboard.';
     }
-
     const pathInput = document.getElementById(which === 'add' ? 'appPath' : 'editAppPath');
     if (pathInput) {
         if (type === 'pdf') pathInput.placeholder = 'DeThi.pdf';
@@ -2360,8 +2124,6 @@ function setModalType(which, type) {
         else pathInput.placeholder = 'Exam.html hoặc index.html';
     }
 }
-
-/* R) FILE PICKERS */
 function pickFileEmoji(fileName, type) {
     const n = String(fileName || '').toLowerCase();
     if (type === 'image' || /\.(png|jpe?g|gif|webp|svg|bmp|avif|ico)$/.test(n)) return '🖼️';
@@ -2369,36 +2131,21 @@ function pickFileEmoji(fileName, type) {
     if (/\.html?$/.test(n)) return '🌐';
     return '💡';
 }
-
 function handleFilePick(which) {
     const picker = document.getElementById(which + 'FilePicker');
     if (!picker || !picker.files || !picker.files[0]) return;
     const f = picker.files[0];
     const type = document.getElementById(which + 'Type').value;
-
     const pathInput = document.getElementById(which === 'add' ? 'appPath' : 'editAppPath');
     if (pathInput) pathInput.value = f.name;
-
     const nameInput = document.getElementById(which === 'add' ? 'appName' : 'editAppName');
-    if (nameInput && !nameInput.value.trim()) {
-        nameInput.value = f.name.replace(/\.[^.]+$/, '');
-    }
-
+    if (nameInput && !nameInput.value.trim()) nameInput.value = f.name.replace(/\.[^.]+$/, '');
     const emojiInput = document.getElementById(which === 'add' ? 'appEmoji' : 'editAppEmoji');
-    if (emojiInput && !emojiInput.value.trim()) {
-        emojiInput.value = pickFileEmoji(f.name, type);
-    }
-
+    if (emojiInput && !emojiInput.value.trim()) emojiInput.value = pickFileEmoji(f.name, type);
     picker.value = '';
     showToast('Đã lấy tên tệp. Hãy đặt tệp cùng thư mục nhé!');
 }
-
-/* S) MODALS */
-function openAddModal() {
-    setModalType('add', 'html');
-    document.getElementById('addModal').style.display = 'flex';
-    setTimeout(() => document.getElementById('appName').focus(), 60);
-}
+function openAddModal() { setModalType('add', 'html'); document.getElementById('addModal').style.display = 'flex'; setTimeout(() => document.getElementById('appName').focus(), 60); }
 function closeAddModal() {
     document.getElementById('addModal').style.display = 'none';
     ['appEmoji', 'appName', 'appPath'].forEach(id => document.getElementById(id).value = '');
@@ -2416,7 +2163,6 @@ function openEditModal(id) {
     setTimeout(() => document.getElementById('editAppName').focus(), 60);
 }
 function closeEditModal() { document.getElementById('editModal').style.display = 'none'; }
-
 function saveEditApp() {
     const id = document.getElementById('editAppId').value;
     const emoji = document.getElementById('editAppEmoji').value.trim() || '💡';
@@ -2427,9 +2173,7 @@ function saveEditApp() {
     const i = userApps.findIndex(a => a.id === id);
     if (i !== -1) {
         userApps[i] = Object.assign({}, userApps[i], { emoji, name, path, type });
-        persistApps();
-        renderApps();
-
+        persistApps(); renderApps();
         if (currentActiveAppId === id) {
             const updated = userApps[i];
             document.getElementById('currentAppName').innerHTML = buildAppChip(emoji, name);
@@ -2439,21 +2183,18 @@ function saveEditApp() {
         showToast('Đã lưu thay đổi!');
     }
 }
-
 function askDeleteApp(id, name) {
     document.getElementById('deleteConfirmText').textContent = 'Xóa "' + name + '" khỏi thư viện cá nhân?';
     document.getElementById('deleteConfirmModal').style.display = 'flex';
     document.getElementById('btnConfirmDelete').onclick = function () {
         userApps = userApps.filter(a => a.id !== id);
-        persistApps();
-        renderApps();
+        persistApps(); renderApps();
         document.getElementById('deleteConfirmModal').style.display = 'none';
         showToast('Đã xóa ứng dụng!', 'error');
         if (currentActiveAppId === id) goHome();
     };
 }
 function closeDeleteModal() { document.getElementById('deleteConfirmModal').style.display = 'none'; }
-
 function saveNewApp() {
     const emoji = document.getElementById('appEmoji').value.trim() || '💡';
     const name = document.getElementById('appName').value.trim();
@@ -2461,48 +2202,93 @@ function saveNewApp() {
     const type = document.getElementById('addType').value;
     if (!name || !path) { showToast('Điền đủ thông tin nhé!', 'error'); return; }
     userApps.push({ id: 'app-' + Date.now(), emoji, name, path, type });
-    persistApps();
-    renderApps();
+    persistApps(); renderApps();
     closeAddModal();
-    if (type === 'pdf') showToast('Đã thêm tài liệu PDF!');
-    else if (type === 'image') showToast('Đã thêm ảnh!');
-    else showToast('Đã thêm ứng dụng!');
+    showToast('Đã thêm ứng dụng!');
 }
 
-/* ═══════════════════════════════════════════════════════════
-   S2) QUOTES MODAL
-   ═══════════════════════════════════════════════════════════ */
+/* T) LANG DROPDOWN */
+const LANG_META = {
+    auto: { flag: '🌐', label: 'Tự động nhận diện' },
+    en:   { flag: '🇬🇧', label: 'Tiếng Anh' },
+    vi:   { flag: '🇻🇳', label: 'Tiếng Việt' },
+    ja:   { flag: '🇯🇵', label: 'Tiếng Nhật' }
+};
+function toggleLangDropdown(e) {
+    if (e) e.stopPropagation();
+    document.getElementById('langDropdown').classList.toggle('open');
+}
+function selectLang(val) {
+    if (!LANG_META[val]) val = 'auto';
+    document.getElementById('quoteLang').value = val;
+    document.getElementById('langFlag').textContent = LANG_META[val].flag;
+    document.getElementById('langLabel').textContent = LANG_META[val].label;
+    document.querySelectorAll('#langMenu .lang-option').forEach(o => {
+        o.classList.toggle('active', o.dataset.value === val);
+    });
+    document.getElementById('langDropdown').classList.remove('open');
+    updateQuotePreview();
+}
+document.addEventListener('click', function (e) {
+    const dd = document.getElementById('langDropdown');
+    if (dd && !dd.contains(e.target)) dd.classList.remove('open');
+});
+
+/* U) QUOTE MODAL */
 function openQuotesModal() {
     resetQuoteForm();
     renderQuotesList();
+    updateQuotePreview();
     document.getElementById('quotesModal').style.display = 'flex';
 }
 function closeQuotesModal() {
     document.getElementById('quotesModal').style.display = 'none';
     resetQuoteForm();
 }
+function setQuoteSource(type) {
+    currentQuoteSource = type;
+    document.getElementById('quoteSource').value = type;
+    document.querySelectorAll('.src-btn').forEach(b => b.classList.toggle('active', b.dataset.src === type));
+
+    const srcFields = document.getElementById('quoteSourceFields');
+    if (isWorkSource(type)) {
+        srcFields.style.display = 'flex';
+        document.getElementById('quoteTitleLabel').textContent =
+            type === 'movie' ? 'Tên phim' : type === 'book' ? 'Tên sách' : 'Tên bài hát';
+        document.getElementById('quoteAuthorLabel').textContent =
+            type === 'movie' ? 'Nhân vật / Người nói' : 'Tác giả';
+    } else {
+        srcFields.style.display = 'none';
+        document.getElementById('quoteAuthorLabel').textContent =
+            type === 'proverb' ? 'Nguồn (VD: Tục ngữ Việt Nam)' :
+            type === 'famous' ? 'Tác giả' : 'Tác giả / Người nói';
+    }
+    updateQuotePreview();
+}
 function resetQuoteForm() {
     editingQuoteId = null;
-    const en = document.getElementById('quoteInputEn');
-    const vi = document.getElementById('quoteInputVi');
-    const au = document.getElementById('quoteInputAuthor');
-    const btn = document.getElementById('quoteSaveBtn');
-    const cancel = document.getElementById('quoteCancelBtn');
-    if (en) en.value = '';
-    if (vi) vi.value = '';
-    if (au) au.value = '';
-    if (btn) btn.textContent = 'Thêm câu nói';
-    if (cancel) cancel.style.display = 'none';
+    selectLang('auto');
+    document.getElementById('quoteInputText').value = '';
+    document.getElementById('quoteInputTrans').value = '';
+    document.getElementById('quoteInputTitle').value = '';
+    document.getElementById('quoteInputYear').value = '';
+    document.getElementById('quoteInputAuthor').value = '';
+    setQuoteSource('personal');
+    document.getElementById('quoteSaveBtn').textContent = 'Thêm câu nói';
+    document.getElementById('quoteCancelBtn').style.display = 'none';
+    updateQuotePreview();
 }
 function renderQuotesList() {
     const list = document.getElementById('quotesList');
+    const count = document.getElementById('quoteCount');
     if (!list) return;
     list.innerHTML = '';
+    if (count) count.textContent = userQuotes.length;
 
     if (userQuotes.length === 0) {
         const empty = document.createElement('div');
         empty.style.cssText = 'padding:24px 12px;text-align:center;font-size:11.5px;color:#475569;font-style:italic;line-height:1.6;';
-        empty.textContent = 'Chưa có câu nói nào. Thêm câu đầu tiên ở khung dưới nhé!';
+        empty.textContent = 'Chưa có câu nói nào. Thêm câu đầu tiên ở khung bên phải nhé!';
         list.appendChild(empty);
         return;
     }
@@ -2510,20 +2296,24 @@ function renderQuotesList() {
     userQuotes.forEach((q, idx) => {
         const item = document.createElement('div');
         item.className = 'quote-item';
+        const lang = q.lang && q.lang !== 'auto' ? q.lang : detectLang(q.text);
+        const marks = getQuoteMarks(lang);
+        const metaParts = [];
+        if (q.sourceTitle && q.sourceTitle.trim()) metaParts.push('"' + q.sourceTitle + '"');
+        if (q.author && q.author.trim()) metaParts.push(q.author);
+
         item.innerHTML =
             '<div style="flex:1;min-width:0;">' +
-                '<div style="font-size:12.5px;font-weight:700;color:#e2e8f0;font-style:italic;line-height:1.5;word-break:break-word;">"' + escapeHtml(q.en) + '"</div>' +
-                '<div style="font-size:11px;color:#94a3b8;font-style:italic;margin-top:4px;line-height:1.5;word-break:break-word;">(' + escapeHtml(q.vi) + ')</div>' +
-                '<div style="font-size:9px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#a78bfa;margin-top:6px;">— ' + escapeHtml(q.author) + ' —</div>' +
+                '<div class="quote-item-text">' + escapeHtml(marks.open + q.text + marks.close) + '</div>' +
+                (q.translation ? '<div class="quote-item-trans">(' + escapeHtml(q.translation) + ')</div>' : '') +
+                (metaParts.length ? '<div class="quote-item-meta">' + escapeHtml(metaParts.join(' · ')) + '</div>' : '') +
             '</div>' +
             '<div style="display:flex;gap:4px;flex-shrink:0;">' +
-                '<button class="icon-btn quote-edit-btn" title="Sửa">' + svgIcon('edit', 12) + '</button>' +
-                '<button class="icon-btn danger quote-del-btn" title="Xóa">' + svgIcon('trash', 12) + '</button>' +
+                '<button class="icon-btn qedit-btn" title="Sửa">' + svgIcon('edit', 12) + '</button>' +
+                '<button class="icon-btn danger qdel-btn" title="Xóa">' + svgIcon('trash', 12) + '</button>' +
             '</div>';
-
-        item.querySelector('.quote-edit-btn').addEventListener('click', () => editQuote(idx));
-        item.querySelector('.quote-del-btn').addEventListener('click', () => deleteQuote(idx));
-
+        item.querySelector('.qedit-btn').addEventListener('click', () => editQuote(idx));
+        item.querySelector('.qdel-btn').addEventListener('click', () => deleteQuote(idx));
         list.appendChild(item);
     });
 }
@@ -2531,43 +2321,46 @@ function editQuote(idx) {
     const q = userQuotes[idx];
     if (!q) return;
     editingQuoteId = q.id;
-    document.getElementById('quoteInputEn').value = q.en || '';
-    document.getElementById('quoteInputVi').value = q.vi || '';
+    selectLang(q.lang || 'auto');
+    document.getElementById('quoteInputText').value = q.text || '';
+    document.getElementById('quoteInputTrans').value = q.translation || '';
+    document.getElementById('quoteInputTitle').value = q.sourceTitle || '';
+    document.getElementById('quoteInputYear').value = q.year || '';
     document.getElementById('quoteInputAuthor').value = q.author || '';
+    setQuoteSource(q.sourceType || 'personal');
     document.getElementById('quoteSaveBtn').textContent = 'Lưu thay đổi';
     document.getElementById('quoteCancelBtn').style.display = 'inline-block';
-    document.getElementById('quoteInputEn').focus();
+    document.getElementById('quoteInputText').focus();
+    updateQuotePreview();
 }
 function deleteQuote(idx) {
     if (!userQuotes[idx]) return;
     userQuotes.splice(idx, 1);
     persistQuotes();
     renderQuotesList();
-    if (editingQuoteId && !userQuotes.some(q => q.id === editingQuoteId)) {
-        resetQuoteForm();
-    }
+    if (editingQuoteId && !userQuotes.some(q => q.id === editingQuoteId)) resetQuoteForm();
     loadRandomQuote();
     showToast('Đã xóa câu nói!', 'error');
 }
 function saveQuote() {
-    const en = document.getElementById('quoteInputEn').value.trim();
-    const vi = document.getElementById('quoteInputVi').value.trim();
-    const author = document.getElementById('quoteInputAuthor').value.trim() || 'Khuyết danh';
+    const lang = document.getElementById('quoteLang').value || 'auto';
+    const text = document.getElementById('quoteInputText').value.trim();
+    const translation = document.getElementById('quoteInputTrans').value.trim();
+    const sourceType = currentQuoteSource;
+    const sourceTitle = document.getElementById('quoteInputTitle').value.trim();
+    const year = document.getElementById('quoteInputYear').value.trim();
+    const author = document.getElementById('quoteInputAuthor').value.trim();
 
-    if (!en) { showToast('Nhập câu tiếng Anh đã nhé!', 'error'); return; }
-    if (!vi) { showToast('Nhập bản dịch tiếng Việt đã nhé!', 'error'); return; }
+    if (!text) { showToast('Nhập câu gốc đã nhé!', 'error'); return; }
+    if (isWorkSource(sourceType) && !sourceTitle) { showToast('Nhập tên tác phẩm đã nhé!', 'error'); return; }
 
+    const data = { lang, text, translation, sourceType, sourceTitle, year, author };
     if (editingQuoteId) {
         const i = userQuotes.findIndex(q => q.id === editingQuoteId);
-        if (i !== -1) {
-            userQuotes[i] = Object.assign({}, userQuotes[i], { en, vi, author });
-        }
+        if (i !== -1) userQuotes[i] = Object.assign({}, userQuotes[i], data);
         showToast('Đã lưu thay đổi!');
     } else {
-        userQuotes.push({
-            id: 'q-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
-            en, vi, author
-        });
+        userQuotes.push(Object.assign({ id: 'q-' + Date.now() + '-' + Math.floor(Math.random() * 1000) }, data));
         showToast('Đã thêm câu nói!');
     }
     persistQuotes();
@@ -2575,8 +2368,49 @@ function saveQuote() {
     resetQuoteForm();
     loadRandomQuote();
 }
+function updateQuotePreview() {
+    const preview = document.getElementById('quotePreview');
+    if (!preview) return;
+    const text = document.getElementById('quoteInputText').value.trim();
+    const translation = document.getElementById('quoteInputTrans').value.trim();
+    const sourceType = currentQuoteSource;
+    const sourceTitle = document.getElementById('quoteInputTitle').value.trim();
+    const year = document.getElementById('quoteInputYear').value.trim();
+    const author = document.getElementById('quoteInputAuthor').value.trim();
+    const langSetting = document.getElementById('quoteLang').value || 'auto';
 
-/* T) TOAST */
+    if (!text) {
+        preview.innerHTML = '<div style="font-size:11px;color:#475569;font-style:italic;text-align:center;padding:8px;">Nhập câu gốc để xem trước…</div>';
+        return;
+    }
+
+    const lang = langSetting !== 'auto' ? langSetting : detectLang(text);
+    const marks = getQuoteMarks(lang);
+    const isWork = isWorkSource(sourceType) && sourceTitle;
+
+    let html = '<div style="text-align:left;">';
+    html += '<div style="font-weight:800;font-style:italic;color:#f1f5f9;line-height:1.5;' +
+            (lang === 'ja' ? 'font-size:16px;line-height:1.75;letter-spacing:0.02em;' : 'font-size:14px;') +
+            '">' + escapeHtml(marks.open + text + marks.close) + '</div>';
+    if (translation) {
+        html += '<div style="font-size:11.5px;color:#cbd5e1;font-style:italic;margin-top:8px;line-height:1.5;">(' + escapeHtml(translation) + ')</div>';
+    }
+    if (isWork) {
+        const srcLine = '"' + escapeHtml(sourceTitle) + (year ? ' · ' + escapeHtml(year) : '') + '"';
+        html += '<div class="quote-credit-wrap" style="margin-top:12px;">' +
+            '<div class="quote-credit">' +
+                '<div class="quote-credit-source">' + srcLine + '</div>' +
+                (author ? '<div class="quote-credit-author">— ' + escapeHtml(author) + ' —</div>' : '') +
+            '</div>' +
+        '</div>';
+    } else if (author) {
+        html += '<div class="quote-attr-inline" style="margin-top:12px;">— ' + escapeHtml(author) + ' —</div>';
+    }
+    html += '</div>';
+    preview.innerHTML = html;
+}
+
+/* V) TOAST */
 function showToast(msg, type) {
     type = type || 'success';
     const c = document.getElementById('toastContainer');
@@ -2587,11 +2421,7 @@ function showToast(msg, type) {
     const ico = type === 'error' ? 'alert' : 'check';
     t.innerHTML = svgIcon(ico, 16, col) + '<span>' + msg + '</span>';
     c.appendChild(t);
-    requestAnimationFrame(() => {
-        t.style.transition = 'all 0.3s ease';
-        t.style.opacity = '1';
-        t.style.transform = 'translateY(0)';
-    });
+    requestAnimationFrame(() => { t.style.transition = 'all 0.3s ease'; t.style.opacity = '1'; t.style.transform = 'translateY(0)'; });
     setTimeout(() => {
         t.style.opacity = '0';
         t.style.transform = 'translateY(-8px)';
@@ -2599,7 +2429,7 @@ function showToast(msg, type) {
     }, 3000);
 }
 
-/* U) BOOT */
+/* W) BOOT */
 document.addEventListener('DOMContentLoaded', function () {
     loadSidebarWidth();
     restoreSidebarState();
@@ -2620,59 +2450,58 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.getElementById('appFrame').addEventListener('load', bindIframe);
 
+    /* ⭐ Bấm vào khối quote → mở modal quản lý câu nói */
+    document.getElementById('quoteBlock').addEventListener('click', function (e) {
+        const sel = window.getSelection();
+        if (sel && sel.toString().trim().length > 0) return;
+        if (e.target.closest('button') || e.target.closest('a')) return;
+        openQuotesModal();
+    });
+
     /* PDF toolbar */
     document.getElementById('pdfZoomIn').addEventListener('click', () => pdfZoom(1.2));
     document.getElementById('pdfZoomOut').addEventListener('click', () => pdfZoom(1 / 1.2));
     document.getElementById('pdfFitWidth').addEventListener('click', () => pdfFitWidth());
-    document.getElementById('pdfOpenTab').addEventListener('click', () => {
-        if (!pdfCurrentUrl) return;
-        window.open(pdfCurrentUrl, '_blank', 'noopener');
-    });
+    document.getElementById('pdfOpenTab').addEventListener('click', () => { if (pdfCurrentUrl) window.open(pdfCurrentUrl, '_blank', 'noopener'); });
 
     /* Image toolbar */
     document.getElementById('imgZoomIn').addEventListener('click', () => imgZoomBy(1.2));
     document.getElementById('imgZoomOut').addEventListener('click', () => imgZoomBy(1 / 1.2));
     document.getElementById('imgFitScreen').addEventListener('click', imgFitToScreen);
     document.getElementById('imgActualSize').addEventListener('click', () => imgActualSize());
-    document.getElementById('imgOpenTab').addEventListener('click', () => {
-        if (!imgCurrentUrl) return;
-        window.open(imgCurrentUrl, '_blank', 'noopener');
-    });
+    document.getElementById('imgOpenTab').addEventListener('click', () => { if (imgCurrentUrl) window.open(imgCurrentUrl, '_blank', 'noopener'); });
 
-    /* Ctrl + wheel zoom PDF */
+    /* Ctrl + wheel zoom */
     document.getElementById('pdfScroll').addEventListener('wheel', function (e) {
-        if (!(e.ctrlKey || e.metaKey)) return;
-        if (!pdfDoc) return;
+        if (!(e.ctrlKey || e.metaKey) || !pdfDoc) return;
         e.preventDefault();
         pdfZoom(e.deltaY < 0 ? 1.12 : 1 / 1.12, e.clientX, e.clientY);
     }, { passive: false });
-
-    /* Ctrl + wheel zoom ảnh */
     document.getElementById('imageScroll').addEventListener('wheel', function (e) {
-        if (!(e.ctrlKey || e.metaKey)) return;
-        if (!imgNaturalW) return;
+        if (!(e.ctrlKey || e.metaKey) || !imgNaturalW) return;
         e.preventDefault();
         imgZoomBy(e.deltaY < 0 ? 1.12 : 1 / 1.12, e.clientX, e.clientY);
     }, { passive: false });
 
-    /* Đúp chuột vào ảnh */
+    /* Double-click image */
     document.getElementById('imageDisplay').addEventListener('dblclick', function (e) {
         if (!imgNaturalW) return;
         e.preventDefault();
-        if (Math.abs(imgZoomLevel - 1) < 0.01) {
-            imgFitToScreen();
-        } else {
-            imgActualSize(e.clientX, e.clientY);
-        }
+        if (Math.abs(imgZoomLevel - 1) < 0.01) imgFitToScreen();
+        else imgActualSize(e.clientX, e.clientY);
     });
 
     /* File pickers */
     document.getElementById('addFilePicker').addEventListener('change', () => handleFilePick('add'));
     document.getElementById('editFilePicker').addEventListener('change', () => handleFilePick('edit'));
 
-    window.addEventListener('pageshow', function () {
-        setTimeout(applyFieldsToIframe, 150);
+    /* Quote form live preview */
+    ['quoteInputText', 'quoteInputTrans', 'quoteInputTitle', 'quoteInputYear', 'quoteInputAuthor'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('input', updateQuotePreview);
     });
+
+    window.addEventListener('pageshow', function () { setTimeout(applyFieldsToIframe, 150); });
 
     window.addEventListener('resize', function () {
         clampSidebarWidth();
@@ -2694,23 +2523,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') {
-            const addOpen = document.getElementById('addModal').style.display === 'flex';
-            const editOpen = document.getElementById('editModal').style.display === 'flex';
-            const delOpen = document.getElementById('deleteConfirmModal').style.display === 'flex';
-            const quotesOpen = document.getElementById('quotesModal').style.display === 'flex';
-            if (addOpen || editOpen || delOpen || quotesOpen) {
+            const opens = ['addModal', 'editModal', 'deleteConfirmModal', 'quotesModal'].some(mid =>
+                document.getElementById(mid).style.display === 'flex');
+            if (opens) {
                 document.getElementById('addModal').style.display = 'none';
                 document.getElementById('editModal').style.display = 'none';
                 document.getElementById('deleteConfirmModal').style.display = 'none';
                 document.getElementById('quotesModal').style.display = 'none';
                 return;
             }
-            if (document.body.classList.contains('sidebar-open')) {
-                closeSidebar();
-            }
+            if (document.body.classList.contains('sidebar-open')) closeSidebar();
         }
-        if ((e.key === 'b' || e.key === 'B') &&
-            !e.ctrlKey && !e.metaKey && !e.altKey) {
+        if ((e.key === 'b' || e.key === 'B') && !e.ctrlKey && !e.metaKey && !e.altKey) {
             const t = e.target;
             const tag = t && t.tagName ? t.tagName.toLowerCase() : '';
             if (tag === 'input' || tag === 'textarea' || tag === 'select' || (t && t.isContentEditable)) return;
@@ -2719,10 +2543,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        window._deferredPrompt = e;
-    });
+    window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); window._deferredPrompt = e; });
 
     if ('serviceWorker' in navigator && location.protocol !== 'file:') {
         navigator.serviceWorker.register('sw.js').catch(() => {});
