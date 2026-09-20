@@ -283,7 +283,7 @@ body.sidebar-open #sidebar { transform: translateX(0); }
 
 #quoteText {
     position: relative;
-    padding-left: 1.3em;
+    padding-left: 0;
     font-size: clamp(12px, 1.1vw, 15px);   /* ↓ giảm từ 15-19 */
     font-weight: 500;                        /* ↓ từ 800 → 500 */
     font-style: italic;
@@ -679,7 +679,7 @@ body.sidebar-open #sidebarBackdrop { opacity: 1; pointer-events: auto; }
     #welcomeState { border-radius: 16px; padding: 24px; }
     #iframeWrapper, #pdfWrapper, #imageWrapper { border-radius: 16px; }
 
-    #quoteBlock { width: 92vw; max-width: none; min-width: 0; }
+    #quoteBlock { width: 100%; max-width: calc(100vw - 28px); min-width: 0; padding-left: 4px; padding-right: 4px; }
     #quoteText { font-size: 14px; }
     #quoteBlock.lang-ja #quoteText { font-size: 17px; }
     #quoteTrans { font-size: 12px; }
@@ -812,7 +812,38 @@ body.sidebar-open #sidebarBackdrop { opacity: 1; pointer-events: auto; }
 
 /* Mobile app shell: full-screen library and content surface */
 @media (max-width: 767px) {
-    html, body { width: 100vw; min-width: 0; max-width: 100vw; overflow: hidden; }
+    html, body {
+        width: 100vw;
+        min-width: 0;
+        max-width: 100vw;
+        overflow: hidden;
+        position: relative;
+    }
+
+    /* Mobile type scale: compact but still readable */
+    body { font-size: 12px; }
+    #currentDateDisplay { font-size: 1.35rem !important; line-height: 1.2; }
+    #quoteBlock { font-size: 12px; }
+    #quoteText { font-size: 11.5px !important; line-height: 1.45; }
+    #quoteBlock.lang-ja #quoteText { font-size: 13px !important; }
+    #quoteTrans { font-size: 10px !important; line-height: 1.45; }
+    #quoteText .quote-mark.open,
+    #quoteText .quote-mark.close { display: none !important; }
+    .quote-attr-inline,
+    .quote-credit-source { font-size: 8.5px !important; text-align: center; }
+    .quote-credit-wrap { width: 100% !important; margin: 14px 0 0 !important; text-align: center !important; }
+    .quote-credit { display: block; width: 100%; text-align: center; }
+    .quote-credit-author { font-size: 8px !important; text-align: center; }
+    .sidebar-header div div:first-child { font-size: 11px !important; }
+    .sidebar-header div div:nth-child(2) { font-size: 8.5px !important; }
+    .slabel, .mlabel { font-size: 9px !important; }
+    .app-item { font-size: 11px; }
+    .app-item > div:first-child > div > div:first-child { font-size: 11px !important; }
+    .app-item > div:first-child > div > div:last-child { font-size: 9px !important; }
+    .add-btn, .btn-pri, .btn-sec, .pdf-tbtn { font-size: 10px !important; }
+    .pdf-zoomlabel { font-size: 10px !important; }
+    .modal-input { font-size: 12px; }
+    .bold-hint { font-size: 9px; }
 
     #sidebar {
         left: 0;
@@ -828,21 +859,28 @@ body.sidebar-open #sidebarBackdrop { opacity: 1; pointer-events: auto; }
         padding-bottom: env(safe-area-inset-bottom);
     }
     body.sidebar-open #sidebar { transform: translateX(0); }
-    #sidebarResizer { display: none; }
+    #sidebarResizer { display: none !important; }
     .sidebar-header { padding: 18px 16px 14px; }
     #sidebar > div:nth-of-type(3) { padding: 14px 12px; }
     #sidebar > div:last-child { padding: 12px 12px calc(12px + env(safe-area-inset-bottom)); }
     #sidebarBackdrop { z-index: 49; }
 
     #mainArea {
-        flex: 1 1 0;
-        width: 100vw;
-        max-width: 100vw;
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        display: flex;
+        flex: none;
+        width: auto;
+        max-width: none;
         height: 100dvh;
         padding: 6px;
         gap: 6px;
     }
-    #headerCard, #welcomeState { width: 100%; min-width: 0; }
+    #headerCard, #welcomeState { width: auto; min-width: 0; align-self: stretch; }
+    #welcomeState { margin: 0; }
     body.has-active-app #mainArea {
         padding: 0;
         gap: 0;
@@ -903,14 +941,17 @@ body.sidebar-open #sidebarBackdrop { opacity: 1; pointer-events: auto; }
 }
 .quote-mark.open {
     position: absolute;
-    left: 0.12em;
-    top: 0.12em;
-    margin-right: 0;
+    left: -1.15em;
+    top: 0;
+    margin: 0;
     transform: none;
 }
 .quote-mark.close {
-    margin-left: 0.05em;
-    vertical-align: -0.22em;
+    position: absolute;
+    right: -1.15em;
+    bottom: 0;
+    margin: 0;
+    transform: none;
 }
 
 #quoteBlock.lang-ja .quote-mark {
@@ -1929,13 +1970,7 @@ function getQuoteMarks(lang) {
 function isWorkSource(type) { return type === 'movie' || type === 'book' || type === 'music'; }
 
 function alignQuoteOpeningMark() {
-    const text = document.getElementById('quoteText');
-    const mark = text && text.querySelector('.quote-mark.open');
-    if (!text || !mark) return;
-
-    mark.style.left = '0.12em';
-    mark.style.top = '0.12em';
-    mark.style.transform = 'none';
+    /* Dấu ngoặc được neo bằng CSS, không đo lại theo ký tự đầu tiên. */
 }
 
 function alignQuoteCreditToLongestLine() {
@@ -1982,8 +2017,8 @@ function renderQuoteBlock(q) {
     const marks = getQuoteMarks(lang);
     const inner = parseBoldMarkdown(q.text);
     elText.innerHTML =
+        '<span class="quote-content">' + inner + '</span>' +
         '<span class="quote-mark open" aria-hidden="true">' + marks.open + '</span>' +
-        inner +
         '<span class="quote-mark close" aria-hidden="true">' + marks.close + '</span>';
 
     if (q.translation && q.translation.trim()) {
