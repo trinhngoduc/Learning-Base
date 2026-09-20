@@ -27,7 +27,7 @@
     --vio: #8b5cf6; --vio-l: #c4b5fd;
     --pink: #f472b6; --pink-l: #fbcfe8;
     --text: #e2e8f0; --muted: #94a3b8; --faint: #475569;
-    --sidebar-width: 272px;   /* ⭐ điều chỉnh được */
+    --sidebar-width: 272px;
 }
 html, body { height: 100%; overflow: hidden; }
 body {
@@ -42,9 +42,6 @@ body {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(139, 92, 246, 0.4); border-radius: 99px; }
 
-/* ═══════════════════════════════════════════════════════════
-   SIDEBAR — LUÔN LÀ OVERLAY, KHÔNG ĐẨY MAIN AREA
-   ═══════════════════════════════════════════════════════════ */
 #sidebar {
     position: fixed;
     left: 12px; top: 12px;
@@ -62,11 +59,8 @@ body {
     transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     z-index: 50;
 }
-body.sidebar-open #sidebar {
-    transform: translateX(0);
-}
+body.sidebar-open #sidebar { transform: translateX(0); }
 
-/* ─── Thanh kéo giãn mép phải ─── */
 #sidebarResizer {
     position: absolute;
     top: 0; right: -3px;
@@ -89,9 +83,7 @@ body.sidebar-open #sidebar {
     transition: opacity 0.2s ease, height 0.2s ease;
 }
 #sidebar:hover #sidebarResizer::after,
-#sidebarResizer.dragging::after {
-    opacity: 1;
-}
+#sidebarResizer.dragging::after { opacity: 1; }
 #sidebarResizer.dragging::after {
     background: linear-gradient(180deg, transparent, rgba(196, 181, 253, 0.9), transparent);
     height: 90px;
@@ -102,8 +94,6 @@ body.sidebar-open #sidebar {
     background: linear-gradient(160deg, rgba(139, 92, 246, 0.15) 0%, rgba(139, 92, 246, 0.02) 60%);
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
-
-/* Main area luôn full width vì sidebar không chiếm không gian */
 #mainArea {
     flex: 1; display: flex; flex-direction: column;
     min-width: 0;
@@ -111,7 +101,6 @@ body.sidebar-open #sidebar {
     gap: 10px; height: 100vh; overflow: hidden;
     width: 100%;
 }
-
 #headerCard {
     background: var(--glass-bg);
     backdrop-filter: blur(var(--glass-blur));
@@ -131,7 +120,6 @@ body.sidebar-open #sidebar {
 }
 #iframeWrapper iframe { width: 100%; height: 100%; border: none; display: block; }
 
-/* ═══════════ PDF & IMAGE VIEWER ═══════════ */
 #pdfWrapper, #imageWrapper {
     flex: 1; border-radius: 20px; overflow: hidden;
     border: 1px solid var(--glass-border);
@@ -204,18 +192,29 @@ body.sidebar-open #sidebar {
 }
 @keyframes pdfspin { to { transform: rotate(360deg); } }
 
+/* ═══════════════════════════════════════════════════════════
+   IMAGE SCROLL — dùng safe center để ảnh nhỏ thì căn giữa,
+   ảnh lớn thì scroll bình thường (không bị dãn/constrain)
+   ═══════════════════════════════════════════════════════════ */
 #imageScroll {
     flex: 1; overflow: auto; padding: 16px;
-    display: flex; align-items: center; justify-content: center;
     min-height: 0; -webkit-overflow-scrolling: touch;
+    display: flex;
+    align-items: safe center;
+    justify-content: safe center;
 }
 #imageDisplay {
-    display: block; max-width: 100%; max-height: 100%;
+    display: block;
+    /* ⭐ BỎ max-width/max-height để ảnh có thể to hơn container */
+    max-width: none;
+    max-height: none;
     border-radius: 8px;
     box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55);
-    transition: width 0.15s ease;
+    /* ⭐ BỎ transition width để tránh sai lệch vị trí khi zoom */
     user-select: none;
     -webkit-user-drag: none;
+    cursor: zoom-in;
+    will-change: width;
 }
 .img-error {
     max-width: 360px; display: flex; flex-direction: column;
@@ -484,8 +483,6 @@ body.sidebar-open #sidebar {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
     transition: all 0.3s ease;
 }
-
-/* ═══════════ BACKDROP — HIỂN THỊ MỌI KÍCH THƯỚC ═══════════ */
 #sidebarBackdrop {
     position: fixed; inset: 0;
     background: rgba(0, 0, 0, 0.6);
@@ -558,7 +555,6 @@ body.sidebar-open #sidebarBackdrop {
     font-size: 10px; line-height: 1.4; font-weight: 600;
 }
 
-/* ═══ LITE MODE (mobile/tablet) ═══ */
 @media (max-width: 1024px) {
     * { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
     #sidebar, #headerCard, #welcomeState { background: #1a1530 !important; }
@@ -585,7 +581,6 @@ body.sidebar-open #sidebarBackdrop {
     #imageDisplay { box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6) !important; }
 }
 
-/* ═══ COMPACT MODE cho điện thoại khi đã vào app ═══ */
 @media (max-width: 767px) {
     body.has-active-app #headerCard {
         justify-content: center;
@@ -651,7 +646,6 @@ body.sidebar-open #sidebarBackdrop {
     #imageScroll { padding: 10px 6px; }
 }
 
-/* Trên desktop: chip không click được */
 @media (min-width: 768px) {
     #currentAppName { cursor: default !important; }
 }
@@ -1584,20 +1578,50 @@ async function renderPdfPage(holder) {
     } catch (e) {}
 }
 
-function pdfZoom(factor) {
+/* ⭐ PDF ZOOM — neo theo điểm con trỏ chuột */
+async function pdfZoomAt(newScale, clientX, clientY) {
     if (!pdfDoc) return;
-    pdfScale = Math.min(5, Math.max(0.25, pdfScale * factor));
+    newScale = Math.min(5, Math.max(0.25, newScale));
+    if (Math.abs(newScale - pdfScale) < 0.0001) return;
+
+    const scroll = document.getElementById('pdfScroll');
+    const scrollRect = scroll.getBoundingClientRect();
+
+    // Điểm neo trong viewport (px tính từ mép scroll)
+    let anchorX, anchorY;
+    if (clientX === undefined || clientY === undefined) {
+        anchorX = scrollRect.width / 2;
+        anchorY = scrollRect.height / 2;
+    } else {
+        anchorX = clientX - scrollRect.left;
+        anchorY = clientY - scrollRect.top;
+    }
+
+    // Điểm neo trong "content space" (bao gồm scroll hiện tại)
+    const contentX = scroll.scrollLeft + anchorX;
+    const contentY = scroll.scrollTop + anchorY;
+
+    const ratio = newScale / pdfScale;
+    pdfScale = newScale;
     setPdfZoomLabel();
+
     const token = ++pdfRenderToken;
-    renderPdfAll(token);
+    await renderPdfAll(token);
+    if (token !== pdfRenderToken) return;
+
+    // Sau khi render, content đã scale theo ratio → điều chỉnh scroll
+    scroll.scrollLeft = contentX * ratio - anchorX;
+    scroll.scrollTop  = contentY * ratio - anchorY;
 }
 
-function pdfFitWidth() {
+function pdfZoom(factor, clientX, clientY) {
     if (!pdfDoc) return;
-    pdfScale = 1;
-    setPdfZoomLabel();
-    const token = ++pdfRenderToken;
-    renderPdfAll(token);
+    pdfZoomAt(pdfScale * factor, clientX, clientY);
+}
+
+async function pdfFitWidth(clientX, clientY) {
+    if (!pdfDoc) return;
+    pdfZoomAt(1, clientX, clientY);
 }
 
 /* L) IMAGE VIEWER */
@@ -1692,12 +1716,62 @@ function applyImageSize() {
     img.style.height = 'auto';
     document.getElementById('imgZoomLabel').textContent =
         Math.round(imgZoomLevel * 100) + '%';
+    updateImageCursor();
 }
 
-function imgZoomBy(factor) {
+function updateImageCursor() {
+    const img = document.getElementById('imageDisplay');
+    if (!img) return;
+    if (!imgNaturalW) { img.style.cursor = 'default'; return; }
+    img.style.cursor = (Math.abs(imgZoomLevel - 1) < 0.01) ? 'zoom-out' : 'zoom-in';
+}
+
+/* ⭐ IMAGE SET ZOOM — neo theo điểm con trỏ chuột */
+function imgSetZoom(newZoom, clientX, clientY) {
     if (!imgNaturalW) return;
-    imgZoomLevel = Math.min(8, Math.max(0.05, imgZoomLevel * factor));
+    newZoom = Math.min(8, Math.max(0.05, newZoom));
+    if (Math.abs(newZoom - imgZoomLevel) < 0.0001) return;
+
+    const img = document.getElementById('imageDisplay');
+    const scroll = document.getElementById('imageScroll');
+    const scrollRect = scroll.getBoundingClientRect();
+
+    // Điểm neo (clientX/Y) — mặc định tâm scroll nếu không có
+    let ax, ay;
+    if (clientX === undefined || clientY === undefined) {
+        ax = scrollRect.left + scrollRect.width / 2;
+        ay = scrollRect.top + scrollRect.height / 2;
+    } else {
+        ax = clientX;
+        ay = clientY;
+    }
+
+    // Tính vị trí tương đối (0..1) trong ảnh TRƯỚC khi zoom
+    const imgRectBefore = img.getBoundingClientRect();
+    const relX = imgRectBefore.width  > 0 ? (ax - imgRectBefore.left) / imgRectBefore.width  : 0.5;
+    const relY = imgRectBefore.height > 0 ? (ay - imgRectBefore.top)  / imgRectBefore.height : 0.5;
+
+    // Đổi kích thước ảnh
+    imgZoomLevel = newZoom;
     applyImageSize();
+
+    // Sau khi đổi kích thước, tính lại vị trí điểm neo
+    const imgRectAfter = img.getBoundingClientRect();
+    const anchorAfterX = imgRectAfter.left + relX * imgRectAfter.width;
+    const anchorAfterY = imgRectAfter.top  + relY * imgRectAfter.height;
+
+    // Scroll để điểm neo quay về đúng vị trí chuột
+    const dx = anchorAfterX - ax;
+    const dy = anchorAfterY - ay;
+    if (Math.abs(dx) > 0.5) scroll.scrollLeft += dx;
+    if (Math.abs(dy) > 0.5) scroll.scrollTop  += dy;
+
+    updateImageCursor();
+}
+
+function imgZoomBy(factor, clientX, clientY) {
+    if (!imgNaturalW) return;
+    imgSetZoom(imgZoomLevel * factor, clientX, clientY);
 }
 
 function imgFitToScreen() {
@@ -1707,12 +1781,13 @@ function imgFitToScreen() {
     const availH = scroll.clientHeight - 32;
     imgZoomLevel = Math.min(availW / imgNaturalW, availH / imgNaturalH, 1);
     applyImageSize();
+    scroll.scrollLeft = 0;
+    scroll.scrollTop = 0;
 }
 
-function imgActualSize() {
+function imgActualSize(clientX, clientY) {
     if (!imgNaturalW) return;
-    imgZoomLevel = 1;
-    applyImageSize();
+    imgSetZoom(1, clientX, clientY);
 }
 
 /* M) NGÀY / GIỜ / QUOTE */
@@ -1739,31 +1814,25 @@ function updateClock() {
     if (el) el.textContent = time;
 }
 
-/* ═══════════════════════════════════════════════════════════
-   SIDEBAR — TOGGLE, RESIZE, BACKDROP
-   ═══════════════════════════════════════════════════════════ */
+/* SIDEBAR — TOGGLE, RESIZE, BACKDROP */
 function toggleSidebar() {
     document.body.classList.toggle('sidebar-open');
     saveSidebarState();
 }
-
 function openSidebar() {
     document.body.classList.add('sidebar-open');
     saveSidebarState();
 }
-
 function closeSidebar() {
     document.body.classList.remove('sidebar-open');
     saveSidebarState();
 }
-
 function saveSidebarState() {
     try {
         localStorage.setItem(LS_SIDEBAR_OPEN,
             document.body.classList.contains('sidebar-open') ? '1' : '0');
     } catch (e) {}
 }
-
 function initSidebarResize() {
     const resizer = document.getElementById('sidebarResizer');
     const sidebar = document.getElementById('sidebar');
@@ -1784,7 +1853,6 @@ function initSidebarResize() {
         document.body.style.userSelect = 'none';
         if (e.preventDefault) e.preventDefault();
     }
-
     function move(e) {
         if (!isResizing) return;
         const pt = e.touches ? e.touches[0] : e;
@@ -1795,7 +1863,6 @@ function initSidebarResize() {
         document.documentElement.style.setProperty('--sidebar-width', w + 'px');
         if (e.preventDefault) e.preventDefault();
     }
-
     function end() {
         if (!isResizing) return;
         isResizing = false;
@@ -1817,7 +1884,6 @@ function initSidebarResize() {
     document.addEventListener('touchend', end);
     document.addEventListener('touchcancel', end);
 }
-
 function loadSidebarWidth() {
     try {
         const w = parseFloat(localStorage.getItem(LS_SIDEBAR_W));
@@ -1826,17 +1892,14 @@ function loadSidebarWidth() {
         }
     } catch (e) {}
 }
-
 function restoreSidebarState() {
     try {
         const state = localStorage.getItem(LS_SIDEBAR_OPEN);
         if (state === '1') { document.body.classList.add('sidebar-open'); return; }
         if (state === '0') { document.body.classList.remove('sidebar-open'); return; }
     } catch (e) {}
-    // Mặc định: mở trên desktop, đóng trên mobile
     if (window.innerWidth >= 768) document.body.classList.add('sidebar-open');
 }
-
 function clampSidebarWidth() {
     const sidebar = document.getElementById('sidebar');
     if (!sidebar) return;
@@ -1977,7 +2040,6 @@ function activateApp(app, el) {
 
     document.getElementById('currentAppName').innerHTML = buildAppChip(app.emoji, app.name);
 
-    // ⭐ Đóng sidebar để app hiện full
     closeSidebar();
 
     document.getElementById('welcomeState').style.display = 'none';
@@ -2227,7 +2289,6 @@ function showToast(msg, type) {
 
 /* U) BOOT */
 document.addEventListener('DOMContentLoaded', function () {
-    /* Sidebar init */
     loadSidebarWidth();
     restoreSidebarState();
     initSidebarResize();
@@ -2247,10 +2308,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.getElementById('appFrame').addEventListener('load', bindIframe);
 
-    /* PDF toolbar */
+    /* PDF toolbar — zoom neo vào tâm */
     document.getElementById('pdfZoomIn').addEventListener('click', () => pdfZoom(1.2));
     document.getElementById('pdfZoomOut').addEventListener('click', () => pdfZoom(1 / 1.2));
-    document.getElementById('pdfFitWidth').addEventListener('click', pdfFitWidth);
+    document.getElementById('pdfFitWidth').addEventListener('click', () => pdfFitWidth());
     document.getElementById('pdfOpenTab').addEventListener('click', () => {
         if (!pdfCurrentUrl) return;
         window.open(pdfCurrentUrl, '_blank', 'noopener');
@@ -2260,17 +2321,42 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('imgZoomIn').addEventListener('click', () => imgZoomBy(1.2));
     document.getElementById('imgZoomOut').addEventListener('click', () => imgZoomBy(1 / 1.2));
     document.getElementById('imgFitScreen').addEventListener('click', imgFitToScreen);
-    document.getElementById('imgActualSize').addEventListener('click', imgActualSize);
+    document.getElementById('imgActualSize').addEventListener('click', () => imgActualSize());
     document.getElementById('imgOpenTab').addEventListener('click', () => {
         if (!imgCurrentUrl) return;
         window.open(imgCurrentUrl, '_blank', 'noopener');
     });
 
-    document.getElementById('imageScroll').addEventListener('wheel', function (e) {
-        if (!e.ctrlKey) return;
+    /* ═══════════════════════════════════════════════════
+       ⭐ ZOOM NEO THEO CON TRỎ CHUỘT
+       ═══════════════════════════════════════════════════ */
+
+    /* (1) Ctrl + lăn chuột trên PDF → zoom vào vị trí con trỏ */
+    document.getElementById('pdfScroll').addEventListener('wheel', function (e) {
+        if (!(e.ctrlKey || e.metaKey)) return;
+        if (!pdfDoc) return;
         e.preventDefault();
-        imgZoomBy(e.deltaY < 0 ? 1.12 : 1 / 1.12);
+        pdfZoom(e.deltaY < 0 ? 1.12 : 1 / 1.12, e.clientX, e.clientY);
     }, { passive: false });
+
+    /* (2) Ctrl + lăn chuột trên ảnh → zoom vào vị trí con trỏ */
+    document.getElementById('imageScroll').addEventListener('wheel', function (e) {
+        if (!(e.ctrlKey || e.metaKey)) return;
+        if (!imgNaturalW) return;
+        e.preventDefault();
+        imgZoomBy(e.deltaY < 0 ? 1.12 : 1 / 1.12, e.clientX, e.clientY);
+    }, { passive: false });
+
+    /* (3) Đúp chuột vào ảnh → toggle vừa khung ↔ 100% (neo tại chuột) */
+    document.getElementById('imageDisplay').addEventListener('dblclick', function (e) {
+        if (!imgNaturalW) return;
+        e.preventDefault();
+        if (Math.abs(imgZoomLevel - 1) < 0.01) {
+            imgFitToScreen();
+        } else {
+            imgActualSize(e.clientX, e.clientY);
+        }
+    });
 
     /* File pickers */
     document.getElementById('addFilePicker').addEventListener('change', () => handleFilePick('add'));
@@ -2280,7 +2366,6 @@ document.addEventListener('DOMContentLoaded', function () {
         setTimeout(applyFieldsToIframe, 150);
     });
 
-    /* Resize window */
     window.addEventListener('resize', function () {
         clampSidebarWidth();
         if (pdfDoc) {
@@ -2293,16 +2378,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    /* Modal click-outside close */
     ['addModal', 'editModal', 'deleteConfirmModal'].forEach(function (mid) {
         const m = document.getElementById(mid);
         m.addEventListener('click', e => { if (e.target === m) m.style.display = 'none'; });
     });
 
-    /* Keyboard shortcuts */
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') {
-            // Nếu có modal đang mở → đóng modal
             const addOpen = document.getElementById('addModal').style.display === 'flex';
             const editOpen = document.getElementById('editModal').style.display === 'flex';
             const delOpen = document.getElementById('deleteConfirmModal').style.display === 'flex';
@@ -2312,12 +2394,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById('deleteConfirmModal').style.display = 'none';
                 return;
             }
-            // Nếu sidebar đang mở → đóng sidebar
             if (document.body.classList.contains('sidebar-open')) {
                 closeSidebar();
             }
         }
-        // B để toggle sidebar (khi không đang gõ trong input)
         if ((e.key === 'b' || e.key === 'B') &&
             !e.ctrlKey && !e.metaKey && !e.altKey) {
             const t = e.target;
