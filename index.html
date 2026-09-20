@@ -27,6 +27,7 @@
     --vio: #8b5cf6; --vio-l: #c4b5fd;
     --pink: #f472b6; --pink-l: #fbcfe8;
     --text: #e2e8f0; --muted: #94a3b8; --faint: #475569;
+    --sidebar-width: 272px;   /* ⭐ điều chỉnh được */
 }
 html, body { height: 100%; overflow: hidden; }
 body {
@@ -41,48 +42,76 @@ body {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(139, 92, 246, 0.4); border-radius: 99px; }
 
+/* ═══════════════════════════════════════════════════════════
+   SIDEBAR — LUÔN LÀ OVERLAY, KHÔNG ĐẨY MAIN AREA
+   ═══════════════════════════════════════════════════════════ */
 #sidebar {
-    width: 272px; min-width: 272px;
-    margin: 12px 0 12px 12px;
+    position: fixed;
+    left: 12px; top: 12px;
     height: calc(100vh - 24px);
+    width: var(--sidebar-width);
     border-radius: 24px;
     background: var(--glass-bg);
     backdrop-filter: blur(var(--glass-blur));
     -webkit-backdrop-filter: blur(var(--glass-blur));
     border: 1px solid var(--glass-border);
     display: flex; flex-direction: column;
-    overflow: hidden; flex-shrink: 0;
+    overflow: hidden;
     box-shadow: var(--glass-shadow);
-    transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-        min-width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-        opacity 0.25s ease, margin 0.35s ease;
-    z-index: 40; position: relative;
+    transform: translateX(calc(-100% - 24px));
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 50;
 }
-body.sidebar-collapsed #sidebar {
-    width: 0 !important; min-width: 0 !important;
-    margin-left: 0 !important; opacity: 0; pointer-events: none;
+body.sidebar-open #sidebar {
+    transform: translateX(0);
 }
-@media (max-width: 767px) {
-    #sidebar {
-        position: fixed; left: 12px; top: 12px;
-        height: calc(100vh - 24px);
-        transform: translateX(calc(-100% - 24px));
-        transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
-        z-index: 50;
-    }
-    body.sidebar-open #sidebar { transform: translateX(0); opacity: 1; }
-    body.sidebar-open #sidebarBackdrop { opacity: 1 !important; pointer-events: auto !important; }
+
+/* ─── Thanh kéo giãn mép phải ─── */
+#sidebarResizer {
+    position: absolute;
+    top: 0; right: -3px;
+    width: 10px; height: 100%;
+    cursor: col-resize;
+    z-index: 5;
+    background: transparent;
+    touch-action: none;
+    -webkit-tap-highlight-color: transparent;
 }
+#sidebarResizer::after {
+    content: '';
+    position: absolute;
+    top: 50%; right: 4px;
+    transform: translateY(-50%);
+    width: 3px; height: 48px;
+    border-radius: 3px;
+    background: linear-gradient(180deg, transparent, rgba(139, 92, 246, 0.55), transparent);
+    opacity: 0;
+    transition: opacity 0.2s ease, height 0.2s ease;
+}
+#sidebar:hover #sidebarResizer::after,
+#sidebarResizer.dragging::after {
+    opacity: 1;
+}
+#sidebarResizer.dragging::after {
+    background: linear-gradient(180deg, transparent, rgba(196, 181, 253, 0.9), transparent);
+    height: 90px;
+}
+
 .sidebar-header {
     padding: 20px 18px 14px;
     background: linear-gradient(160deg, rgba(139, 92, 246, 0.15) 0%, rgba(139, 92, 246, 0.02) 60%);
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
+
+/* Main area luôn full width vì sidebar không chiếm không gian */
 #mainArea {
     flex: 1; display: flex; flex-direction: column;
-    min-width: 0; padding: 12px 12px 12px 8px;
+    min-width: 0;
+    padding: 12px;
     gap: 10px; height: 100vh; overflow: hidden;
+    width: 100%;
 }
+
 #headerCard {
     background: var(--glass-bg);
     backdrop-filter: blur(var(--glass-blur));
@@ -175,7 +204,6 @@ body.sidebar-collapsed #sidebar {
 }
 @keyframes pdfspin { to { transform: rotate(360deg); } }
 
-/* ─── IMAGE VIEWER ─── */
 #imageScroll {
     flex: 1; overflow: auto; padding: 16px;
     display: flex; align-items: center; justify-content: center;
@@ -185,7 +213,7 @@ body.sidebar-collapsed #sidebar {
     display: block; max-width: 100%; max-height: 100%;
     border-radius: 8px;
     box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55);
-    transition: width 0.15s ease, height 0.15s ease;
+    transition: width 0.15s ease;
     user-select: none;
     -webkit-user-drag: none;
 }
@@ -193,17 +221,10 @@ body.sidebar-collapsed #sidebar {
     max-width: 360px; display: flex; flex-direction: column;
     gap: 12px; align-items: center; text-align: center; padding: 24px;
 }
-.img-error-title {
-    font-size: 14px; font-weight: 800; color: #f87171;
-}
-.img-error-desc {
-    font-size: 11.5px; color: #94a3b8; line-height: 1.65; font-weight: 500;
-}
-.img-error a {
-    text-decoration: none; display: inline-block;
-}
+.img-error-title { font-size: 14px; font-weight: 800; color: #f87171; }
+.img-error-desc { font-size: 11.5px; color: #94a3b8; line-height: 1.65; font-weight: 500; }
+.img-error a { text-decoration: none; display: inline-block; }
 
-/* ═══════════ TYPE SWITCH ═══════════ */
 .type-switch {
     display: flex; gap: 4px; padding: 4px; border-radius: 14px;
     background: rgba(0, 0, 0, 0.28);
@@ -214,8 +235,7 @@ body.sidebar-collapsed #sidebar {
     border: 1px solid transparent; background: transparent;
     color: var(--muted); font-family: inherit;
     font-size: 11px; font-weight: 700; cursor: pointer;
-    transition: all 0.18s; white-space: nowrap;
-    text-align: center;
+    transition: all 0.18s; white-space: nowrap; text-align: center;
 }
 .type-opt:hover { color: var(--text); background: rgba(255, 255, 255, 0.05); }
 .type-opt.active {
@@ -280,11 +300,10 @@ body.sidebar-collapsed #sidebar {
 .app-item:hover {
     background: rgba(139, 92, 246, 0.10);
     border-color: rgba(139, 92, 246, 0.2);
-    color: var(--text); backdrop-filter: blur(4px);
+    color: var(--text);
 }
 .app-item.active {
     background: rgba(139, 92, 246, 0.18);
-    backdrop-filter: blur(8px);
     border-color: rgba(139, 92, 246, 0.3);
     color: var(--text);
     box-shadow: 0 2px 16px rgba(139, 92, 246, 0.12);
@@ -329,7 +348,7 @@ body.sidebar-collapsed #sidebar {
     border: 1px solid rgba(255, 255, 255, 0.06);
     background: rgba(255, 255, 255, 0.03);
     color: var(--muted); cursor: pointer;
-    transition: all 0.18s ease; backdrop-filter: blur(4px);
+    transition: all 0.18s ease;
 }
 .icon-btn:hover {
     background: rgba(139, 92, 246, 0.14);
@@ -359,7 +378,6 @@ body.sidebar-collapsed #sidebar {
     display: inline-flex; align-items: center; gap: 6px;
     padding: 3px 10px 3px 7px; border-radius: 9999px;
     background: rgba(139, 92, 246, 0.15);
-    backdrop-filter: blur(8px);
     border: 1px solid rgba(139, 92, 246, 0.2);
     max-width: 220px; overflow: hidden;
     transition: all 0.2s ease;
@@ -368,7 +386,6 @@ body.sidebar-collapsed #sidebar {
     width: 100%; display: flex; align-items: center; justify-content: center;
     gap: 7px; padding: 11px 16px; border-radius: 14px;
     background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(244, 114, 182, 0.2));
-    backdrop-filter: blur(8px);
     border: 1px solid rgba(255, 255, 255, 0.10);
     color: #fff; font-size: 12px; font-weight: 700;
     font-family: inherit; cursor: pointer;
@@ -385,10 +402,10 @@ body.sidebar-collapsed #sidebar {
     padding: 8px 20px; border-radius: 12px;
     font-size: 12px; font-weight: 700; color: #fff;
     background: linear-gradient(135deg, rgba(139, 92, 246, 0.4), rgba(139, 92, 246, 0.2));
-    backdrop-filter: blur(8px);
     border: 1px solid rgba(255, 255, 255, 0.10);
     cursor: pointer; transition: all 0.2s ease;
     box-shadow: 0 2px 12px rgba(139, 92, 246, 0.2);
+    font-family: inherit;
 }
 .btn-pri:hover {
     opacity: 0.88; transform: translateY(-1px);
@@ -399,7 +416,6 @@ body.sidebar-collapsed #sidebar {
     padding: 8px 16px; border-radius: 12px;
     font-size: 12px; font-weight: 600; color: var(--muted);
     background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(4px);
     border: 1px solid rgba(255, 255, 255, 0.06);
     cursor: pointer; transition: all 0.18s;
     font-family: inherit;
@@ -413,10 +429,10 @@ body.sidebar-collapsed #sidebar {
     padding: 8px 18px; border-radius: 12px;
     font-size: 12px; font-weight: 700; color: #fff;
     background: rgba(220, 38, 38, 0.25);
-    backdrop-filter: blur(8px);
     border: 1px solid rgba(248, 113, 113, 0.15);
     cursor: pointer; transition: all 0.18s;
     box-shadow: 0 2px 12px rgba(220, 38, 38, 0.15);
+    font-family: inherit;
 }
 .btn-danger:hover {
     opacity: 0.85; transform: translateY(-1px);
@@ -434,7 +450,6 @@ body.sidebar-collapsed #sidebar {
 .modal-input {
     width: 100%; padding: 10px 14px;
     background: rgba(0, 0, 0, 0.25);
-    backdrop-filter: blur(4px);
     border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 12px; font-size: 13px;
     color: var(--text); outline: none;
@@ -469,15 +484,30 @@ body.sidebar-collapsed #sidebar {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
     transition: all 0.3s ease;
 }
+
+/* ═══════════ BACKDROP — HIỂN THỊ MỌI KÍCH THƯỚC ═══════════ */
 #sidebarBackdrop {
     position: fixed; inset: 0;
     background: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(8px);
-    z-index: 45; opacity: 0;
-    pointer-events: none; transition: opacity 0.3s;
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 45;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
 }
+body.sidebar-open #sidebarBackdrop {
+    opacity: 1;
+    pointer-events: auto;
+}
+
 @media (max-width: 767px) {
-    #sidebar { border-radius: 20px; left: 8px; top: 8px; height: calc(100vh - 16px); }
+    #sidebar {
+        left: 8px; top: 8px;
+        height: calc(100vh - 16px);
+        border-radius: 20px;
+        width: min(var(--sidebar-width), calc(100vw - 16px));
+    }
     #mainArea { padding: 8px; }
     #headerCard { border-radius: 16px; height: 48px; padding: 0 10px; }
     #welcomeState { border-radius: 16px; padding: 24px; }
@@ -488,7 +518,6 @@ body.sidebar-collapsed #sidebar {
     display: inline-flex; align-items: center; gap: 8px;
     padding: 4px 16px; border-radius: 9999px;
     background: rgba(255, 255, 255, 0.10);
-    backdrop-filter: blur(8px);
     border: 1px solid rgba(255, 255, 255, 0.15);
     box-shadow: 0 0 20px rgba(139, 92, 246, 0.15);
     font-size: 14px; font-weight: 800;
@@ -515,21 +544,9 @@ body.sidebar-collapsed #sidebar {
     color: #94a3b8;
     transition: all 0.3s;
 }
-.sync-badge.ok {
-    background: rgba(16, 185, 129, 0.1);
-    border-color: rgba(16, 185, 129, 0.25);
-    color: #34d399;
-}
-.sync-badge.saving {
-    background: rgba(139, 92, 246, 0.12);
-    border-color: rgba(139, 92, 246, 0.3);
-    color: #c4b5fd;
-}
-.sync-badge.err {
-    background: rgba(239, 68, 68, 0.12);
-    border-color: rgba(239, 68, 68, 0.25);
-    color: #f87171;
-}
+.sync-badge.ok { background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.25); color: #34d399; }
+.sync-badge.saving { background: rgba(139, 92, 246, 0.12); border-color: rgba(139, 92, 246, 0.3); color: #c4b5fd; }
+.sync-badge.err { background: rgba(239, 68, 68, 0.12); border-color: rgba(239, 68, 68, 0.25); color: #f87171; }
 .env-warning {
     display: none;
     margin: 10px 12px 0;
@@ -538,16 +555,12 @@ body.sidebar-collapsed #sidebar {
     background: rgba(251, 191, 36, 0.1);
     border: 1px solid rgba(251, 191, 36, 0.3);
     color: #fbbf24;
-    font-size: 10px;
-    line-height: 1.4;
-    font-weight: 600;
+    font-size: 10px; line-height: 1.4; font-weight: 600;
 }
 
+/* ═══ LITE MODE (mobile/tablet) ═══ */
 @media (max-width: 1024px) {
-    * {
-        backdrop-filter: none !important;
-        -webkit-backdrop-filter: none !important;
-    }
+    * { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
     #sidebar, #headerCard, #welcomeState { background: #1a1530 !important; }
     .modal-card { background: #1f1a3a !important; }
     #sidebarBackdrop { background: rgba(0, 0, 0, 0.88) !important; }
@@ -559,6 +572,7 @@ body.sidebar-collapsed #sidebar {
     .add-btn, .btn-pri, .btn-danger, .app-item.active { box-shadow: none !important; }
     .welcome-logo svg { animation: none !important; }
     * { transition-duration: 0.1s !important; }
+    #sidebar { transition-duration: 0.2s !important; }
     #currentDateDisplay {
         background: none !important;
         -webkit-text-fill-color: #c4b5fd !important;
@@ -571,6 +585,7 @@ body.sidebar-collapsed #sidebar {
     #imageDisplay { box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6) !important; }
 }
 
+/* ═══ COMPACT MODE cho điện thoại khi đã vào app ═══ */
 @media (max-width: 767px) {
     body.has-active-app #headerCard {
         justify-content: center;
@@ -616,16 +631,8 @@ body.sidebar-collapsed #sidebar {
         transform: scale(0.97);
         background: rgba(139, 92, 246, 0.32);
     }
-    body.has-active-app #mainArea {
-        padding: 8px;
-        gap: 8px;
-    }
-    body.has-active-app #iframeWrapper {
-        border: none !important;
-        box-shadow: none !important;
-        border-radius: 16px !important;
-        background: transparent !important;
-    }
+    body.has-active-app #mainArea { padding: 8px; gap: 8px; }
+    body.has-active-app #iframeWrapper,
     body.has-active-app #pdfWrapper,
     body.has-active-app #imageWrapper {
         border: none !important;
@@ -644,6 +651,7 @@ body.sidebar-collapsed #sidebar {
     #imageScroll { padding: 10px 6px; }
 }
 
+/* Trên desktop: chip không click được */
 @media (min-width: 768px) {
     #currentAppName { cursor: default !important; }
 }
@@ -654,6 +662,8 @@ body.sidebar-collapsed #sidebar {
 <div id="sidebarBackdrop" onclick="toggleSidebar()"></div>
 
 <aside id="sidebar">
+    <div id="sidebarResizer" title="Kéo để thay đổi chiều rộng"></div>
+
     <div class="sidebar-header">
         <div style="display:flex;align-items:center;gap:12px;user-select:none;">
             <div style="width:40px;height:40px;border-radius:14px;background:rgba(139,92,246,0.2);border:1px solid rgba(139,92,246,0.25);display:flex;align-items:center;justify-content:center;">
@@ -695,7 +705,7 @@ body.sidebar-collapsed #sidebar {
 <div id="mainArea">
     <div id="headerCard">
         <div style="display:flex;align-items:center;gap:10px;overflow:hidden;min-width:0;flex:1;">
-            <button class="icon-btn" onclick="toggleSidebar()" title="Ẩn/Hiện Cột Trái">
+            <button class="icon-btn" onclick="toggleSidebar()" title="Mở/Đóng Thư Viện (B)">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
                 </svg>
@@ -766,7 +776,6 @@ body.sidebar-collapsed #sidebar {
         <iframe id="appFrame" src="" allow="clipboard-write"></iframe>
     </div>
 
-    <!-- ═══════════ PDF VIEWER ═══════════ -->
     <div id="pdfWrapper">
         <div id="pdfToolbar">
             <button class="pdf-tbtn" id="pdfZoomOut" title="Thu nhỏ">
@@ -789,7 +798,6 @@ body.sidebar-collapsed #sidebar {
         <div id="pdfLoading"></div>
     </div>
 
-    <!-- ═══════════ IMAGE VIEWER ═══════════ -->
     <div id="imageWrapper">
         <div id="imageToolbar">
             <button class="pdf-tbtn" id="imgZoomOut" title="Thu nhỏ">−</button>
@@ -963,6 +971,8 @@ function escapeHtml(str) {
 /* C) STATE */
 const LS_APPS = 'my_learning_hub_apps_v3';
 const LS_FIELDS = 'my_learning_hub_fields_v3';
+const LS_SIDEBAR_W = 'sidebar_width_v1';
+const LS_SIDEBAR_OPEN = 'sidebar_open_v1';
 
 let userApps = [];
 try {
@@ -977,7 +987,7 @@ try {
 } catch (e) {}
 
 let currentActiveAppId = null;
-let currentAppKind = null;   // 'html' | 'pdf' | 'image' | null
+let currentAppKind = null;
 let dragIndex = null;
 let cloudAppsLoaded = false;
 let cloudFieldsLoaded = false;
@@ -1357,7 +1367,7 @@ window.addEventListener('message', function (e) {
     }
 });
 
-/* K) PDF VIEWER (PDF.js) */
+/* K) PDF VIEWER */
 const PDFJS_VER = '3.11.174';
 const PDFJS_BASE = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/' + PDFJS_VER + '/';
 
@@ -1410,7 +1420,6 @@ async function openPdf(path) {
     const wrap = document.getElementById('pdfWrapper');
     const pagesEl = document.getElementById('pdfPages');
     const loading = document.getElementById('pdfLoading');
-    const scroll = document.getElementById('pdfScroll');
 
     wrap.style.display = 'flex';
     pagesEl.innerHTML = '';
@@ -1591,7 +1600,7 @@ function pdfFitWidth() {
     renderPdfAll(token);
 }
 
-/* ═══════════ L) IMAGE VIEWER ═══════════ */
+/* L) IMAGE VIEWER */
 let imgCurrentUrl = null;
 let imgNaturalW = 0, imgNaturalH = 0;
 let imgZoomLevel = 1;
@@ -1706,7 +1715,7 @@ function imgActualSize() {
     applyImageSize();
 }
 
-/* M) NGÀY / GIỜ / QUOTE / SIDEBAR */
+/* M) NGÀY / GIỜ / QUOTE */
 function updateDate() {
     const days = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
     const now = new Date();
@@ -1729,16 +1738,118 @@ function updateClock() {
     const el = document.getElementById('clockTime');
     if (el) el.textContent = time;
 }
+
+/* ═══════════════════════════════════════════════════════════
+   SIDEBAR — TOGGLE, RESIZE, BACKDROP
+   ═══════════════════════════════════════════════════════════ */
 function toggleSidebar() {
-    if (window.innerWidth >= 768) document.body.classList.toggle('sidebar-collapsed');
-    else document.body.classList.toggle('sidebar-open');
+    document.body.classList.toggle('sidebar-open');
+    saveSidebarState();
+}
+
+function openSidebar() {
+    document.body.classList.add('sidebar-open');
+    saveSidebarState();
+}
+
+function closeSidebar() {
+    document.body.classList.remove('sidebar-open');
+    saveSidebarState();
+}
+
+function saveSidebarState() {
+    try {
+        localStorage.setItem(LS_SIDEBAR_OPEN,
+            document.body.classList.contains('sidebar-open') ? '1' : '0');
+    } catch (e) {}
+}
+
+function initSidebarResize() {
+    const resizer = document.getElementById('sidebarResizer');
+    const sidebar = document.getElementById('sidebar');
+    if (!resizer || !sidebar) return;
+
+    let isResizing = false;
+    let startX = 0;
+    let startW = 0;
+
+    function start(e) {
+        if (e.touches && e.touches.length !== 1) return;
+        const pt = e.touches ? e.touches[0] : e;
+        isResizing = true;
+        startX = pt.clientX;
+        startW = sidebar.getBoundingClientRect().width;
+        resizer.classList.add('dragging');
+        document.body.style.cursor = 'col-resize';
+        document.body.style.userSelect = 'none';
+        if (e.preventDefault) e.preventDefault();
+    }
+
+    function move(e) {
+        if (!isResizing) return;
+        const pt = e.touches ? e.touches[0] : e;
+        const dx = pt.clientX - startX;
+        const maxW = Math.min(window.innerWidth - 24, 900);
+        let w = startW + dx;
+        w = Math.max(200, Math.min(maxW, w));
+        document.documentElement.style.setProperty('--sidebar-width', w + 'px');
+        if (e.preventDefault) e.preventDefault();
+    }
+
+    function end() {
+        if (!isResizing) return;
+        isResizing = false;
+        resizer.classList.remove('dragging');
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+        try {
+            const w = sidebar.getBoundingClientRect().width;
+            localStorage.setItem(LS_SIDEBAR_W, String(Math.round(w)));
+        } catch (e) {}
+    }
+
+    resizer.addEventListener('mousedown', start);
+    document.addEventListener('mousemove', move);
+    document.addEventListener('mouseup', end);
+
+    resizer.addEventListener('touchstart', start, { passive: false });
+    document.addEventListener('touchmove', move, { passive: false });
+    document.addEventListener('touchend', end);
+    document.addEventListener('touchcancel', end);
+}
+
+function loadSidebarWidth() {
+    try {
+        const w = parseFloat(localStorage.getItem(LS_SIDEBAR_W));
+        if (w >= 200 && w <= 900) {
+            document.documentElement.style.setProperty('--sidebar-width', w + 'px');
+        }
+    } catch (e) {}
+}
+
+function restoreSidebarState() {
+    try {
+        const state = localStorage.getItem(LS_SIDEBAR_OPEN);
+        if (state === '1') { document.body.classList.add('sidebar-open'); return; }
+        if (state === '0') { document.body.classList.remove('sidebar-open'); return; }
+    } catch (e) {}
+    // Mặc định: mở trên desktop, đóng trên mobile
+    if (window.innerWidth >= 768) document.body.classList.add('sidebar-open');
+}
+
+function clampSidebarWidth() {
+    const sidebar = document.getElementById('sidebar');
+    if (!sidebar) return;
+    const cur = sidebar.getBoundingClientRect().width;
+    const maxW = Math.min(window.innerWidth - 24, 900);
+    const w = Math.max(200, Math.min(maxW, cur));
+    document.documentElement.style.setProperty('--sidebar-width', w + 'px');
 }
 
 function handleChipClick(e) {
     if (!document.body.classList.contains('has-active-app')) return;
-    if (window.innerWidth > 767) return;
     if (e && e.target && (e.target.closest('button') || e.target.closest('a'))) return;
-    document.body.classList.add('sidebar-open');
+    openSidebar();
 }
 
 function goHome() {
@@ -1866,12 +1977,10 @@ function activateApp(app, el) {
 
     document.getElementById('currentAppName').innerHTML = buildAppChip(app.emoji, app.name);
 
-    if (window.innerWidth >= 768) document.body.classList.add('sidebar-collapsed');
-    else document.body.classList.remove('sidebar-open');
+    // ⭐ Đóng sidebar để app hiện full
+    closeSidebar();
 
     document.getElementById('welcomeState').style.display = 'none';
-
-    // Ẩn tất cả
     document.getElementById('iframeWrapper').style.display = 'none';
     document.getElementById('pdfWrapper').style.display = 'none';
     document.getElementById('imageWrapper').style.display = 'none';
@@ -1954,7 +2063,6 @@ function setModalType(which, type) {
         });
     }
 
-    // File picker: accept + label
     const picker = document.getElementById(which + 'FilePicker');
     const pickBtn = document.getElementById(which + 'PickBtn');
     if (picker) {
@@ -1968,7 +2076,6 @@ function setModalType(which, type) {
         else pickBtn.textContent = '📎 Chọn tệp HTML để lấy tên…';
     }
 
-    // Hint
     const hint = document.getElementById(which + 'PathHint');
     if (hint) {
         if (type === 'pdf')
@@ -1979,7 +2086,6 @@ function setModalType(which, type) {
             hint.textContent = 'Tệp HTML phải nằm cùng thư mục với Dashboard.';
     }
 
-    // Placeholder
     const pathInput = document.getElementById(which === 'add' ? 'appPath' : 'editAppPath');
     if (pathInput) {
         if (type === 'pdf') pathInput.placeholder = 'DeThi.pdf';
@@ -2121,6 +2227,11 @@ function showToast(msg, type) {
 
 /* U) BOOT */
 document.addEventListener('DOMContentLoaded', function () {
+    /* Sidebar init */
+    loadSidebarWidth();
+    restoreSidebarState();
+    initSidebarResize();
+
     renderApps();
     loadRandomQuote();
     updateDate();
@@ -2155,7 +2266,6 @@ document.addEventListener('DOMContentLoaded', function () {
         window.open(imgCurrentUrl, '_blank', 'noopener');
     });
 
-    /* Ctrl + wheel để zoom ảnh */
     document.getElementById('imageScroll').addEventListener('wheel', function (e) {
         if (!e.ctrlKey) return;
         e.preventDefault();
@@ -2170,8 +2280,9 @@ document.addEventListener('DOMContentLoaded', function () {
         setTimeout(applyFieldsToIframe, 150);
     });
 
-    /* Resize → re-render PDF / fit ảnh */
+    /* Resize window */
     window.addEventListener('resize', function () {
+        clampSidebarWidth();
         if (pdfDoc) {
             clearTimeout(pdfResizeTimer);
             pdfResizeTimer = setTimeout(function () {
@@ -2180,21 +2291,40 @@ document.addEventListener('DOMContentLoaded', function () {
                 renderPdfAll(token);
             }, 260);
         }
-        if (imgNaturalW && currentAppKind === 'image') {
-            // giữ zoom hiện tại, không tự fit khi resize để tránh giật
-        }
     });
 
+    /* Modal click-outside close */
     ['addModal', 'editModal', 'deleteConfirmModal'].forEach(function (mid) {
         const m = document.getElementById(mid);
         m.addEventListener('click', e => { if (e.target === m) m.style.display = 'none'; });
     });
 
+    /* Keyboard shortcuts */
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') {
-            document.getElementById('addModal').style.display = 'none';
-            document.getElementById('editModal').style.display = 'none';
-            document.getElementById('deleteConfirmModal').style.display = 'none';
+            // Nếu có modal đang mở → đóng modal
+            const addOpen = document.getElementById('addModal').style.display === 'flex';
+            const editOpen = document.getElementById('editModal').style.display === 'flex';
+            const delOpen = document.getElementById('deleteConfirmModal').style.display === 'flex';
+            if (addOpen || editOpen || delOpen) {
+                document.getElementById('addModal').style.display = 'none';
+                document.getElementById('editModal').style.display = 'none';
+                document.getElementById('deleteConfirmModal').style.display = 'none';
+                return;
+            }
+            // Nếu sidebar đang mở → đóng sidebar
+            if (document.body.classList.contains('sidebar-open')) {
+                closeSidebar();
+            }
+        }
+        // B để toggle sidebar (khi không đang gõ trong input)
+        if ((e.key === 'b' || e.key === 'B') &&
+            !e.ctrlKey && !e.metaKey && !e.altKey) {
+            const t = e.target;
+            const tag = t && t.tagName ? t.tagName.toLowerCase() : '';
+            if (tag === 'input' || tag === 'textarea' || tag === 'select' || (t && t.isContentEditable)) return;
+            e.preventDefault();
+            toggleSidebar();
         }
     });
 
