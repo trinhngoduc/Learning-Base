@@ -282,6 +282,7 @@ body.sidebar-open #sidebar { transform: translateX(0); }
 
 #quoteText {
     position: relative;
+    padding-left: 1.3em;
     font-size: clamp(12px, 1.1vw, 15px);   /* ↓ giảm từ 15-19 */
     font-weight: 500;                        /* ↓ từ 800 → 500 */
     font-style: italic;
@@ -832,9 +833,10 @@ body.sidebar-open #sidebarBackdrop { opacity: 1; pointer-events: auto; }
 }
 .quote-mark.open {
     position: absolute;
-    right: auto;
-    top: -0.08em;
+    left: 0.12em;
+    top: 0.12em;
     margin-right: 0;
+    transform: none;
 }
 .quote-mark.close {
     margin-left: 0.05em;
@@ -1122,7 +1124,7 @@ body.sidebar-open #sidebarBackdrop { opacity: 1; pointer-events: auto; }
             </button>
         </div>
 
-        <div id="quotesModalBody" style="display:grid;grid-template-columns:minmax(0,6fr) minmax(0,4fr);gap:16px;flex:1;min-height:0;overflow:hidden;">
+        <div id="quotesModalBody" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;flex:1;min-height:0;overflow:hidden;">
             <div style="display:flex;flex-direction:column;min-height:0;">
                 <div id="quotePreviewPanel" style="flex-shrink:0;margin-bottom:16px;">
                     <label class="mlabel">Xem trước</label>
@@ -1178,13 +1180,13 @@ body.sidebar-open #sidebarBackdrop { opacity: 1; pointer-events: auto; }
 
                     <div>
                         <label class="mlabel">Câu gốc <span style="color:#f472b6;">*</span></label>
-                        <textarea class="modal-input" id="quoteInputText" rows="2" placeholder="May the Force be with you / 挑戦し続けろ / Nước chảy đá mòn"></textarea>
+                        <textarea class="modal-input" id="quoteInputText" rows="5" style="min-height:180px;" placeholder="May the Force be with you / 挑戦し続けろ / Nước chảy đá mòn"></textarea>
                         <p class="bold-hint">Mẹo: chọn đoạn chữ rồi nhấn <kbd>Ctrl</kbd>+<kbd>B</kbd> để in đậm riêng đoạn đó</p>
                     </div>
 
                     <div>
                         <label class="mlabel">Bản dịch (tùy chọn)</label>
-                        <textarea class="modal-input" id="quoteInputTrans" rows="2" placeholder="Cầu Thần lực ở bên bạn."></textarea>
+                        <textarea class="modal-input" id="quoteInputTrans" rows="3" style="min-height:100px;" placeholder="Cầu Thần lực ở bên bạn."></textarea>
                         <p class="bold-hint">Cũng hỗ trợ <kbd>Ctrl</kbd>+<kbd>B</kbd></p>
                     </div>
 
@@ -1861,19 +1863,9 @@ function alignQuoteOpeningMark() {
     const mark = text && text.querySelector('.quote-mark.open');
     if (!text || !mark) return;
 
-    const walker = document.createTreeWalker(text, NodeFilter.SHOW_TEXT);
-    const firstText = walker.nextNode();
-    if (!firstText || !firstText.textContent.trim()) return;
-
-    const range = document.createRange();
-    const firstChar = firstText.textContent.search(/\S/);
-    range.setStart(firstText, firstChar < 0 ? 0 : firstChar);
-    range.setEnd(firstText, Math.min(firstText.length, (firstChar < 0 ? 0 : firstChar) + 1));
-
-    const charRect = range.getBoundingClientRect();
-    const textRect = text.getBoundingClientRect();
-    mark.style.left = Math.round(charRect.left - textRect.left - mark.getBoundingClientRect().width - 6) + 'px';
-    mark.style.top = Math.round(charRect.top - textRect.top - 3) + 'px';
+    mark.style.left = '0.12em';
+    mark.style.top = '0.12em';
+    mark.style.transform = 'none';
 }
 
 function alignQuoteCreditToLongestLine() {
@@ -1918,16 +1910,11 @@ function renderQuoteBlock(q) {
     else block.classList.remove('lang-ja');
 
     const marks = getQuoteMarks(lang);
-    /* ⭐ Dùng innerHTML + parse **bold** → <strong> */
     const inner = parseBoldMarkdown(q.text);
-    if (marks.open) {
-        elText.innerHTML =
-            '<span class="quote-mark open">' + marks.open + '</span>' +
-            inner +
-            '<span class="quote-mark close">' + marks.close + '</span>';
-    } else {
-        elText.innerHTML = inner;
-    }
+    elText.innerHTML =
+        '<span class="quote-mark open" aria-hidden="true">' + marks.open + '</span>' +
+        inner +
+        '<span class="quote-mark close" aria-hidden="true">' + marks.close + '</span>';
 
     if (q.translation && q.translation.trim()) {
         elTrans.innerHTML = '(' + parseBoldMarkdown(q.translation) + ')';
@@ -2546,19 +2533,13 @@ function updateQuotePreview() {
     }
 
     const lang = langSetting !== 'auto' ? langSetting : detectLang(text);
-    const marks = getQuoteMarks(lang);
     const isWork = isWorkSource(sourceType) && sourceTitle;
 
     let html = '<div style="text-align:left;">';
-    /* ⭐ Preview cũng parse bold + không đậm mặc định */
-        const innerPreview = parseBoldMarkdown(text);
-        const previewContent = marks.open
-                ? '<span class="quote-mark open">' + marks.open + '</span>' + innerPreview +
-                    '<span class="quote-mark close">' + marks.close + '</span>'
-                : innerPreview;
+    const innerPreview = parseBoldMarkdown(text);
     html += '<div style="font-weight:500;font-style:italic;color:#f1f5f9;line-height:1.5;white-space:pre-line;overflow-wrap:anywhere;word-break:break-word;' +
             (lang === 'ja' ? 'font-size:15px;line-height:1.75;letter-spacing:0.02em;' : 'font-size:13.5px;') +
-                        '">' + previewContent + '</div>';
+                        '">' + innerPreview + '</div>';
     if (translation) {
         html += '<div style="font-size:11.5px;color:#cbd5e1;font-style:italic;margin-top:8px;line-height:1.5;font-weight:500;">(' + parseBoldMarkdown(translation) + ')</div>';
     }
