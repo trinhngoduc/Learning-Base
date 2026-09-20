@@ -37,7 +37,7 @@ body {
         radial-gradient(circle at 30% 40%, rgba(139, 92, 246, 0.08) 0%, transparent 60%),
         radial-gradient(circle at 70% 80%, rgba(244, 114, 182, 0.06) 0%, transparent 50%);
 }
-::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(139, 92, 246, 0.4); border-radius: 99px; }
 
@@ -102,8 +102,8 @@ body.sidebar-collapsed #sidebar {
 }
 #iframeWrapper iframe { width: 100%; height: 100%; border: none; display: block; }
 
-/* ═══════════ PDF VIEWER ═══════════ */
-#pdfWrapper {
+/* ═══════════ PDF & IMAGE VIEWER ═══════════ */
+#pdfWrapper, #imageWrapper {
     flex: 1; border-radius: 20px; overflow: hidden;
     border: 1px solid var(--glass-border);
     box-shadow: var(--glass-shadow);
@@ -112,7 +112,7 @@ body.sidebar-collapsed #sidebar {
     backdrop-filter: blur(4px);
     position: relative; min-height: 0;
 }
-#pdfToolbar {
+#pdfToolbar, #imageToolbar {
     display: flex; align-items: center; gap: 8px;
     padding: 8px 12px; flex-shrink: 0;
     background: rgba(37, 31, 69, 0.75);
@@ -175,18 +175,47 @@ body.sidebar-collapsed #sidebar {
 }
 @keyframes pdfspin { to { transform: rotate(360deg); } }
 
-/* ═══════════ TYPE SWITCH (MODAL) ═══════════ */
+/* ─── IMAGE VIEWER ─── */
+#imageScroll {
+    flex: 1; overflow: auto; padding: 16px;
+    display: flex; align-items: center; justify-content: center;
+    min-height: 0; -webkit-overflow-scrolling: touch;
+}
+#imageDisplay {
+    display: block; max-width: 100%; max-height: 100%;
+    border-radius: 8px;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55);
+    transition: width 0.15s ease, height 0.15s ease;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+.img-error {
+    max-width: 360px; display: flex; flex-direction: column;
+    gap: 12px; align-items: center; text-align: center; padding: 24px;
+}
+.img-error-title {
+    font-size: 14px; font-weight: 800; color: #f87171;
+}
+.img-error-desc {
+    font-size: 11.5px; color: #94a3b8; line-height: 1.65; font-weight: 500;
+}
+.img-error a {
+    text-decoration: none; display: inline-block;
+}
+
+/* ═══════════ TYPE SWITCH ═══════════ */
 .type-switch {
-    display: flex; gap: 6px; padding: 4px; border-radius: 14px;
+    display: flex; gap: 4px; padding: 4px; border-radius: 14px;
     background: rgba(0, 0, 0, 0.28);
     border: 1px solid rgba(255, 255, 255, 0.06);
 }
 .type-opt {
-    flex: 1; padding: 9px 8px; border-radius: 11px;
+    flex: 1; padding: 9px 6px; border-radius: 11px;
     border: 1px solid transparent; background: transparent;
     color: var(--muted); font-family: inherit;
-    font-size: 11.5px; font-weight: 700; cursor: pointer;
+    font-size: 11px; font-weight: 700; cursor: pointer;
     transition: all 0.18s; white-space: nowrap;
+    text-align: center;
 }
 .type-opt:hover { color: var(--text); background: rgba(255, 255, 255, 0.05); }
 .type-opt.active {
@@ -278,13 +307,21 @@ body.sidebar-collapsed #sidebar {
 }
 .app-item:hover .drag-handle { opacity: 0.7; }
 .app-item:active .drag-handle { opacity: 1; }
-.pdf-tag {
+.pdf-tag, .img-tag {
     display: inline-block; margin-left: 6px;
     padding: 1px 5px; border-radius: 5px;
+    font-size: 8px; font-weight: 800;
+    letter-spacing: 0.06em; vertical-align: middle;
+}
+.pdf-tag {
     background: rgba(244, 114, 182, 0.15);
     border: 1px solid rgba(244, 114, 182, 0.3);
-    color: #f9a8d4; font-size: 8px; font-weight: 800;
-    letter-spacing: 0.06em; vertical-align: middle;
+    color: #f9a8d4;
+}
+.img-tag {
+    background: rgba(56, 189, 248, 0.15);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    color: #7dd3fc;
 }
 .icon-btn {
     display: inline-flex; align-items: center; justify-content: center;
@@ -445,7 +482,7 @@ body.sidebar-collapsed #sidebar {
     #headerCard { border-radius: 16px; height: 48px; padding: 0 10px; }
     #welcomeState { border-radius: 16px; padding: 24px; }
     #iframeWrapper { border-radius: 16px; }
-    #pdfWrapper { border-radius: 16px; }
+    #pdfWrapper, #imageWrapper { border-radius: 16px; }
 }
 .clock-center {
     display: inline-flex; align-items: center; gap: 8px;
@@ -506,9 +543,6 @@ body.sidebar-collapsed #sidebar {
     font-weight: 600;
 }
 
-/* ═══════════════════════════════════════════════════════════
-   LITE MODE — TỰ ĐỘNG ÁP DỤNG CHO MOBILE/TABLET (≤1024px)
-   ═══════════════════════════════════════════════════════════ */
 @media (max-width: 1024px) {
     * {
         backdrop-filter: none !important;
@@ -519,7 +553,7 @@ body.sidebar-collapsed #sidebar {
     #sidebarBackdrop { background: rgba(0, 0, 0, 0.88) !important; }
     #addModal, #editModal, #deleteConfirmModal { background: rgba(0, 0, 0, 0.88) !important; }
     body { background-image: none !important; }
-    #sidebar, #headerCard, #welcomeState, #iframeWrapper, #pdfWrapper, .modal-card {
+    #sidebar, #headerCard, #welcomeState, #iframeWrapper, #pdfWrapper, #imageWrapper, .modal-card {
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5) !important;
     }
     .add-btn, .btn-pri, .btn-danger, .app-item.active { box-shadow: none !important; }
@@ -531,16 +565,13 @@ body.sidebar-collapsed #sidebar {
         color: #c4b5fd !important;
     }
     #appList { content-visibility: auto; contain-intrinsic-size: auto 300px; }
-    #pdfWrapper { background: #1a1530 !important; }
-    #pdfToolbar { background: #241d44 !important; }
+    #pdfWrapper, #imageWrapper { background: #1a1530 !important; }
+    #pdfToolbar, #imageToolbar { background: #241d44 !important; }
     .pdf-page { box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6) !important; }
+    #imageDisplay { box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6) !important; }
 }
 
-/* ═══════════════════════════════════════════════════════════
-   COMPACT MODE — CHỈ ÁP DỤNG CHO ĐIỆN THOẠI (≤767px)
-   ═══════════════════════════════════════════════════════════ */
 @media (max-width: 767px) {
-
     body.has-active-app #headerCard {
         justify-content: center;
         padding: 0 10px;
@@ -548,18 +579,15 @@ body.sidebar-collapsed #sidebar {
         border-radius: 14px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
     }
-
     body.has-active-app #headerCard > div:nth-child(2),
     body.has-active-app #headerCard > div:nth-child(3) {
         display: none !important;
     }
-
     body.has-active-app #headerCard .icon-btn,
     body.has-active-app #breadcrumbBase,
     body.has-active-app #breadcrumbSlash {
         display: none !important;
     }
-
     body.has-active-app #headerCard > div:nth-child(1) {
         flex: 1 1 100%;
         justify-content: center;
@@ -571,7 +599,6 @@ body.sidebar-collapsed #sidebar {
         width: 100%;
         gap: 0;
     }
-
     body.has-active-app #currentAppName {
         cursor: pointer;
         user-select: none;
@@ -589,31 +616,32 @@ body.sidebar-collapsed #sidebar {
         transform: scale(0.97);
         background: rgba(139, 92, 246, 0.32);
     }
-
     body.has-active-app #mainArea {
         padding: 8px;
         gap: 8px;
     }
-
     body.has-active-app #iframeWrapper {
         border: none !important;
         box-shadow: none !important;
         border-radius: 16px !important;
         background: transparent !important;
     }
-    body.has-active-app #pdfWrapper {
+    body.has-active-app #pdfWrapper,
+    body.has-active-app #imageWrapper {
         border: none !important;
         box-shadow: none !important;
         border-radius: 16px !important;
         background: transparent !important;
     }
-    body.has-active-app #pdfToolbar {
+    body.has-active-app #pdfToolbar,
+    body.has-active-app #imageToolbar {
         border-radius: 12px;
         padding: 6px 8px;
         gap: 6px;
     }
     #pdfScroll { padding: 10px 6px 20px; }
     .pdf-pagetag { display: none; }
+    #imageScroll { padding: 10px 6px; }
 }
 
 @media (min-width: 768px) {
@@ -760,6 +788,25 @@ body.sidebar-collapsed #sidebar {
         </div>
         <div id="pdfLoading"></div>
     </div>
+
+    <!-- ═══════════ IMAGE VIEWER ═══════════ -->
+    <div id="imageWrapper">
+        <div id="imageToolbar">
+            <button class="pdf-tbtn" id="imgZoomOut" title="Thu nhỏ">−</button>
+            <span class="pdf-zoomlabel" id="imgZoomLabel">100%</span>
+            <button class="pdf-tbtn" id="imgZoomIn" title="Phóng to">+</button>
+            <button class="pdf-tbtn" id="imgFitScreen" title="Vừa khung">⊡ Vừa khung</button>
+            <button class="pdf-tbtn" id="imgActualSize" title="Kích thước thật">1:1</button>
+            <button class="pdf-tbtn" id="imgOpenTab" title="Mở trong tab mới">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                Tab mới
+            </button>
+            <span class="pdf-pagetag" id="imgInfo"></span>
+        </div>
+        <div id="imageScroll">
+            <img id="imageDisplay" src="" alt="">
+        </div>
+    </div>
 </div>
 
 <!-- MODAL: THÊM -->
@@ -782,8 +829,9 @@ body.sidebar-collapsed #sidebar {
             <div>
                 <label class="mlabel">Loại ứng dụng</label>
                 <div class="type-switch" id="addTypeSwitch">
-                    <button type="button" class="type-opt active" data-type="html" onclick="setModalType('add','html')">🌐 Trang HTML</button>
-                    <button type="button" class="type-opt" data-type="pdf" onclick="setModalType('add','pdf')">📄 Tài liệu PDF</button>
+                    <button type="button" class="type-opt active" data-type="html" onclick="setModalType('add','html')">🌐 HTML</button>
+                    <button type="button" class="type-opt" data-type="pdf" onclick="setModalType('add','pdf')">📄 PDF</button>
+                    <button type="button" class="type-opt" data-type="image" onclick="setModalType('add','image')">🖼️ Ảnh</button>
                 </div>
                 <input type="hidden" id="addType" value="html">
             </div>
@@ -793,9 +841,9 @@ body.sidebar-collapsed #sidebar {
                 <label class="mlabel">Đường dẫn tệp tin</label>
                 <input class="modal-input" id="appPath" placeholder="Exam.html hoặc index.html">
                 <p id="addPathHint" style="font-size:10px;color:#334155;margin-top:6px;">Tệp phải nằm cùng thư mục với Dashboard.</p>
-                <div id="addPdfPickRow" style="display:none;margin-top:10px;">
-                    <input type="file" id="addPdfFile" accept="application/pdf,.pdf" style="display:none;">
-                    <button type="button" class="btn-sec" onclick="document.getElementById('addPdfFile').click()">📎 Chọn tệp PDF để lấy tên…</button>
+                <div style="margin-top:10px;">
+                    <input type="file" id="addFilePicker" style="display:none;">
+                    <button type="button" class="btn-sec" id="addPickBtn" onclick="document.getElementById('addFilePicker').click()">📎 Chọn tệp…</button>
                 </div>
             </div>
         </div>
@@ -826,8 +874,9 @@ body.sidebar-collapsed #sidebar {
             <div>
                 <label class="mlabel">Loại ứng dụng</label>
                 <div class="type-switch" id="editTypeSwitch">
-                    <button type="button" class="type-opt active" data-type="html" onclick="setModalType('edit','html')">🌐 Trang HTML</button>
-                    <button type="button" class="type-opt" data-type="pdf" onclick="setModalType('edit','pdf')">📄 Tài liệu PDF</button>
+                    <button type="button" class="type-opt active" data-type="html" onclick="setModalType('edit','html')">🌐 HTML</button>
+                    <button type="button" class="type-opt" data-type="pdf" onclick="setModalType('edit','pdf')">📄 PDF</button>
+                    <button type="button" class="type-opt" data-type="image" onclick="setModalType('edit','image')">🖼️ Ảnh</button>
                 </div>
                 <input type="hidden" id="editType" value="html">
             </div>
@@ -837,9 +886,9 @@ body.sidebar-collapsed #sidebar {
                 <label class="mlabel">Đường dẫn</label>
                 <input class="modal-input" id="editAppPath">
                 <p id="editPathHint" style="font-size:10px;color:#334155;margin-top:6px;">Tệp phải nằm cùng thư mục với Dashboard.</p>
-                <div id="editPdfPickRow" style="display:none;margin-top:10px;">
-                    <input type="file" id="editPdfFile" accept="application/pdf,.pdf" style="display:none;">
-                    <button type="button" class="btn-sec" onclick="document.getElementById('editPdfFile').click()">📎 Chọn tệp PDF để lấy tên…</button>
+                <div style="margin-top:10px;">
+                    <input type="file" id="editFilePicker" style="display:none;">
+                    <button type="button" class="btn-sec" id="editPickBtn" onclick="document.getElementById('editFilePicker').click()">📎 Chọn tệp…</button>
                 </div>
             </div>
         </div>
@@ -928,7 +977,7 @@ try {
 } catch (e) {}
 
 let currentActiveAppId = null;
-let currentAppIsPdf = false;
+let currentAppKind = null;   // 'html' | 'pdf' | 'image' | null
 let dragIndex = null;
 let cloudAppsLoaded = false;
 let cloudFieldsLoaded = false;
@@ -1174,7 +1223,7 @@ function writeValue(el, val) {
 function applyFieldsToIframe() {
     if (!currentIframeDoc) return;
     if (_applyingFromCloud) return;
-    if (currentAppIsPdf) return;
+    if (currentAppKind !== 'html') return;
 
     try {
         const iframeDoc = currentIframeDoc;
@@ -1231,7 +1280,7 @@ function bindIframe() {
     if (currentFieldObserver) { currentFieldObserver.disconnect(); currentFieldObserver = null; }
     currentIframeDoc = null;
 
-    if (currentAppIsPdf) return;
+    if (currentAppKind !== 'html') return;
 
     const iframe = document.getElementById('appFrame');
     if (!iframe) return;
@@ -1308,16 +1357,14 @@ window.addEventListener('message', function (e) {
     }
 });
 
-/* ═══════════════════════════════════════════════════════════
-   K) PDF VIEWER (PDF.js)
-   ═══════════════════════════════════════════════════════════ */
+/* K) PDF VIEWER (PDF.js) */
 const PDFJS_VER = '3.11.174';
 const PDFJS_BASE = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/' + PDFJS_VER + '/';
 
 let pdfLibPromise = null;
 let pdfDoc = null;
-let pdfScale = 1;          // hệ số zoom tương đối so với "vừa khổ"
-let pdfBaseScale = 1;      // scale để vừa chiều rộng
+let pdfScale = 1;
+let pdfBaseScale = 1;
 let pdfObserver = null;
 let pdfRenderToken = 0;
 let pdfCurrentUrl = null;
@@ -1379,7 +1426,6 @@ async function openPdf(path) {
     pdfCurrentUrl = path;
     const token = ++pdfRenderToken;
 
-    // Cho layout ổn định trước khi đo chiều rộng
     await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
 
     let lib;
@@ -1526,9 +1572,7 @@ async function renderPdfPage(holder) {
             transform: dpr !== 1 ? [dpr, 0, 0, dpr, 0, 0] : null
         });
         await renderTask.promise;
-    } catch (e) {
-        // render bị huỷ khi zoom/đổi tài liệu → bỏ qua
-    }
+    } catch (e) {}
 }
 
 function pdfZoom(factor) {
@@ -1547,7 +1591,122 @@ function pdfFitWidth() {
     renderPdfAll(token);
 }
 
-/* L) NGÀY / GIỜ / QUOTE / SIDEBAR */
+/* ═══════════ L) IMAGE VIEWER ═══════════ */
+let imgCurrentUrl = null;
+let imgNaturalW = 0, imgNaturalH = 0;
+let imgZoomLevel = 1;
+
+function closeImage() {
+    imgCurrentUrl = null;
+    imgNaturalW = 0;
+    imgNaturalH = 0;
+    imgZoomLevel = 1;
+    const img = document.getElementById('imageDisplay');
+    if (img) { img.onload = null; img.onerror = null; img.src = ''; img.style.width = ''; img.style.height = ''; }
+    const scroll = document.getElementById('imageScroll');
+    if (scroll) {
+        const errBox = scroll.querySelector('.img-error');
+        if (errBox) errBox.remove();
+        if (img) img.style.display = '';
+    }
+    const info = document.getElementById('imgInfo');
+    if (info) info.textContent = '';
+    const lbl = document.getElementById('imgZoomLabel');
+    if (lbl) lbl.textContent = '100%';
+}
+
+function openImage(path) {
+    const wrap = document.getElementById('imageWrapper');
+    const scroll = document.getElementById('imageScroll');
+    const img = document.getElementById('imageDisplay');
+
+    wrap.style.display = 'flex';
+    imgCurrentUrl = path;
+    imgNaturalW = 0;
+    imgNaturalH = 0;
+    imgZoomLevel = 1;
+
+    const errBox = scroll.querySelector('.img-error');
+    if (errBox) errBox.remove();
+    img.style.display = '';
+
+    document.getElementById('imgInfo').textContent = '';
+    document.getElementById('imgZoomLabel').textContent = '100%';
+
+    img.onload = function () {
+        imgNaturalW = img.naturalWidth;
+        imgNaturalH = img.naturalHeight;
+        document.getElementById('imgInfo').textContent =
+            imgNaturalW + ' × ' + imgNaturalH;
+        imgFitToScreen();
+    };
+    img.onerror = function () {
+        showImageError(path);
+    };
+    img.src = path;
+}
+
+function showImageError(path) {
+    const scroll = document.getElementById('imageScroll');
+    const img = document.getElementById('imageDisplay');
+    if (!scroll) return;
+    img.style.display = 'none';
+    const oldErr = scroll.querySelector('.img-error');
+    if (oldErr) oldErr.remove();
+
+    let msg = 'Không tải được ảnh.';
+    if (location.protocol === 'file:') {
+        msg = 'Trình duyệt có thể chặn khi mở bằng file://. Hãy chạy qua local server hoặc mở ảnh trong tab mới.';
+    }
+
+    const box = document.createElement('div');
+    box.className = 'img-error';
+    box.innerHTML =
+        '<div class="img-error-title">Không xem được ảnh</div>' +
+        '<div class="img-error-desc">' + escapeHtml(msg) + '</div>';
+
+    const a = document.createElement('a');
+    a.href = path;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.className = 'btn-pri';
+    a.textContent = 'Mở ảnh trong tab mới';
+    box.appendChild(a);
+
+    scroll.appendChild(box);
+}
+
+function applyImageSize() {
+    const img = document.getElementById('imageDisplay');
+    if (!img || !imgNaturalW) return;
+    img.style.width  = Math.round(imgNaturalW * imgZoomLevel) + 'px';
+    img.style.height = 'auto';
+    document.getElementById('imgZoomLabel').textContent =
+        Math.round(imgZoomLevel * 100) + '%';
+}
+
+function imgZoomBy(factor) {
+    if (!imgNaturalW) return;
+    imgZoomLevel = Math.min(8, Math.max(0.05, imgZoomLevel * factor));
+    applyImageSize();
+}
+
+function imgFitToScreen() {
+    if (!imgNaturalW) return;
+    const scroll = document.getElementById('imageScroll');
+    const availW = scroll.clientWidth - 32;
+    const availH = scroll.clientHeight - 32;
+    imgZoomLevel = Math.min(availW / imgNaturalW, availH / imgNaturalH, 1);
+    applyImageSize();
+}
+
+function imgActualSize() {
+    if (!imgNaturalW) return;
+    imgZoomLevel = 1;
+    applyImageSize();
+}
+
+/* M) NGÀY / GIỜ / QUOTE / SIDEBAR */
 function updateDate() {
     const days = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
     const now = new Date();
@@ -1589,26 +1748,39 @@ function goHome() {
     document.getElementById('welcomeState').style.display = 'flex';
     document.getElementById('iframeWrapper').style.display = 'none';
     document.getElementById('pdfWrapper').style.display = 'none';
+    document.getElementById('imageWrapper').style.display = 'none';
     document.getElementById('currentAppName').innerHTML =
         '<span style="font-size:11px;color:#475569;font-style:italic;font-weight:500;">Chưa chọn ứng dụng</span>';
     document.getElementById('appFrame').src = 'about:blank';
     currentActiveAppId = null;
-    currentAppIsPdf = false;
+    currentAppKind = null;
     currentIframeDoc = null;
     if (currentFieldObserver) { currentFieldObserver.disconnect(); currentFieldObserver = null; }
     closePdf();
+    closeImage();
     document.querySelectorAll('.app-item').forEach(b => b.classList.remove('active'));
 }
 
-/* M) PDF HELPERS */
+/* N) TYPE HELPERS */
 function isPdfApp(app) {
     if (!app) return false;
     if (app.type === 'pdf') return true;
-    if (app.type === 'html') return false;
+    if (app.type === 'html' || app.type === 'image') return false;
     return /\.pdf(\?|#|$)/i.test(String(app.path || ''));
 }
+function isImageApp(app) {
+    if (!app) return false;
+    if (app.type === 'image') return true;
+    if (app.type === 'html' || app.type === 'pdf') return false;
+    return /\.(png|jpe?g|gif|webp|svg|bmp|avif|ico)(\?|#|$)/i.test(String(app.path || ''));
+}
+function getAppKind(app) {
+    if (isPdfApp(app)) return 'pdf';
+    if (isImageApp(app)) return 'image';
+    return 'html';
+}
 
-/* N) RENDER APPS */
+/* O) RENDER APPS */
 function renderApps() {
     const list = document.getElementById('appList');
     if (!list) return;
@@ -1622,7 +1794,10 @@ function renderApps() {
     }
 
     userApps.forEach((app, idx) => {
-        const pdf = isPdfApp(app);
+        const kind = getAppKind(app);
+        const tag = kind === 'pdf' ? '<span class="pdf-tag">PDF</span>'
+                  : kind === 'image' ? '<span class="img-tag">ẢNH</span>'
+                  : '';
         const btn = document.createElement('div');
         btn.className = 'app-item' + (app.id === currentActiveAppId ? ' active' : '');
         btn.draggable = true;
@@ -1635,7 +1810,7 @@ function renderApps() {
                 '<span style="font-size:20px;flex-shrink:0;line-height:1;user-select:none;">' + escapeHtml(app.emoji) + '</span>' +
                 '<div style="overflow:hidden;min-width:0;">' +
                     '<div style="font-size:12px;font-weight:700;color:#e2e8f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' +
-                        escapeHtml(app.name) + (pdf ? '<span class="pdf-tag">PDF</span>' : '') +
+                        escapeHtml(app.name) + tag +
                     '</div>' +
                     '<div style="font-size:10px;color:#475569;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px;">' + escapeHtml(app.path) + '</div>' +
                 '</div>' +
@@ -1681,11 +1856,11 @@ function buildAppChip(emoji, name) {
 
 function activateApp(app, el) {
     if (!app) return;
-    const pdf = isPdfApp(app);
+    const kind = getAppKind(app);
 
     document.body.classList.add('has-active-app');
     currentActiveAppId = app.id;
-    currentAppIsPdf = pdf;
+    currentAppKind = kind;
     document.querySelectorAll('.app-item').forEach(b => b.classList.remove('active'));
     if (el) el.classList.add('active');
 
@@ -1696,22 +1871,34 @@ function activateApp(app, el) {
 
     document.getElementById('welcomeState').style.display = 'none';
 
-    if (pdf) {
-        document.getElementById('iframeWrapper').style.display = 'none';
-        document.getElementById('pdfWrapper').style.display = 'flex';
+    // Ẩn tất cả
+    document.getElementById('iframeWrapper').style.display = 'none';
+    document.getElementById('pdfWrapper').style.display = 'none';
+    document.getElementById('imageWrapper').style.display = 'none';
+
+    if (kind === 'pdf') {
         document.getElementById('appFrame').src = 'about:blank';
         currentIframeDoc = null;
         if (currentFieldObserver) { currentFieldObserver.disconnect(); currentFieldObserver = null; }
+        closeImage();
+        document.getElementById('pdfWrapper').style.display = 'flex';
         openPdf(app.path);
-    } else {
-        document.getElementById('pdfWrapper').style.display = 'none';
-        document.getElementById('iframeWrapper').style.display = 'block';
+    } else if (kind === 'image') {
+        document.getElementById('appFrame').src = 'about:blank';
+        currentIframeDoc = null;
+        if (currentFieldObserver) { currentFieldObserver.disconnect(); currentFieldObserver = null; }
         closePdf();
+        document.getElementById('imageWrapper').style.display = 'flex';
+        openImage(app.path);
+    } else {
+        closePdf();
+        closeImage();
+        document.getElementById('iframeWrapper').style.display = 'block';
         document.getElementById('appFrame').src = app.path;
     }
 }
 
-/* O) DRAG & DROP */
+/* P) DRAG & DROP */
 function handleDragStart(e) {
     const item = e.target.closest('.app-item');
     if (!item) return;
@@ -1753,9 +1940,10 @@ function handleDrop(e) {
     showToast('✅ Đã sắp xếp lại thứ tự!');
 }
 
-/* P) MODAL TYPE SWITCH */
+/* Q) MODAL TYPE SWITCH */
 function setModalType(which, type) {
-    const isPdf = type === 'pdf';
+    if (type !== 'html' && type !== 'pdf' && type !== 'image') type = 'html';
+
     const hidden = document.getElementById(which + 'Type');
     if (hidden) hidden.value = type;
 
@@ -1766,21 +1954,73 @@ function setModalType(which, type) {
         });
     }
 
-    const pick = document.getElementById(which + 'PdfPickRow');
-    if (pick) pick.style.display = isPdf ? 'block' : 'none';
-
-    const hint = document.getElementById(which + 'PathHint');
-    if (hint) {
-        hint.textContent = isPdf
-            ? 'Tệp PDF phải nằm cùng thư mục với Dashboard (VD: DeThi.pdf).'
-            : 'Tệp phải nằm cùng thư mục với Dashboard.';
+    // File picker: accept + label
+    const picker = document.getElementById(which + 'FilePicker');
+    const pickBtn = document.getElementById(which + 'PickBtn');
+    if (picker) {
+        if (type === 'pdf') picker.accept = '.pdf,application/pdf';
+        else if (type === 'image') picker.accept = 'image/*';
+        else picker.accept = '.html,.htm,text/html';
+    }
+    if (pickBtn) {
+        if (type === 'pdf') pickBtn.textContent = '📎 Chọn tệp PDF để lấy tên…';
+        else if (type === 'image') pickBtn.textContent = '📎 Chọn ảnh để lấy tên…';
+        else pickBtn.textContent = '📎 Chọn tệp HTML để lấy tên…';
     }
 
+    // Hint
+    const hint = document.getElementById(which + 'PathHint');
+    if (hint) {
+        if (type === 'pdf')
+            hint.textContent = 'Tệp PDF phải nằm cùng thư mục với Dashboard (VD: DeThi.pdf).';
+        else if (type === 'image')
+            hint.textContent = 'Ảnh phải nằm cùng thư mục với Dashboard (VD: avatar.png).';
+        else
+            hint.textContent = 'Tệp HTML phải nằm cùng thư mục với Dashboard.';
+    }
+
+    // Placeholder
     const pathInput = document.getElementById(which === 'add' ? 'appPath' : 'editAppPath');
-    if (pathInput) pathInput.placeholder = isPdf ? 'DeThi.pdf' : 'Exam.html hoặc index.html';
+    if (pathInput) {
+        if (type === 'pdf') pathInput.placeholder = 'DeThi.pdf';
+        else if (type === 'image') pathInput.placeholder = 'avatar.png';
+        else pathInput.placeholder = 'Exam.html hoặc index.html';
+    }
 }
 
-/* Q) MODALS */
+/* R) FILE PICKERS */
+function pickFileEmoji(fileName, type) {
+    const n = String(fileName || '').toLowerCase();
+    if (type === 'image' || /\.(png|jpe?g|gif|webp|svg|bmp|avif|ico)$/.test(n)) return '🖼️';
+    if (type === 'pdf' || /\.pdf$/.test(n)) return '📄';
+    if (/\.html?$/.test(n)) return '🌐';
+    return '💡';
+}
+
+function handleFilePick(which) {
+    const picker = document.getElementById(which + 'FilePicker');
+    if (!picker || !picker.files || !picker.files[0]) return;
+    const f = picker.files[0];
+    const type = document.getElementById(which + 'Type').value;
+
+    const pathInput = document.getElementById(which === 'add' ? 'appPath' : 'editAppPath');
+    if (pathInput) pathInput.value = f.name;
+
+    const nameInput = document.getElementById(which === 'add' ? 'appName' : 'editAppName');
+    if (nameInput && !nameInput.value.trim()) {
+        nameInput.value = f.name.replace(/\.[^.]+$/, '');
+    }
+
+    const emojiInput = document.getElementById(which === 'add' ? 'appEmoji' : 'editAppEmoji');
+    if (emojiInput && !emojiInput.value.trim()) {
+        emojiInput.value = pickFileEmoji(f.name, type);
+    }
+
+    picker.value = '';
+    showToast('Đã lấy tên tệp. Hãy đặt tệp cùng thư mục nhé!');
+}
+
+/* S) MODALS */
 function openAddModal() {
     setModalType('add', 'html');
     document.getElementById('addModal').style.display = 'flex';
@@ -1798,7 +2038,7 @@ function openEditModal(id) {
     document.getElementById('editAppEmoji').value = app.emoji;
     document.getElementById('editAppName').value = app.name;
     document.getElementById('editAppPath').value = app.path;
-    setModalType('edit', isPdfApp(app) ? 'pdf' : 'html');
+    setModalType('edit', getAppKind(app));
     document.getElementById('editModal').style.display = 'flex';
     setTimeout(() => document.getElementById('editAppName').focus(), 60);
 }
@@ -1809,7 +2049,7 @@ function saveEditApp() {
     const emoji = document.getElementById('editAppEmoji').value.trim() || '💡';
     const name = document.getElementById('editAppName').value.trim();
     const path = document.getElementById('editAppPath').value.trim();
-    const type = document.getElementById('editType').value === 'pdf' ? 'pdf' : 'html';
+    const type = document.getElementById('editType').value;
     if (!name || !path) { showToast('Điền đủ thông tin nhé!', 'error'); return; }
     const i = userApps.findIndex(a => a.id === id);
     if (i !== -1) {
@@ -1820,21 +2060,7 @@ function saveEditApp() {
         if (currentActiveAppId === id) {
             const updated = userApps[i];
             document.getElementById('currentAppName').innerHTML = buildAppChip(emoji, name);
-            if (isPdfApp(updated)) {
-                document.getElementById('iframeWrapper').style.display = 'none';
-                document.getElementById('pdfWrapper').style.display = 'flex';
-                document.getElementById('appFrame').src = 'about:blank';
-                currentAppIsPdf = true;
-                currentIframeDoc = null;
-                if (currentFieldObserver) { currentFieldObserver.disconnect(); currentFieldObserver = null; }
-                openPdf(updated.path);
-            } else {
-                document.getElementById('pdfWrapper').style.display = 'none';
-                document.getElementById('iframeWrapper').style.display = 'block';
-                closePdf();
-                currentAppIsPdf = false;
-                document.getElementById('appFrame').src = updated.path;
-            }
+            activateApp(updated, null);
         }
         closeEditModal();
         showToast('Đã lưu thay đổi!');
@@ -1859,16 +2085,18 @@ function saveNewApp() {
     const emoji = document.getElementById('appEmoji').value.trim() || '💡';
     const name = document.getElementById('appName').value.trim();
     const path = document.getElementById('appPath').value.trim();
-    const type = document.getElementById('addType').value === 'pdf' ? 'pdf' : 'html';
+    const type = document.getElementById('addType').value;
     if (!name || !path) { showToast('Điền đủ thông tin nhé!', 'error'); return; }
     userApps.push({ id: 'app-' + Date.now(), emoji, name, path, type });
     persistApps();
     renderApps();
     closeAddModal();
-    showToast(type === 'pdf' ? 'Đã thêm tài liệu PDF!' : 'Đã thêm ứng dụng!');
+    if (type === 'pdf') showToast('Đã thêm tài liệu PDF!');
+    else if (type === 'image') showToast('Đã thêm ảnh!');
+    else showToast('Đã thêm ứng dụng!');
 }
 
-/* R) TOAST */
+/* T) TOAST */
 function showToast(msg, type) {
     type = type || 'success';
     const c = document.getElementById('toastContainer');
@@ -1891,7 +2119,7 @@ function showToast(msg, type) {
     }, 3000);
 }
 
-/* S) BOOT */
+/* U) BOOT */
 document.addEventListener('DOMContentLoaded', function () {
     renderApps();
     loadRandomQuote();
@@ -1908,7 +2136,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.getElementById('appFrame').addEventListener('load', bindIframe);
 
-    /* ── PDF toolbar ── */
+    /* PDF toolbar */
     document.getElementById('pdfZoomIn').addEventListener('click', () => pdfZoom(1.2));
     document.getElementById('pdfZoomOut').addEventListener('click', () => pdfZoom(1 / 1.2));
     document.getElementById('pdfFitWidth').addEventListener('click', pdfFitWidth);
@@ -1917,39 +2145,44 @@ document.addEventListener('DOMContentLoaded', function () {
         window.open(pdfCurrentUrl, '_blank', 'noopener');
     });
 
-    /* ── File picker (chỉ lấy tên tệp) ── */
-    document.getElementById('addPdfFile').addEventListener('change', function () {
-        const f = this.files && this.files[0];
-        if (!f) return;
-        document.getElementById('appPath').value = f.name;
-        const nameEl = document.getElementById('appName');
-        if (!nameEl.value.trim()) nameEl.value = f.name.replace(/\.pdf$/i, '');
-        const emojiEl = document.getElementById('appEmoji');
-        if (!emojiEl.value.trim()) emojiEl.value = '📄';
-        this.value = '';
-        showToast('Đã lấy tên tệp. Hãy đặt PDF cùng thư mục nhé!');
+    /* Image toolbar */
+    document.getElementById('imgZoomIn').addEventListener('click', () => imgZoomBy(1.2));
+    document.getElementById('imgZoomOut').addEventListener('click', () => imgZoomBy(1 / 1.2));
+    document.getElementById('imgFitScreen').addEventListener('click', imgFitToScreen);
+    document.getElementById('imgActualSize').addEventListener('click', imgActualSize);
+    document.getElementById('imgOpenTab').addEventListener('click', () => {
+        if (!imgCurrentUrl) return;
+        window.open(imgCurrentUrl, '_blank', 'noopener');
     });
-    document.getElementById('editPdfFile').addEventListener('change', function () {
-        const f = this.files && this.files[0];
-        if (!f) return;
-        document.getElementById('editAppPath').value = f.name;
-        this.value = '';
-        showToast('Đã lấy tên tệp. Hãy đặt PDF cùng thư mục nhé!');
-    });
+
+    /* Ctrl + wheel để zoom ảnh */
+    document.getElementById('imageScroll').addEventListener('wheel', function (e) {
+        if (!e.ctrlKey) return;
+        e.preventDefault();
+        imgZoomBy(e.deltaY < 0 ? 1.12 : 1 / 1.12);
+    }, { passive: false });
+
+    /* File pickers */
+    document.getElementById('addFilePicker').addEventListener('change', () => handleFilePick('add'));
+    document.getElementById('editFilePicker').addEventListener('change', () => handleFilePick('edit'));
 
     window.addEventListener('pageshow', function () {
         setTimeout(applyFieldsToIframe, 150);
     });
 
-    /* ── Resize → re-render PDF ── */
+    /* Resize → re-render PDF / fit ảnh */
     window.addEventListener('resize', function () {
-        if (!pdfDoc) return;
-        clearTimeout(pdfResizeTimer);
-        pdfResizeTimer = setTimeout(function () {
-            if (!pdfDoc) return;
-            const token = ++pdfRenderToken;
-            renderPdfAll(token);
-        }, 260);
+        if (pdfDoc) {
+            clearTimeout(pdfResizeTimer);
+            pdfResizeTimer = setTimeout(function () {
+                if (!pdfDoc) return;
+                const token = ++pdfRenderToken;
+                renderPdfAll(token);
+            }, 260);
+        }
+        if (imgNaturalW && currentAppKind === 'image') {
+            // giữ zoom hiện tại, không tự fit khi resize để tránh giật
+        }
     });
 
     ['addModal', 'editModal', 'deleteConfirmModal'].forEach(function (mid) {
