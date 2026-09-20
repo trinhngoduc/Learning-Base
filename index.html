@@ -269,10 +269,10 @@ body.sidebar-open #sidebar { transform: translateX(0); }
    QUOTE BLOCK — click để mở modal, chữ thường + Ctrl+B để đậm
    ═══════════════════════════════════════════════════════════ */
 #quoteBlock {
-    width: 50vw; max-width: 720px; min-width: 280px;
+    width: 40vw; max-width: 700px; min-width: 280px;
     position: relative; z-index: 1;
     padding: 8px 8px; margin: 0 auto;
-    text-align: left;
+    text-align: center;
     cursor: pointer;
     transition: opacity 0.2s ease;
     border-radius: 12px;
@@ -832,9 +832,9 @@ body.sidebar-open #sidebarBackdrop { opacity: 1; pointer-events: auto; }
 }
 .quote-mark.open {
     position: absolute;
-    right: 100%;
+    right: auto;
     top: -0.08em;
-    margin-right: 0.12em;
+    margin-right: 0;
 }
 .quote-mark.close {
     margin-left: 0.05em;
@@ -1856,6 +1856,46 @@ function getQuoteMarks(lang) {
 }
 function isWorkSource(type) { return type === 'movie' || type === 'book' || type === 'music'; }
 
+function alignQuoteOpeningMark() {
+    const text = document.getElementById('quoteText');
+    const mark = text && text.querySelector('.quote-mark.open');
+    if (!text || !mark) return;
+
+    const walker = document.createTreeWalker(text, NodeFilter.SHOW_TEXT);
+    const firstText = walker.nextNode();
+    if (!firstText || !firstText.textContent.trim()) return;
+
+    const range = document.createRange();
+    const firstChar = firstText.textContent.search(/\S/);
+    range.setStart(firstText, firstChar < 0 ? 0 : firstChar);
+    range.setEnd(firstText, Math.min(firstText.length, (firstChar < 0 ? 0 : firstChar) + 1));
+
+    const charRect = range.getBoundingClientRect();
+    const textRect = text.getBoundingClientRect();
+    mark.style.left = Math.round(charRect.left - textRect.left - mark.getBoundingClientRect().width - 6) + 'px';
+    mark.style.top = Math.round(charRect.top - textRect.top - 3) + 'px';
+}
+
+function alignQuoteCreditToLongestLine() {
+    const block = document.getElementById('quoteBlock');
+    const text = document.getElementById('quoteText');
+    const wrap = document.querySelector('#quoteAttr .quote-credit-wrap');
+    if (!block || !text || !wrap || !text.textContent.trim()) return;
+
+    const range = document.createRange();
+    range.selectNodeContents(text);
+    const rects = Array.from(range.getClientRects()).filter(rect => rect.width > 0 && rect.height > 0);
+    if (!rects.length) return;
+
+    const blockRect = block.getBoundingClientRect();
+    const longestRight = Math.max.apply(null, rects.map(rect => rect.right));
+    const width = Math.max(0, Math.min(blockRect.width, longestRight - blockRect.left));
+
+    wrap.style.width = Math.round(width) + 'px';
+    wrap.style.marginLeft = '0';
+    wrap.style.textAlign = 'right';
+}
+
 function renderQuoteBlock(q) {
     const block = document.getElementById('quoteBlock');
     const elText = document.getElementById('quoteText');
@@ -1914,6 +1954,11 @@ function renderQuoteBlock(q) {
             elAttr.innerHTML = '';
         }
     }
+
+    requestAnimationFrame(function () {
+        alignQuoteOpeningMark();
+        alignQuoteCreditToLongestLine();
+    });
 }
 
 function loadRandomQuote() {
@@ -2641,6 +2686,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     window.addEventListener('resize', function () {
         clampSidebarWidth();
+        requestAnimationFrame(function () {
+            alignQuoteOpeningMark();
+            alignQuoteCreditToLongestLine();
+        });
         if (pdfDoc) {
             pdfFitScale = 0;
             clearTimeout(pdfResizeTimer);
