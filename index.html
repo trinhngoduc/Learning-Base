@@ -1873,4 +1873,108 @@ function showToast(msg, type) {
     type = type || 'success';
     const c = document.getElementById('toastContainer');
     const t = document.createElement('div');
-    t.className
+    t.className = 'toast';
+    t.style.cssText = 'opacity:0;transform:translateY(8px);';
+    const col = type === 'error' ? '#f87171' : '#34d399';
+    const ico = type === 'error' ? 'alert' : 'check';
+    t.innerHTML = svgIcon(ico, 16, col) + '<span>' + msg + '</span>';
+    c.appendChild(t);
+    requestAnimationFrame(() => {
+        t.style.transition = 'all 0.3s ease';
+        t.style.opacity = '1';
+        t.style.transform = 'translateY(0)';
+    });
+    setTimeout(() => {
+        t.style.opacity = '0';
+        t.style.transform = 'translateY(-8px)';
+        setTimeout(() => t.remove(), 300);
+    }, 3000);
+}
+
+/* S) BOOT */
+document.addEventListener('DOMContentLoaded', function () {
+    renderApps();
+    loadRandomQuote();
+    updateDate();
+    updateClock();
+    setInterval(updateDate, 60000);
+    setInterval(updateClock, 1000);
+
+    if (location.protocol === 'file:') {
+        const w = document.getElementById('envWarning');
+        if (w) w.style.display = 'block';
+        setSyncBadge('err', 'File://');
+    }
+
+    document.getElementById('appFrame').addEventListener('load', bindIframe);
+
+    /* ── PDF toolbar ── */
+    document.getElementById('pdfZoomIn').addEventListener('click', () => pdfZoom(1.2));
+    document.getElementById('pdfZoomOut').addEventListener('click', () => pdfZoom(1 / 1.2));
+    document.getElementById('pdfFitWidth').addEventListener('click', pdfFitWidth);
+    document.getElementById('pdfOpenTab').addEventListener('click', () => {
+        if (!pdfCurrentUrl) return;
+        window.open(pdfCurrentUrl, '_blank', 'noopener');
+    });
+
+    /* ── File picker (chỉ lấy tên tệp) ── */
+    document.getElementById('addPdfFile').addEventListener('change', function () {
+        const f = this.files && this.files[0];
+        if (!f) return;
+        document.getElementById('appPath').value = f.name;
+        const nameEl = document.getElementById('appName');
+        if (!nameEl.value.trim()) nameEl.value = f.name.replace(/\.pdf$/i, '');
+        const emojiEl = document.getElementById('appEmoji');
+        if (!emojiEl.value.trim()) emojiEl.value = '📄';
+        this.value = '';
+        showToast('Đã lấy tên tệp. Hãy đặt PDF cùng thư mục nhé!');
+    });
+    document.getElementById('editPdfFile').addEventListener('change', function () {
+        const f = this.files && this.files[0];
+        if (!f) return;
+        document.getElementById('editAppPath').value = f.name;
+        this.value = '';
+        showToast('Đã lấy tên tệp. Hãy đặt PDF cùng thư mục nhé!');
+    });
+
+    window.addEventListener('pageshow', function () {
+        setTimeout(applyFieldsToIframe, 150);
+    });
+
+    /* ── Resize → re-render PDF ── */
+    window.addEventListener('resize', function () {
+        if (!pdfDoc) return;
+        clearTimeout(pdfResizeTimer);
+        pdfResizeTimer = setTimeout(function () {
+            if (!pdfDoc) return;
+            const token = ++pdfRenderToken;
+            renderPdfAll(token);
+        }, 260);
+    });
+
+    ['addModal', 'editModal', 'deleteConfirmModal'].forEach(function (mid) {
+        const m = document.getElementById(mid);
+        m.addEventListener('click', e => { if (e.target === m) m.style.display = 'none'; });
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            document.getElementById('addModal').style.display = 'none';
+            document.getElementById('editModal').style.display = 'none';
+            document.getElementById('deleteConfirmModal').style.display = 'none';
+        }
+    });
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        window._deferredPrompt = e;
+    });
+
+    if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+        navigator.serviceWorker.register('sw.js').catch(() => {});
+    }
+});
+</script>
+
+</body>
+</html>
