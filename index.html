@@ -159,22 +159,28 @@ body.sidebar-open #sidebar { transform: translateX(0); }
     font-size: 10px; font-weight: 700; color: var(--faint);
     letter-spacing: 0.06em; text-transform: uppercase; margin-left: auto;
 }
+
 #pdfScroll {
     flex: 1; overflow: auto; padding: 16px 12px 24px;
-    display: flex; flex-direction: column; align-items: center;
     min-height: 0; -webkit-overflow-scrolling: touch;
 }
 #pdfPages {
-    display: flex; flex-direction: column; align-items: center;
-    gap: 14px; width: 100%;
+    width: fit-content;
+    min-width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
 }
 .pdf-page {
+    flex-shrink: 0;
     display: flex; align-items: center; justify-content: center;
     border-radius: 10px; background: #ffffff;
     box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55);
-    overflow: hidden; max-width: 100%;
+    overflow: hidden;
 }
-.pdf-page canvas { display: block; max-width: 100%; height: auto; }
+.pdf-page canvas { display: block; }
 #pdfLoading {
     position: absolute; inset: 0;
     display: none; align-items: center; justify-content: center;
@@ -192,10 +198,6 @@ body.sidebar-open #sidebar { transform: translateX(0); }
 }
 @keyframes pdfspin { to { transform: rotate(360deg); } }
 
-/* ═══════════════════════════════════════════════════════════
-   IMAGE SCROLL — dùng safe center để ảnh nhỏ thì căn giữa,
-   ảnh lớn thì scroll bình thường (không bị dãn/constrain)
-   ═══════════════════════════════════════════════════════════ */
 #imageScroll {
     flex: 1; overflow: auto; padding: 16px;
     min-height: 0; -webkit-overflow-scrolling: touch;
@@ -205,12 +207,10 @@ body.sidebar-open #sidebar { transform: translateX(0); }
 }
 #imageDisplay {
     display: block;
-    /* ⭐ BỎ max-width/max-height để ảnh có thể to hơn container */
     max-width: none;
     max-height: none;
     border-radius: 8px;
     box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55);
-    /* ⭐ BỎ transition width để tránh sai lệch vị trí khi zoom */
     user-select: none;
     -webkit-user-drag: none;
     cursor: zoom-in;
@@ -288,6 +288,75 @@ body.sidebar-open #sidebar { transform: translateX(0); }
     backdrop-filter: blur(6px);
     border: 1px solid rgba(139, 92, 246, 0.15);
 }
+
+/* QUOTE — rõ ràng hơn, rộng 50% màn hình */
+#quoteBlock {
+    width: 50vw;
+    max-width: 720px;
+    min-width: 280px;
+    position: relative;
+    z-index: 1;
+    padding: 0 8px;
+    margin: 0 auto;
+}
+#quoteEn {
+    font-size: clamp(15px, 1.5vw, 19px);
+    font-weight: 800;
+    font-style: italic;
+    line-height: 1.55;
+    color: #f1f5f9;
+    letter-spacing: -0.005em;
+    text-shadow: 0 1px 12px rgba(196, 181, 253, 0.25);
+}
+#quoteVi {
+    font-size: clamp(12.5px, 1.1vw, 15px);
+    font-weight: 600;
+    font-style: italic;
+    line-height: 1.6;
+    color: #cbd5e1;
+    margin-top: 14px;
+}
+#quoteAuthor {
+    display: block;
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #a78bfa;
+    margin-top: 18px;
+}
+#quoteBlock.empty #quoteEn {
+    color: #475569;
+    font-weight: 600;
+    font-size: 13px;
+    text-shadow: none;
+    font-style: italic;
+}
+#quoteBlock.empty #quoteVi {
+    display: none;
+}
+#quoteBlock.empty #quoteAuthor {
+    color: #475569;
+    letter-spacing: 0.1em;
+    font-size: 10px;
+}
+
+/* Item trong danh sách câu nói (modal) */
+.quote-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    transition: all 0.18s;
+}
+.quote-item:hover {
+    background: rgba(139, 92, 246, 0.08);
+    border-color: rgba(139, 92, 246, 0.2);
+}
+
 .app-item {
     width: 100%; display: flex; align-items: center; justify-content: space-between;
     padding: 10px 12px; border-radius: 14px;
@@ -510,6 +579,15 @@ body.sidebar-open #sidebarBackdrop {
     #welcomeState { border-radius: 16px; padding: 24px; }
     #iframeWrapper { border-radius: 16px; }
     #pdfWrapper, #imageWrapper { border-radius: 16px; }
+
+    #quoteBlock {
+        width: 92vw;
+        max-width: none;
+        min-width: 0;
+    }
+    #quoteEn { font-size: 15px; }
+    #quoteVi { font-size: 13px; }
+    #quoteAuthor { font-size: 10px; }
 }
 .clock-center {
     display: inline-flex; align-items: center; gap: 8px;
@@ -560,7 +638,7 @@ body.sidebar-open #sidebarBackdrop {
     #sidebar, #headerCard, #welcomeState { background: #1a1530 !important; }
     .modal-card { background: #1f1a3a !important; }
     #sidebarBackdrop { background: rgba(0, 0, 0, 0.88) !important; }
-    #addModal, #editModal, #deleteConfirmModal { background: rgba(0, 0, 0, 0.88) !important; }
+    #addModal, #editModal, #deleteConfirmModal, #quotesModal { background: rgba(0, 0, 0, 0.88) !important; }
     body { background-image: none !important; }
     #sidebar, #headerCard, #welcomeState, #iframeWrapper, #pdfWrapper, #imageWrapper, .modal-card {
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5) !important;
@@ -659,17 +737,24 @@ body.sidebar-open #sidebarBackdrop {
     <div id="sidebarResizer" title="Kéo để thay đổi chiều rộng"></div>
 
     <div class="sidebar-header">
-        <div style="display:flex;align-items:center;gap:12px;user-select:none;">
-            <div style="width:40px;height:40px;border-radius:14px;background:rgba(139,92,246,0.2);border:1px solid rgba(139,92,246,0.25);display:flex;align-items:center;justify-content:center;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c4b5fd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
-                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;user-select:none;">
+            <div style="display:flex;align-items:center;gap:12px;min-width:0;">
+                <div style="width:40px;height:40px;border-radius:14px;background:rgba(139,92,246,0.2);border:1px solid rgba(139,92,246,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c4b5fd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                    </svg>
+                </div>
+                <div style="min-width:0;">
+                    <div style="font-size:13px;font-weight:900;letter-spacing:0.08em;text-transform:uppercase;color:#e2e8f0;line-height:1.2;">Learning Base</div>
+                    <div style="font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#f472b6;margin-top:2px;">Hệ sinh thái học tập</div>
+                </div>
+            </div>
+            <button class="icon-btn" id="quoteManagerBtn" onclick="openQuotesModal()" title="Quản lý câu nói">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
                 </svg>
-            </div>
-            <div>
-                <div style="font-size:13px;font-weight:900;letter-spacing:0.08em;text-transform:uppercase;color:#e2e8f0;line-height:1.2;">Learning Base</div>
-                <div style="font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#f472b6;margin-top:2px;">Hệ sinh thái học tập</div>
-            </div>
+            </button>
         </div>
         <div class="env-warning" id="envWarning">
             ⚠ Bạn đang mở bằng <b>file://</b>. Đồng bộ trong iframe và xem PDF sẽ bị chặn. Hãy chạy qua local server (VD: <code>python -m http.server 8000</code>).
@@ -748,10 +833,10 @@ body.sidebar-open #sidebarBackdrop {
 
         <div class="gdiv" style="position:relative;z-index:1;"></div>
 
-        <div style="max-width:340px;position:relative;z-index:1;">
-            <p id="quoteEn" style="font-size:12px;font-weight:700;font-style:italic;line-height:1.6;color:#c4b5fd;">"..."</p>
-            <p id="quoteVi" style="font-size:11px;font-weight:500;font-style:italic;color:#475569;margin-top:8px;line-height:1.5;">(đang tải...)</p>
-            <span id="quoteAuthor" style="font-size:9px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:#334155;display:block;margin-top:12px;">— ...</span>
+        <div id="quoteBlock">
+            <p id="quoteEn">"..."</p>
+            <p id="quoteVi">(đang tải...)</p>
+            <span id="quoteAuthor">— ... —</span>
         </div>
 
         <div style="display:flex;gap:10px;margin-top:32px;position:relative;z-index:1;">
@@ -772,13 +857,9 @@ body.sidebar-open #sidebarBackdrop {
 
     <div id="pdfWrapper">
         <div id="pdfToolbar">
-            <button class="pdf-tbtn" id="pdfZoomOut" title="Thu nhỏ">
-                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            </button>
+            <button class="pdf-tbtn" id="pdfZoomOut" title="Thu nhỏ">−</button>
             <span class="pdf-zoomlabel" id="pdfZoomLabel">100%</span>
-            <button class="pdf-tbtn" id="pdfZoomIn" title="Phóng to">
-                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            </button>
+            <button class="pdf-tbtn" id="pdfZoomIn" title="Phóng to">+</button>
             <button class="pdf-tbtn" id="pdfFitWidth" title="Vừa chiều rộng">↔ Vừa khổ</button>
             <button class="pdf-tbtn" id="pdfOpenTab" title="Mở trong tab mới">
                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
@@ -919,6 +1000,47 @@ body.sidebar-open #sidebarBackdrop {
     </div>
 </div>
 
+<!-- MODAL: QUẢN LÝ CÂU NÓI -->
+<div id="quotesModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:60;align-items:center;justify-content:center;padding:16px;">
+    <div class="modal-card" style="width:100%;max-width:620px;padding:24px;max-height:92vh;display:flex;flex-direction:column;">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:14px;margin-bottom:14px;border-bottom:1px solid rgba(255,255,255,0.06);flex-shrink:0;">
+            <span style="font-size:11px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#a78bfa;display:flex;align-items:center;gap:7px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                </svg>Quản lý câu nói
+            </span>
+            <button class="icon-btn" onclick="closeQuotesModal()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
+        </div>
+
+        <div id="quotesList" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding-right:4px;min-height:120px;max-height:42vh;"></div>
+
+        <div style="border-top:1px solid rgba(255,255,255,0.06);margin-top:16px;padding-top:16px;flex-shrink:0;">
+            <div style="display:flex;flex-direction:column;gap:10px;">
+                <div>
+                    <label class="mlabel">Câu tiếng Anh</label>
+                    <input class="modal-input" id="quoteInputEn" placeholder="The beautiful thing about learning is...">
+                </div>
+                <div>
+                    <label class="mlabel">Dịch tiếng Việt</label>
+                    <input class="modal-input" id="quoteInputVi" placeholder="Điều tuyệt vời của việc học là...">
+                </div>
+                <div>
+                    <label class="mlabel">Tác giả</label>
+                    <input class="modal-input" id="quoteInputAuthor" placeholder="B.B. King">
+                </div>
+            </div>
+            <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:14px;">
+                <button class="btn-sec" id="quoteCancelBtn" onclick="resetQuoteForm()" style="display:none;">Hủy sửa</button>
+                <button class="btn-pri" id="quoteSaveBtn" onclick="saveQuote()">Thêm câu nói</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="toastContainer" style="position:fixed;top:16px;right:16px;z-index:70;display:flex;flex-direction:column;gap:8px;"></div>
 
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -941,6 +1063,7 @@ db.enablePersistence({ synchronizeTabs: true }).catch(err => console.warn("Persi
 
 const APPS_DOC  = db.collection("learning_data").doc("user_apps");
 const FIELD_DOC = db.collection("learning_data").doc("user_fields");
+const QUOTES_DOC = db.collection("learning_data").doc("user_quotes");
 
 /* B) SVG ICONS */
 const SVG_PATHS = {
@@ -965,6 +1088,7 @@ function escapeHtml(str) {
 /* C) STATE */
 const LS_APPS = 'my_learning_hub_apps_v3';
 const LS_FIELDS = 'my_learning_hub_fields_v3';
+const LS_QUOTES = 'my_learning_hub_quotes_v1';
 const LS_SIDEBAR_W = 'sidebar_width_v1';
 const LS_SIDEBAR_OPEN = 'sidebar_open_v1';
 
@@ -980,24 +1104,22 @@ try {
     if (f && typeof f === 'object') fieldState = f;
 } catch (e) {}
 
+let userQuotes = [];
+try {
+    const q = JSON.parse(localStorage.getItem(LS_QUOTES));
+    if (Array.isArray(q)) userQuotes = q;
+} catch (e) {}
+
 let currentActiveAppId = null;
 let currentAppKind = null;
 let dragIndex = null;
 let cloudAppsLoaded = false;
 let cloudFieldsLoaded = false;
+let cloudQuotesLoaded = false;
 let currentFieldObserver = null;
 let currentIframeDoc = null;
 let _applyingFromCloud = false;
-
-const quotes = [
-    { en: "The beautiful thing about learning is that no one can take it away from you.", vi: "Điều tuyệt vời của việc học là không ai có thể lấy nó đi khỏi bạn.", author: "B.B. King" },
-    { en: "Success is the sum of small efforts, repeated day in and day out.", vi: "Thành công là tổng của những nỗ lực nhỏ, lặp đi lặp lại mỗi ngày.", author: "Robert Collier" },
-    { en: "It always seems impossible until it's done.", vi: "Mọi thứ đều có vẻ bất khả thi cho đến khi nó được hoàn thành.", author: "Nelson Mandela" },
-    { en: "Believe you can and you're halfway there.", vi: "Hãy tin rằng bạn có thể, và bạn đã đi được nửa chặng đường.", author: "Theodore Roosevelt" },
-    { en: "Live as if you were to die tomorrow. Learn as if you were to live forever.", vi: "Sống như thể bạn sẽ chết vào ngày mai. Học như thể bạn sẽ sống mãi mãi.", author: "Mahatma Gandhi" },
-    { en: "Education is the passport to the future.", vi: "Giáo dục là tấm hộ chiếu cho tương lai.", author: "Malcolm X" },
-    { en: "Do not wait for opportunities, create them yourself.", vi: "Đừng chờ đợi cơ hội, hãy tự tạo ra chúng.", author: "Chris Grosser" }
-];
+let editingQuoteId = null;
 
 /* D) SYNC BADGE */
 let savingTimeout = null;
@@ -1022,6 +1144,9 @@ function saveAppsLocal() {
 function saveFieldsLocal() {
     try { localStorage.setItem(LS_FIELDS, JSON.stringify(fieldState)); } catch (e) {}
 }
+function saveQuotesLocal() {
+    try { localStorage.setItem(LS_QUOTES, JSON.stringify(userQuotes)); } catch (e) {}
+}
 
 /* F) CLOUD WRITES */
 function saveAppsCloud() {
@@ -1036,9 +1161,25 @@ function saveAppsCloud() {
           setSyncBadge('err', 'Lỗi đồng bộ');
       });
 }
+function saveQuotesCloud() {
+    if (!cloudQuotesLoaded) return;
+    flashSaving();
+    QUOTES_DOC.set({
+        list: userQuotes,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    }).then(() => setSyncBadge('ok', '☁ Đã đồng bộ'))
+      .catch(err => {
+          console.error('Lỗi lưu quotes:', err);
+          setSyncBadge('err', 'Lỗi đồng bộ');
+      });
+}
 function persistApps() {
     saveAppsLocal();
     saveAppsCloud();
+}
+function persistQuotes() {
+    saveQuotesLocal();
+    saveQuotesCloud();
 }
 
 const pendingFieldWrites = {};
@@ -1128,6 +1269,54 @@ FIELD_DOC.onSnapshot(function (doc) {
         setSyncBadge('ok', '☁ Đã đồng bộ');
     }
 }, err => console.warn('Fields listener error:', err));
+
+/* H2) LISTEN CLOUD - QUOTES */
+QUOTES_DOC.onSnapshot(function (doc) {
+    if (doc.metadata && doc.metadata.hasPendingWrites) return;
+
+    if (doc.exists) {
+        const data = doc.data();
+        const list = Array.isArray(data.list) ? data.list : [];
+
+        if (!cloudQuotesLoaded) {
+            cloudQuotesLoaded = true;
+            // Nếu cloud rỗng + local có → đẩy local lên
+            if (list.length === 0 && userQuotes.length > 0) {
+                saveQuotesCloud();
+                loadRandomQuote();
+                return;
+            }
+            // Cloud có → ưu tiên cloud
+            if (list.length > 0) {
+                userQuotes = list;
+                saveQuotesLocal();
+            } else {
+                // Cloud rỗng, local cũng rỗng → giữ nguyên []
+                userQuotes = [];
+                saveQuotesLocal();
+            }
+            loadRandomQuote();
+            return;
+        }
+
+        if (JSON.stringify(list) !== JSON.stringify(userQuotes)) {
+            userQuotes = list;
+            saveQuotesLocal();
+            loadRandomQuote();
+        }
+    } else {
+        if (!cloudQuotesLoaded) {
+            cloudQuotesLoaded = true;
+            // Doc chưa tồn tại — nếu local có thì đẩy lên, không thì thôi
+            if (userQuotes.length > 0) saveQuotesCloud();
+            loadRandomQuote();
+        }
+    }
+}, err => {
+    console.warn('Quotes listener error:', err);
+    cloudQuotesLoaded = true;
+    loadRandomQuote();
+});
 
 /* I) IFRAME FIELD SCANNER */
 const SKIP_TYPES = ['file', 'submit', 'button', 'reset', 'image', 'password', 'hidden'];
@@ -1361,14 +1550,16 @@ window.addEventListener('message', function (e) {
     }
 });
 
-/* K) PDF VIEWER */
+/* ═══════════════════════════════════════════════════════════
+   K) PDF VIEWER
+   ═══════════════════════════════════════════════════════════ */
 const PDFJS_VER = '3.11.174';
 const PDFJS_BASE = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/' + PDFJS_VER + '/';
 
 let pdfLibPromise = null;
 let pdfDoc = null;
 let pdfScale = 1;
-let pdfBaseScale = 1;
+let pdfFitScale = 0;
 let pdfObserver = null;
 let pdfRenderToken = 0;
 let pdfCurrentUrl = null;
@@ -1395,6 +1586,7 @@ function loadPdfJs() {
 function closePdf() {
     pdfRenderToken++;
     pdfCurrentUrl = null;
+    pdfFitScale = 0;
     if (pdfObserver) { pdfObserver.disconnect(); pdfObserver = null; }
     if (pdfDoc) { try { pdfDoc.destroy(); } catch (e) {} pdfDoc = null; }
     const pages = document.getElementById('pdfPages');
@@ -1425,6 +1617,7 @@ async function openPdf(path) {
     if (pdfDoc) { try { pdfDoc.destroy(); } catch (e) {} pdfDoc = null; }
 
     pdfScale = 1;
+    pdfFitScale = 0;
     setPdfZoomLabel();
     pdfCurrentUrl = path;
     const token = ++pdfRenderToken;
@@ -1511,11 +1704,14 @@ async function renderPdfAll(token) {
     if (pdfObserver) { pdfObserver.disconnect(); pdfObserver = null; }
     pagesEl.innerHTML = '';
 
-    const avail = Math.max(240, scroll.clientWidth - 32);
-    const firstPage = await pdfDoc.getPage(1);
-    if (token !== pdfRenderToken) return;
-    const vp1 = firstPage.getViewport({ scale: 1 });
-    pdfBaseScale = Math.min(1.6, Math.max(0.4, avail / vp1.width));
+    if (!pdfFitScale) {
+        const padding = 24;
+        const avail = Math.max(240, scroll.clientWidth - padding);
+        const firstPage = await pdfDoc.getPage(1);
+        if (token !== pdfRenderToken) return;
+        const vp1 = firstPage.getViewport({ scale: 1 });
+        pdfFitScale = avail / vp1.width;
+    }
 
     pdfObserver = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
@@ -1530,25 +1726,22 @@ async function renderPdfAll(token) {
         if (token !== pdfRenderToken) return;
         let page;
         try { page = await pdfDoc.getPage(i); } catch (e) { continue; }
-        const vp = page.getViewport({ scale: pdfBaseScale });
+        const vp = page.getViewport({ scale: 1 });
+        const s = pdfFitScale * pdfScale;
+        const w = Math.floor(vp.width  * s);
+        const h = Math.floor(vp.height * s);
 
         const holder = document.createElement('div');
         holder.className = 'pdf-page';
         holder.dataset.page = String(i);
         holder._page = page;
-        holder._scale = pdfBaseScale;
-        holder._baseWidth = Math.floor(vp.width);
-        holder._baseHeight = Math.floor(vp.height);
-        holder.style.width = Math.floor(vp.width) + 'px';
-        holder.style.height = Math.floor(vp.height) + 'px';
-        holder.style.transform = 'scale(' + pdfScale + ')';
-        holder.style.transformOrigin = 'top center';
+        holder._scale = s;
 
         const canvas = document.createElement('canvas');
-        canvas.width = Math.floor(vp.width);
-        canvas.height = Math.floor(vp.height);
-        canvas.style.width = Math.floor(vp.width) + 'px';
-        canvas.style.height = Math.floor(vp.height) + 'px';
+        canvas.style.width  = w + 'px';
+        canvas.style.height = h + 'px';
+        canvas.width  = w;
+        canvas.height = h;
 
         holder.appendChild(canvas);
         pagesEl.appendChild(holder);
@@ -1562,29 +1755,30 @@ async function renderPdfPage(holder) {
     try {
         const page = holder._page || (pdfDoc && await pdfDoc.getPage(parseInt(holder.dataset.page, 10)));
         if (!page) return;
-        const scale = holder._scale || pdfBaseScale || 1;
+        const scale = holder._scale || 1;
         const viewport = page.getViewport({ scale: scale });
         const canvas = holder.querySelector('canvas');
         if (!canvas) return;
         const ctx = canvas.getContext('2d');
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-        canvas.width = Math.floor(viewport.width);
-        canvas.height = Math.floor(viewport.height);
-        canvas.style.width = Math.floor(viewport.width) + 'px';
+        canvas.width  = Math.floor(viewport.width  * dpr);
+        canvas.height = Math.floor(viewport.height * dpr);
+        canvas.style.width  = Math.floor(viewport.width) + 'px';
         canvas.style.height = Math.floor(viewport.height) + 'px';
 
         const renderTask = page.render({
             canvasContext: ctx,
-            viewport: viewport
+            viewport: viewport,
+            transform: dpr !== 1 ? [dpr, 0, 0, dpr, 0, 0] : null
         });
         await renderTask.promise;
     } catch (e) {}
 }
 
-/* ⭐ PDF ZOOM — neo theo điểm con trỏ chuột */
 async function pdfZoomAt(newScale, clientX, clientY) {
     if (!pdfDoc) return;
-    newScale = Math.min(2.6, Math.max(0.5, newScale));
+    newScale = Math.min(8, Math.max(0.2, newScale));
     if (Math.abs(newScale - pdfScale) < 0.0001) return;
 
     const scroll = document.getElementById('pdfScroll');
@@ -1601,23 +1795,17 @@ async function pdfZoomAt(newScale, clientX, clientY) {
 
     const contentX = scroll.scrollLeft + anchorX;
     const contentY = scroll.scrollTop + anchorY;
+
     const ratio = newScale / pdfScale;
     pdfScale = newScale;
     setPdfZoomLabel();
 
-    const pages = document.querySelectorAll('#pdfPages .pdf-page');
-    pages.forEach(function (page) {
-        const baseW = page._baseWidth || page.clientWidth || 0;
-        const baseH = page._baseHeight || page.clientHeight || 0;
-        page.style.width = Math.round(baseW * pdfScale) + 'px';
-        page.style.height = Math.round(baseH * pdfScale) + 'px';
-        page.style.transform = 'scale(1)';
-        page.querySelector('canvas').style.width = Math.round(baseW * pdfScale) + 'px';
-        page.querySelector('canvas').style.height = Math.round(baseH * pdfScale) + 'px';
-    });
+    const token = ++pdfRenderToken;
+    await renderPdfAll(token);
+    if (token !== pdfRenderToken) return;
 
     scroll.scrollLeft = contentX * ratio - anchorX;
-    scroll.scrollTop = contentY * ratio - anchorY;
+    scroll.scrollTop  = contentY * ratio - anchorY;
 }
 
 function pdfZoom(factor, clientX, clientY) {
@@ -1625,7 +1813,7 @@ function pdfZoom(factor, clientX, clientY) {
     pdfZoomAt(pdfScale * factor, clientX, clientY);
 }
 
-async function pdfFitWidth(clientX, clientY) {
+function pdfFitWidth(clientX, clientY) {
     if (!pdfDoc) return;
     pdfZoomAt(1, clientX, clientY);
 }
@@ -1732,7 +1920,6 @@ function updateImageCursor() {
     img.style.cursor = (Math.abs(imgZoomLevel - 1) < 0.01) ? 'zoom-out' : 'zoom-in';
 }
 
-/* ⭐ IMAGE SET ZOOM — neo theo điểm con trỏ chuột */
 function imgSetZoom(newZoom, clientX, clientY) {
     if (!imgNaturalW) return;
     newZoom = Math.min(8, Math.max(0.05, newZoom));
@@ -1742,7 +1929,6 @@ function imgSetZoom(newZoom, clientX, clientY) {
     const scroll = document.getElementById('imageScroll');
     const scrollRect = scroll.getBoundingClientRect();
 
-    // Điểm neo (clientX/Y) — mặc định tâm scroll nếu không có
     let ax, ay;
     if (clientX === undefined || clientY === undefined) {
         ax = scrollRect.left + scrollRect.width / 2;
@@ -1752,21 +1938,17 @@ function imgSetZoom(newZoom, clientX, clientY) {
         ay = clientY;
     }
 
-    // Tính vị trí tương đối (0..1) trong ảnh TRƯỚC khi zoom
     const imgRectBefore = img.getBoundingClientRect();
     const relX = imgRectBefore.width  > 0 ? (ax - imgRectBefore.left) / imgRectBefore.width  : 0.5;
     const relY = imgRectBefore.height > 0 ? (ay - imgRectBefore.top)  / imgRectBefore.height : 0.5;
 
-    // Đổi kích thước ảnh
     imgZoomLevel = newZoom;
     applyImageSize();
 
-    // Sau khi đổi kích thước, tính lại vị trí điểm neo
     const imgRectAfter = img.getBoundingClientRect();
     const anchorAfterX = imgRectAfter.left + relX * imgRectAfter.width;
     const anchorAfterY = imgRectAfter.top  + relY * imgRectAfter.height;
 
-    // Scroll để điểm neo quay về đúng vị trí chuột
     const dx = anchorAfterX - ax;
     const dy = anchorAfterY - ay;
     if (Math.abs(dx) > 0.5) scroll.scrollLeft += dx;
@@ -1807,12 +1989,29 @@ function updateDate() {
         String(now.getMonth() + 1).padStart(2, '0') + '/' +
         now.getFullYear();
 }
+
 function loadRandomQuote() {
-    const q = quotes[Math.floor(Math.random() * quotes.length)];
-    document.getElementById('quoteEn').textContent = '"' + q.en + '"';
-    document.getElementById('quoteVi').textContent = '(' + q.vi + ')';
-    document.getElementById('quoteAuthor').textContent = '— ' + q.author;
+    const block = document.getElementById('quoteBlock');
+    const en = document.getElementById('quoteEn');
+    const vi = document.getElementById('quoteVi');
+    const au = document.getElementById('quoteAuthor');
+    if (!en || !vi || !au || !block) return;
+
+    if (!userQuotes || userQuotes.length === 0) {
+        block.classList.add('empty');
+        en.textContent = 'Chưa có câu nói nào — mở thư viện (☰) để thêm';
+        vi.textContent = '';
+        au.textContent = '';
+        return;
+    }
+
+    block.classList.remove('empty');
+    const q = userQuotes[Math.floor(Math.random() * userQuotes.length)];
+    en.textContent = '"' + q.en + '"';
+    vi.textContent = '(' + q.vi + ')';
+    au.textContent = '— ' + q.author + ' —';
 }
+
 function updateClock() {
     const now = new Date();
     const time = now.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
@@ -2270,6 +2469,113 @@ function saveNewApp() {
     else showToast('Đã thêm ứng dụng!');
 }
 
+/* ═══════════════════════════════════════════════════════════
+   S2) QUOTES MODAL
+   ═══════════════════════════════════════════════════════════ */
+function openQuotesModal() {
+    resetQuoteForm();
+    renderQuotesList();
+    document.getElementById('quotesModal').style.display = 'flex';
+}
+function closeQuotesModal() {
+    document.getElementById('quotesModal').style.display = 'none';
+    resetQuoteForm();
+}
+function resetQuoteForm() {
+    editingQuoteId = null;
+    const en = document.getElementById('quoteInputEn');
+    const vi = document.getElementById('quoteInputVi');
+    const au = document.getElementById('quoteInputAuthor');
+    const btn = document.getElementById('quoteSaveBtn');
+    const cancel = document.getElementById('quoteCancelBtn');
+    if (en) en.value = '';
+    if (vi) vi.value = '';
+    if (au) au.value = '';
+    if (btn) btn.textContent = 'Thêm câu nói';
+    if (cancel) cancel.style.display = 'none';
+}
+function renderQuotesList() {
+    const list = document.getElementById('quotesList');
+    if (!list) return;
+    list.innerHTML = '';
+
+    if (userQuotes.length === 0) {
+        const empty = document.createElement('div');
+        empty.style.cssText = 'padding:24px 12px;text-align:center;font-size:11.5px;color:#475569;font-style:italic;line-height:1.6;';
+        empty.textContent = 'Chưa có câu nói nào. Thêm câu đầu tiên ở khung dưới nhé!';
+        list.appendChild(empty);
+        return;
+    }
+
+    userQuotes.forEach((q, idx) => {
+        const item = document.createElement('div');
+        item.className = 'quote-item';
+        item.innerHTML =
+            '<div style="flex:1;min-width:0;">' +
+                '<div style="font-size:12.5px;font-weight:700;color:#e2e8f0;font-style:italic;line-height:1.5;word-break:break-word;">"' + escapeHtml(q.en) + '"</div>' +
+                '<div style="font-size:11px;color:#94a3b8;font-style:italic;margin-top:4px;line-height:1.5;word-break:break-word;">(' + escapeHtml(q.vi) + ')</div>' +
+                '<div style="font-size:9px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#a78bfa;margin-top:6px;">— ' + escapeHtml(q.author) + ' —</div>' +
+            '</div>' +
+            '<div style="display:flex;gap:4px;flex-shrink:0;">' +
+                '<button class="icon-btn quote-edit-btn" title="Sửa">' + svgIcon('edit', 12) + '</button>' +
+                '<button class="icon-btn danger quote-del-btn" title="Xóa">' + svgIcon('trash', 12) + '</button>' +
+            '</div>';
+
+        item.querySelector('.quote-edit-btn').addEventListener('click', () => editQuote(idx));
+        item.querySelector('.quote-del-btn').addEventListener('click', () => deleteQuote(idx));
+
+        list.appendChild(item);
+    });
+}
+function editQuote(idx) {
+    const q = userQuotes[idx];
+    if (!q) return;
+    editingQuoteId = q.id;
+    document.getElementById('quoteInputEn').value = q.en || '';
+    document.getElementById('quoteInputVi').value = q.vi || '';
+    document.getElementById('quoteInputAuthor').value = q.author || '';
+    document.getElementById('quoteSaveBtn').textContent = 'Lưu thay đổi';
+    document.getElementById('quoteCancelBtn').style.display = 'inline-block';
+    document.getElementById('quoteInputEn').focus();
+}
+function deleteQuote(idx) {
+    if (!userQuotes[idx]) return;
+    userQuotes.splice(idx, 1);
+    persistQuotes();
+    renderQuotesList();
+    if (editingQuoteId && !userQuotes.some(q => q.id === editingQuoteId)) {
+        resetQuoteForm();
+    }
+    loadRandomQuote();
+    showToast('Đã xóa câu nói!', 'error');
+}
+function saveQuote() {
+    const en = document.getElementById('quoteInputEn').value.trim();
+    const vi = document.getElementById('quoteInputVi').value.trim();
+    const author = document.getElementById('quoteInputAuthor').value.trim() || 'Khuyết danh';
+
+    if (!en) { showToast('Nhập câu tiếng Anh đã nhé!', 'error'); return; }
+    if (!vi) { showToast('Nhập bản dịch tiếng Việt đã nhé!', 'error'); return; }
+
+    if (editingQuoteId) {
+        const i = userQuotes.findIndex(q => q.id === editingQuoteId);
+        if (i !== -1) {
+            userQuotes[i] = Object.assign({}, userQuotes[i], { en, vi, author });
+        }
+        showToast('Đã lưu thay đổi!');
+    } else {
+        userQuotes.push({
+            id: 'q-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
+            en, vi, author
+        });
+        showToast('Đã thêm câu nói!');
+    }
+    persistQuotes();
+    renderQuotesList();
+    resetQuoteForm();
+    loadRandomQuote();
+}
+
 /* T) TOAST */
 function showToast(msg, type) {
     type = type || 'success';
@@ -2314,7 +2620,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.getElementById('appFrame').addEventListener('load', bindIframe);
 
-    /* PDF toolbar — zoom neo vào tâm */
+    /* PDF toolbar */
     document.getElementById('pdfZoomIn').addEventListener('click', () => pdfZoom(1.2));
     document.getElementById('pdfZoomOut').addEventListener('click', () => pdfZoom(1 / 1.2));
     document.getElementById('pdfFitWidth').addEventListener('click', () => pdfFitWidth());
@@ -2333,11 +2639,7 @@ document.addEventListener('DOMContentLoaded', function () {
         window.open(imgCurrentUrl, '_blank', 'noopener');
     });
 
-    /* ═══════════════════════════════════════════════════
-       ⭐ ZOOM NEO THEO CON TRỎ CHUỘT
-       ═══════════════════════════════════════════════════ */
-
-    /* (1) Ctrl + lăn chuột trên PDF → zoom vào vị trí con trỏ */
+    /* Ctrl + wheel zoom PDF */
     document.getElementById('pdfScroll').addEventListener('wheel', function (e) {
         if (!(e.ctrlKey || e.metaKey)) return;
         if (!pdfDoc) return;
@@ -2345,7 +2647,7 @@ document.addEventListener('DOMContentLoaded', function () {
         pdfZoom(e.deltaY < 0 ? 1.12 : 1 / 1.12, e.clientX, e.clientY);
     }, { passive: false });
 
-    /* (2) Ctrl + lăn chuột trên ảnh → zoom vào vị trí con trỏ */
+    /* Ctrl + wheel zoom ảnh */
     document.getElementById('imageScroll').addEventListener('wheel', function (e) {
         if (!(e.ctrlKey || e.metaKey)) return;
         if (!imgNaturalW) return;
@@ -2353,7 +2655,7 @@ document.addEventListener('DOMContentLoaded', function () {
         imgZoomBy(e.deltaY < 0 ? 1.12 : 1 / 1.12, e.clientX, e.clientY);
     }, { passive: false });
 
-    /* (3) Đúp chuột vào ảnh → toggle vừa khung ↔ 100% (neo tại chuột) */
+    /* Đúp chuột vào ảnh */
     document.getElementById('imageDisplay').addEventListener('dblclick', function (e) {
         if (!imgNaturalW) return;
         e.preventDefault();
@@ -2375,6 +2677,7 @@ document.addEventListener('DOMContentLoaded', function () {
     window.addEventListener('resize', function () {
         clampSidebarWidth();
         if (pdfDoc) {
+            pdfFitScale = 0;
             clearTimeout(pdfResizeTimer);
             pdfResizeTimer = setTimeout(function () {
                 if (!pdfDoc) return;
@@ -2384,7 +2687,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    ['addModal', 'editModal', 'deleteConfirmModal'].forEach(function (mid) {
+    ['addModal', 'editModal', 'deleteConfirmModal', 'quotesModal'].forEach(function (mid) {
         const m = document.getElementById(mid);
         m.addEventListener('click', e => { if (e.target === m) m.style.display = 'none'; });
     });
@@ -2394,10 +2697,12 @@ document.addEventListener('DOMContentLoaded', function () {
             const addOpen = document.getElementById('addModal').style.display === 'flex';
             const editOpen = document.getElementById('editModal').style.display === 'flex';
             const delOpen = document.getElementById('deleteConfirmModal').style.display === 'flex';
-            if (addOpen || editOpen || delOpen) {
+            const quotesOpen = document.getElementById('quotesModal').style.display === 'flex';
+            if (addOpen || editOpen || delOpen || quotesOpen) {
                 document.getElementById('addModal').style.display = 'none';
                 document.getElementById('editModal').style.display = 'none';
                 document.getElementById('deleteConfirmModal').style.display = 'none';
+                document.getElementById('quotesModal').style.display = 'none';
                 return;
             }
             if (document.body.classList.contains('sidebar-open')) {
