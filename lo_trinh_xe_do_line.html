@@ -70,6 +70,15 @@
             .app-brand-text h1 { font-size: 12px !important; }
             .app-brand-text p { font-size: 9px !important; }
         }
+
+        /* Highlight khối nguyên tắc "giải thích sâu" trong prompt */
+        .deep-explain-block {
+            border-left: 3px solid #22d3ee;
+            background: rgba(8, 145, 178, 0.08);
+            padding: 8px 10px;
+            border-radius: 6px;
+            margin: 6px 0;
+        }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col">
@@ -197,6 +206,50 @@
             }
             window.LBSync = { save: lbsync_save, load: lbsync_load };
         })();
+
+        /* ══════════════════════════════════════════════════════
+           KHỐI NGUYÊN TẮC "GIẢI THÍCH SÂU" — TỰ ĐỘNG NỐI VÀO MỌI PROMPT
+           (Cú pháp + Luồng chạy từng bước)
+           ══════════════════════════════════════════════════════ */
+        const COMMON_PROMPT_SUFFIX = `
+
+═══════════════════════════════════════════
+[NGUYÊN TẮC BẮT BUỘC — GIẢI THÍCH SÂU CẤU TRÚC & LUỒNG CHẠY]
+═══════════════════════════════════════════
+⚠️ Với MỌI đoạn code C++/Arduino xuất hiện trong câu trả lời, bạn PHẢI tuân thủ 4 quy tắc sau:
+
+▸ QUY TẮC 1 — MỔ XẺ CÚ PHÁP (SYNTAX) TỪNG DẤU:
+   Chỉ rõ ý nghĩa và vai trò của từng ký tự trong câu lệnh:
+   • Dấu ngoặc tròn ( )  → dùng để làm gì (gọi hàm, truyền tham số, nhóm điều kiện...).
+   • Dấu ngoặc nhọn { }  → mở/đóng khối lệnh nào, phạm vi ảnh hưởng ra sao.
+   • Dấu chấm phẩy ;     → kết thúc câu lệnh, vì sao bắt buộc, thiếu sẽ lỗi gì.
+   • Dấu =, ==, !=, <, >, <=, >=  → phân biệt gán và so sánh.
+   • Dấu &&, ||, !       → toán tử logic, thứ tự ưu tiên.
+   • Dấu ++, --, +=, -=  → rút gọn phép toán, giải thích tương đương.
+   • Dấu # (tiền xử lý)  → #include, #define khác gì code thường.
+   • Dấu < > trong #include, [ ] của mảng, " ' của chuỗi/ký tự.
+   • Dấu ::, ->, .       → phạm vi, con trỏ, truy cập thành viên (nếu có).
+   → Với mỗi dấu: nêu TÊN GỌI + CÔNG DỤNG + VÍ DỤ NGẮN.
+
+▸ QUY TẮC 2 — GIẢI THÍCH LUỒNG CHẠY (EXECUTION FLOW) TỪNG BƯỚC:
+   Trình bày trật tự máy tính thực thi theo dạng đánh số rõ ràng:
+      • Bước 1: Máy đọc gì → xử lý gì → lưu vào đâu.
+      • Bước 2: Máy kiểm tra điều kiện gì → rẽ nhánh nào.
+      • Bước 3: Máy nhảy tới dòng nào tiếp theo.
+      • ... tiếp tục đến khi hết chương trình.
+   Với vòng lặp (for/while): ghi rõ điểm BẮT ĐẦU, ĐIỀU KIỆN DỪNG, ĐIỂM QUAY LẠI.
+   Với hàm: ghi rõ điểm GỌI HÀM, điểm RETURN, giá trị trả về.
+   Với setup()/loop(): giải thích Arduino chạy setup() 1 lần rồi lặp vô hạn loop().
+
+▸ QUY TẮC 3 — VẼ SƠ ĐỒ KHỐI:
+   Nếu giúp hình dung rõ hơn, hãy vẽ sơ đồ khối bằng ký tự ASCII hoặc mũi tên (→) để mô tả luồng chạy.
+
+▸ QUY TẮC 4 — KHÔNG BỎ QUA DÒNG NÀO:
+   Tuyệt đối KHÔNG được viết "phần còn lại tương tự" hoặc bỏ qua dòng code nào.
+   Mỗi dòng code đều phải có: (a) giải thích cú pháp + (b) vai trò trong luồng chạy.
+
+Nếu câu trả lời thiếu 1 trong 4 quy tắc trên → coi như chưa đạt yêu cầu, hãy làm lại.
+        `.trim();
 
         /* ══════════════════════════════════════════════════════
            COURSE DATA — 100% ARDUINO C++, KHÔNG WEBOTS
@@ -652,6 +705,11 @@ Xe tôi đã dò line tốt. Giờ tôi muốn thêm chức năng né vật cả
             closeDrawer();
         }
 
+        // Helper: ghép prompt gốc + khối nguyên tắc sâu
+        function buildFullPrompt(lesson) {
+            return lesson.aiPrompt + '\n\n' + COMMON_PROMPT_SUFFIX;
+        }
+
         function loadLesson(id) {
             let targetLesson = null;
             let targetModule = null;
@@ -664,6 +722,7 @@ Xe tôi đã dò line tốt. Giờ tôi muốn thêm chức năng né vật cả
 
             const container = document.getElementById('lesson-content-container');
             const isCompleted = completedLessons.includes(targetLesson.id);
+            const fullPrompt = buildFullPrompt(targetLesson);
 
             const allLessons = [];
             courseData.forEach(m => m.lessons.forEach(l => allLessons.push(l.id)));
@@ -700,7 +759,20 @@ Xe tôi đã dò line tốt. Giờ tôi muốn thêm chức năng né vật cả
                         </button>
                     </div>
 
-                    <div class="bg-slate-950 p-3 sm:p-4 rounded-lg sm:rounded-xl border border-slate-800 font-mono text-[10px] sm:text-xs text-cyan-200 whitespace-pre-wrap leading-relaxed select-all max-h-72 sm:max-h-96 overflow-y-auto" id="prompt-lesson-text-${targetLesson.id}">${targetLesson.aiPrompt}</div>
+                    <!-- Badge thông báo đã nhúng nguyên tắc sâu -->
+                    <div class="mb-3 flex flex-wrap gap-2 text-[10px] sm:text-[11px]">
+                        <span class="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-emerald-950 text-emerald-300 border border-emerald-800">
+                            ✓ Mổ xẻ cú pháp ( ) { } ; == && ++
+                        </span>
+                        <span class="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-blue-950 text-blue-300 border border-blue-800">
+                            ✓ Luồng chạy từng bước 1→2→3
+                        </span>
+                        <span class="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-purple-950 text-purple-300 border border-purple-800">
+                            ✓ Không bỏ qua dòng code nào
+                        </span>
+                    </div>
+
+                    <div class="bg-slate-950 p-3 sm:p-4 rounded-lg sm:rounded-xl border border-slate-800 font-mono text-[10px] sm:text-xs text-cyan-200 whitespace-pre-wrap leading-relaxed select-all max-h-72 sm:max-h-96 overflow-y-auto" id="prompt-lesson-text-${targetLesson.id}">${fullPrompt}</div>
 
                     <div class="mt-3 text-[10px] sm:text-[11px] text-slate-400 leading-relaxed">
                         💡 Mẹo: Nếu AI trả lời khó hiểu, hãy nhắn tiếp "Giải thích lại như cho học sinh cấp 2" hoặc "Cho ví dụ cụ thể hơn".
@@ -739,7 +811,7 @@ Xe tôi đã dò line tốt. Giờ tôi muốn thêm chức năng né vật cả
             textarea.select();
             try {
                 document.execCommand('copy');
-                showToast("📋 Đã sao chép Prompt AI!");
+                showToast("📋 Đã sao chép Prompt AI (kèm nguyên tắc giải thích sâu)!");
             } catch (err) {
                 showToast("❌ Không sao chép được, vui lòng chọn thủ công.");
             }
