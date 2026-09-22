@@ -70,15 +70,6 @@
             .app-brand-text h1 { font-size: 12px !important; }
             .app-brand-text p { font-size: 9px !important; }
         }
-
-        /* Highlight khối nguyên tắc "giải thích sâu" trong prompt */
-        .deep-explain-block {
-            border-left: 3px solid #22d3ee;
-            background: rgba(8, 145, 178, 0.08);
-            padding: 8px 10px;
-            border-radius: 6px;
-            margin: 6px 0;
-        }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col">
@@ -209,7 +200,6 @@
 
         /* ══════════════════════════════════════════════════════
            KHỐI NGUYÊN TẮC "GIẢI THÍCH SÂU" — TỰ ĐỘNG NỐI VÀO MỌI PROMPT
-           (Cú pháp + Luồng chạy từng bước)
            ══════════════════════════════════════════════════════ */
         const COMMON_PROMPT_SUFFIX = `
 
@@ -248,7 +238,13 @@
    Tuyệt đối KHÔNG được viết "phần còn lại tương tự" hoặc bỏ qua dòng code nào.
    Mỗi dòng code đều phải có: (a) giải thích cú pháp + (b) vai trò trong luồng chạy.
 
-Nếu câu trả lời thiếu 1 trong 4 quy tắc trên → coi như chưa đạt yêu cầu, hãy làm lại.
+▸ QUY TẮC 5 — CHUẨN KHOA HỌC LẬP TRÌNH:
+   Dùng thuật ngữ kỹ thuật CHÍNH XÁC (biến, hằng, kiểu dữ liệu, phạm vi, tham số, giá trị trả về, toán tử...).
+   Khi cần so sánh trực quan thì dùng phép so sánh gần gũi, nhưng KHÔNG hạ thấp chuẩn kỹ thuật.
+   Không dùng ngôn ngữ trẻ con, không ví von quá đà làm mất tính chính xác khoa học.
+   Kiến thức phải đúng theo chuẩn C++/Arduino hiện hành.
+
+Nếu câu trả lời thiếu 1 trong 5 quy tắc trên → coi như chưa đạt yêu cầu, hãy làm lại.
         `.trim();
 
         /* ══════════════════════════════════════════════════════
@@ -258,29 +254,29 @@ Nếu câu trả lời thiếu 1 trong 4 quy tắc trên → coi như chưa đ�
             {
                 id: "mod-1",
                 title: "Module 1: Nhập Môn Lập Trình Cho Người Mới",
-                desc: "Làm quen C++ từ con số 0, hiểu biến, câu lệnh if, vòng lặp bằng ví dụ đời thường.",
+                desc: "Làm quen C++ từ con số 0, hiểu biến, câu lệnh if, vòng lặp bằng ví dụ trực quan.",
                 lessons: [
                     {
                         id: "m1-l1",
                         title: "1.1 C++ Là Gì? Biến, Câu Lệnh If & Vòng Lặp",
                         time: "40 Phút",
-                        summary: "Hiểu lập trình là gì bằng ví dụ đời thường (nấu ăn, đèn giao thông). Làm quen các khái niệm nền tảng: biến, kiểu dữ liệu, câu lệnh if, vòng lặp — tất cả đều ví von dễ hiểu, không cần nền tảng toán.",
+                        summary: "Hiểu lập trình là gì bằng ví dụ trực quan (nấu ăn, đèn giao thông). Làm quen các khái niệm nền tảng: biến, kiểu dữ liệu, câu lệnh if, vòng lặp — giải thích rõ ràng, chuẩn khoa học, không cần nền tảng toán.",
                         aiPrompt: `[VAI TRÒ & ĐỐI TƯỢNG]
-Bạn là giáo viên dạy lập trình thân thiện, chuyên dạy cho NGƯỜI CHƯA TỪNG HỌC LẬP TRÌNH BAO GIỜ.
-Tôi không biết gì về C++, không biết "biến", "hàm", "vòng lặp" là gì. Hãy dạy tôi như dạy một đứa trẻ 12 tuổi.
+Bạn là giảng viên lập trình có kinh nghiệm. Tôi là NGƯỜI MỚI BẮT ĐẦU, chưa từng học C++ và chưa biết các khái niệm "biến", "hàm", "vòng lặp".
+Hãy giảng dạy với ngôn ngữ RÕ RÀNG - CHÍNH XÁC - DỄ HIỂU, đúng chuẩn khoa học lập trình.
 
 [NGUYÊN TẮC GIẢNG DẠY]
-- Tuyệt đối KHÔNG dùng thuật ngữ mà không giải thích ngay.
-- Mỗi khái niệm phải kèm ví dụ ĐỜI THƯỜNG (nấu ăn, đèn giao thông, hộp đựng đồ...).
-- Giải thích từng dòng code một, không bỏ qua dòng nào.
-- Trình bày chậm rãi, từng bước nhỏ.
+- Dùng thuật ngữ kỹ thuật CHÍNH XÁC, giải thích ngay khi xuất hiện lần đầu.
+- Mỗi khái niệm kèm ví dụ trực quan gần gũi (nấu ăn, đèn giao thông, hộp đựng đồ...) — nhưng KHÔNG dùng ngôn ngữ trẻ con.
+- Giải thích từng dòng code, không bỏ qua dòng nào.
+- Trình bày theo cấu trúc từ đơn giản đến phức tạp.
 
 [YÊU CẦU CHI TIẾT]
 1. Lập trình là gì? Vì sao Arduino cần "code" mới chạy được?
-2. "Biến" là gì? Ví dụ: biến \`int tocDo\` giống như một cái hộp có nhãn, bên trong chứa số. Cho ví dụ cụ thể bằng code C++.
-3. Các kiểu dữ liệu cơ bản: \`int\`, \`float\`, \`bool\`, \`char\` — mỗi cái dùng khi nào?
+2. "Biến" là gì? Ví dụ: biến \`int tocDo\` là một vùng nhớ có định danh, chứa giá trị số nguyên. Cho ví dụ cụ thể bằng code C++.
+3. Các kiểu dữ liệu cơ bản: \`int\`, \`float\`, \`bool\`, \`char\` — mỗi cái dùng khi nào, kích thước bao nhiêu byte trên Arduino Uno.
 4. Câu lệnh \`if-else\` là gì? Ví dụ: "NẾU trời mưa THÌ mang áo mưa, KHÔNG THÌ mặc áo thường". Viết code C++ minh họa.
-5. Vòng lặp \`for\` và \`while\` là gì? Ví dụ: "Lặp lại 10 lần bấm nút". Viết code C++ minh họa.
+5. Vòng lặp \`for\` và \`while\` là gì? Ví dụ: "Lặp lại 10 lần bấm nút". Viết code C++ minh họa, phân biệt rõ khi nào dùng for, khi nào dùng while.
 6. Bài tập nhỏ cuối bài: Viết chương trình in ra 5 số từ 1 đến 5 và kiểm tra số nào là số chẵn — kèm lời giải chi tiết từng dòng.`
                     },
                     {
@@ -298,7 +294,7 @@ Tôi CHƯA TỪNG cài phần mềm lập trình bao giờ. Máy tôi là Window
 
 [YÊU CẦU CHI TIẾT]
 1. Tải và cài VS Code từ trang chính thức (kèm link).
-2. Cài extension PlatformIO IDE trong VS Code — chụp từng bước.
+2. Cài extension PlatformIO IDE trong VS Code — mô tả từng bước.
 3. Tạo project PlatformIO đầu tiên cho Arduino Uno R3 (chọn board gì? framework gì?).
 4. Giải thích cấu trúc thư mục project: \`src/\`, \`lib/\`, \`platformio.ini\` — mỗi thứ dùng làm gì?
 5. Nội dung file \`platformio.ini\` chuẩn cho Arduino Uno R3 (baud 115200).
@@ -310,45 +306,45 @@ Tôi CHƯA TỪNG cài phần mềm lập trình bao giờ. Máy tôi là Window
             {
                 id: "mod-2",
                 title: "Module 2: Hiểu Về Linh Kiện Trong Kit",
-                desc: "Cảm biến IR là gì, mạch cầu H L298N là gì — giải thích không cần kiến thức điện tử.",
+                desc: "Cảm biến IR là gì, mạch cầu H L298N là gì — giải thích rõ ràng, không cần kiến thức điện tử chuyên sâu.",
                 lessons: [
                     {
                         id: "m2-l1",
                         title: "2.1 Cảm Biến IR — 'Đôi Mắt' Của Robot",
                         time: "40 Phút",
-                        summary: "Hiểu cảm biến hồng ngoại bằng ví von với đèn pin và gương. Biết cách nó 'nhìn' thấy vạch đen trên nền trắng mà không cần kiến thức quang học phức tạp.",
+                        summary: "Hiểu nguyên lý cảm biến hồng ngoại qua phép so sánh với đèn pin và gương. Biết cách nó nhận diện vạch đen trên nền trắng mà không cần kiến thức quang học phức tạp.",
                         aiPrompt: `[VAI TRÒ & ĐỐI TƯỢNG]
-Tôi chưa biết gì về điện tử. Hãy giải thích cảm biến IR như đang kể chuyện cho trẻ con.
+Tôi chưa có nền tảng điện tử. Hãy giải thích cảm biến IR bằng ngôn ngữ kỹ thuật rõ ràng, kèm ví dụ trực quan.
 
 [NGUYÊN TẮC]
-- Không dùng từ "transistor", "quang trở" mà không giải thích bằng ví von.
-- Mỗi khái niệm kèm hình ảnh so sánh đời thường.
+- Dùng thuật ngữ kỹ thuật chính xác (LED phát IR, photodiode/quang trở thu, hệ số phản xạ...), giải thích ngay khi xuất hiện.
+- Mỗi khái niệm kèm phép so sánh trực quan để dễ hình dung.
 
 [YÊU CẦU CHI TIẾT]
-1. Cảm biến IR hoạt động giống như thế nào? Ví von: giống như bạn soi đèn pin vào gương (sáng chói) và vào tường sơn đen (tối thui).
-2. Tại sao mặt trắng phản xạ nhiều hồng ngoại → mắt thu được tín hiệu; mặt đen hấp thụ → mắt không thấy gì? Giải thích bằng ví von, KHÔNG cần công thức.
-3. Mạch 5 mắt IR bo cong của kit HCMUTE: mỗi mắt gồm 1 đèn phát IR + 1 mắt thu IR. Vì sao cần 5 mắt mà không phải 1?
-4. Tín hiệu mắt IR trả về cho Arduino: 0 (nền trắng) và 1 (vạch đen) — hoặc ngược lại. Cách kiểm tra bằng đồng hồ VOM.
+1. Cảm biến IR hoạt động theo nguyên lý gì? Ví dụ trực quan: giống như bạn soi đèn pin vào gương (phản xạ mạnh) và vào tường sơn đen (hấp thụ gần hết).
+2. Tại sao mặt trắng phản xạ nhiều hồng ngoại → mắt thu nhận tín hiệu; mặt đen hấp thụ → mắt không nhận được? Giải thích bằng hiện tượng phản xạ - hấp thụ, KHÔNG cần công thức.
+3. Mạch 5 mắt IR bo cong của kit HCMUTE: mỗi mắt gồm 1 LED phát IR + 1 bộ thu IR. Vì sao cần 5 mắt mà không phải 1?
+4. Tín hiệu mắt IR trả về cho Arduino: mức logic 0 (nền trắng) hoặc 1 (vạch đen) — hoặc ngược lại tùy mạch. Cách kiểm tra bằng đồng hồ VOM.
 5. Bài thực hành nhỏ: Viết code Arduino đọc 5 mắt IR, in ra Serial Monitor dạng "1 1 0 1 1" khi xe đè vạch. Giải thích từng dòng code.`
                     },
                     {
                         id: "m2-l2",
                         title: "2.2 Mạch Cầu H L298N — 'Công Tắc Đảo Chiều' Cho Động Cơ",
                         time: "40 Phút",
-                        summary: "Hiểu mạch cầu H bằng ví von với 4 công tắc điện. Biết cách dùng L298N để động cơ chạy tiến, lùi, và điều chỉnh tốc độ bằng PWM — giải thích bằng hình ảnh đơn giản.",
+                        summary: "Hiểu nguyên lý mạch cầu H qua phép so sánh với 4 công tắc điện. Biết cách dùng L298N để động cơ chạy tiến, lùi, và điều chỉnh tốc độ bằng PWM — giải thích rõ ràng, có bảng logic.",
                         aiPrompt: `[VAI TRÒ & ĐỐI TƯỢNG]
-Tôi không biết gì về mạch điện. Hãy giải thích mạch cầu H như đang giải thích cho học sinh cấp 2.
+Tôi không có nền tảng mạch điện. Hãy giải thích mạch cầu H bằng ngôn ngữ kỹ thuật rõ ràng, kèm ví dụ trực quan.
 
 [NGUYÊN TẮC]
-- Ví von mạch cầu H = 4 cái công tắc đèn trong nhà, bật 2 cái này thì động cơ quay thuận, bật 2 cái kia thì quay ngược.
-- Không đi sâu vào MOSFET/transistor chi tiết, chỉ cần hiểu "công tắc điện tử".
+- So sánh mạch cầu H = 4 công tắc điện: đóng 2 công tắc chéo nhau thì động cơ quay thuận, đóng 2 công tắc chéo còn lại thì quay ngược.
+- Không đi sâu vào cấu tạo MOSFET/transistor chi tiết — chỉ cần hiểu nguyên lý "công tắc điện tử điều khiển bằng tín hiệu số".
 
 [YÊU CẦU CHI TIẾT]
-1. Động cơ DC là gì? Ví von: giống quạt máy — cấp điện thì quay, đảo dây thì quay ngược.
-2. Tại sao cần mạch cầu H? Vì Arduino không đủ dòng để chạy động cơ (Arduino chỉ ~20mA, động cơ cần ~200mA).
-3. Mạch cầu H L298N = 4 "công tắc điện tử" xếp hình chữ H. Bật S1+S4 → quay thuận; bật S2+S3 → quay ngược; bật S1+S3 hoặc S2+S4 → phanh động cơ.
-4. Chân IN1, IN2, IN3, IN4 trên L298N: kết hợp HIGH/LOW để đảo chiều. Lập bảng logic đơn giản.
-5. PWM (Pulse Width Modulation) là gì? Ví von: giống như bật tắt đèn liên tục rất nhanh — bật lâu thì sáng, bật ít thì mờ. Chân ENA/ENB dùng PWM để chỉnh tốc độ.
+1. Động cơ DC là gì? Nguyên lý hoạt động: cấp điện → quay, đảo cực tính → quay ngược.
+2. Tại sao cần mạch cầu H? Vì chân Arduino chỉ cung cấp dòng rất nhỏ (~20mA), trong khi động cơ cần dòng lớn hơn nhiều (~200mA trở lên).
+3. Mạch cầu H L298N = 4 khóa điện tử xếp hình chữ H. Đóng S1+S4 → quay thuận; đóng S2+S3 → quay ngược; đóng S1+S3 hoặc S2+S4 → phanh động cơ.
+4. Chân IN1, IN2, IN3, IN4 trên L298N: kết hợp HIGH/LOW để đảo chiều. Lập bảng logic đầy đủ.
+5. PWM (Pulse Width Modulation) là gì? Nguyên lý: bật/tắt liên tục với tần số cao — độ rộng xung quyết định công suất trung bình. Chân ENA/ENB dùng PWM để chỉnh tốc độ.
 6. Bài thực hành: Viết code Arduino cho xe chạy tiến 2 giây → lùi 2 giây → dừng 1 giây → lặp lại. Giải thích từng dòng.`
                     }
                 ]
@@ -362,13 +358,13 @@ Tôi không biết gì về mạch điện. Hãy giải thích mạch cầu H nh
                         id: "m3-l1",
                         title: "3.1 Thuật Toán Dò Line Đầu Tiên Bằng If-Else",
                         time: "45 Phút",
-                        summary: "Tự tay viết thuật toán dò line đầu tiên bằng câu lệnh if-else đơn giản. Hiểu tại sao xe chạy thẳng, khi nào rẽ trái, khi nào rẽ phải — tất cả bằng tiếng Việt trước khi viết code.",
+                        summary: "Tự tay viết thuật toán dò line đầu tiên bằng câu lệnh if-else đơn giản. Hiểu tại sao xe chạy thẳng, khi nào rẽ trái, khi nào rẽ phải — phân tích bằng tiếng Việt trước khi viết code.",
                         aiPrompt: `[VAI TRÒ & ĐỐI TƯỢNG]
 Tôi đã biết if-else và vòng lặp cơ bản. Giờ tôi muốn tự viết thuật toán dò line đầu tiên cho xe 2WD kit HCMUTE.
 
 [NGUYÊN TẮC GIẢNG DẠY]
 - Viết thuật toán bằng TIẾNG VIỆT trước (dạng "NẾU ... THÌ ..."), sau đó mới dịch sang C++.
-- Giải thích từng dòng code như đang dạy em nhỏ.
+- Giải thích từng dòng code rõ ràng, chuẩn xác.
 - Không dùng PID, không dùng thuật ngữ phức tạp.
 - Code là ARDUINO C++ (có setup() và loop()), không phải C++ máy tính.
 
@@ -377,7 +373,7 @@ Tôi đã biết if-else và vòng lặp cơ bản. Giờ tôi muốn tự viế
 - L298N: ENA(3), IN1(4), IN2(5), ENB(6), IN3(7), IN4(8).
 
 [YÊU CẦU CHI TIẾT]
-1. Giải thích thuật toán On-Off (Bang-Bang) bằng ví von: "giống như bạn cầm lái xe đạp — thấy lệch trái thì bẻ lái phải, lệch phải thì bẻ lái trái".
+1. Giải thích thuật toán On-Off (Bang-Bang): phản hồi nhị phân — sai lệch về bên nào thì bù về bên đó với lực cố định.
 2. Bảng logic dò line với 5 mắt (viết bằng tiếng Việt trước):
    - 0 0 1 0 0 → đi thẳng
    - 0 1 1 0 0 → hơi lệch trái → rẽ trái nhẹ
@@ -387,7 +383,7 @@ Tôi đã biết if-else và vòng lặp cơ bản. Giờ tôi muốn tự viế
 3. Viết hàm \`docCamBien()\` đọc 5 mắt IR.
 4. Viết hàm \`diThang()\`, \`reTrai()\`, \`rePhai()\`, \`dungLai()\` — mỗi hàm chỉ 3-4 dòng.
 5. Viết hàm \`loop()\` chính: đọc cảm biến → if-else chọn hành động.
-6. Giải thích hiện tượng "rắn bò" (xe lắc qua lắc lại) và cách giảm tốc độ PWM để hết.`
+6. Giải thích hiện tượng dao động (xe lắc qua lắc lại do thuật toán On-Off) và cách giảm tốc độ PWM để hạn chế.`
                     },
                     {
                         id: "m3-l2",
@@ -403,7 +399,7 @@ Xe tôi đã chạy được đường thẳng. Giờ tôi muốn xử lý cua 9
    - Đọc được 1 1 1 0 0 (hoặc 0 0 1 1 1) → xoay tại chỗ (Pivot Turn).
    - Viết hàm \`quayTaiCho(bool sangTrai)\` cho 2 bánh quay ngược chiều.
 3. Xử lý mất line hoàn toàn (0 0 0 0 0):
-   - Dùng biến \`lastDirection\` nhớ hướng đi trước ("lần trước đang rẽ trái thì giờ tiếp tục rẽ trái").
+   - Dùng biến \`lastDirection\` lưu hướng đi trước đó ("lần trước đang rẽ trái thì giờ tiếp tục rẽ trái").
    - Viết code với biến này.
 4. Xử lý vạch ngang ngã tư (1 1 1 1 1):
    - Xe phải đi thẳng xuyên qua, không được khựng lại.
@@ -427,7 +423,7 @@ Xe tôi đã chạy được đường thẳng. Giờ tôi muốn xử lý cua 9
 Tôi muốn dựng mạch giả lập Wokwi đầy đủ để test thuật toán dò line TRƯỚC KHI nạp xe thật. Tôi dùng ARDUINO C++ (có setup() và loop()), không phải C++ máy tính.
 
 [NGUYÊN TẮC]
-- Giải thích Wokwi là gì: giống "Google Docs cho mạch điện" — dựng mạch online, chạy code Arduino ngay trên trình duyệt.
+- Giải thích Wokwi là gì: trình mô phỏng mạch điện - vi điều khiển chạy trực tiếp trên trình duyệt, cho phép nạp code và quan sát phản ứng mà không cần phần cứng thật.
 - Mỗi bước: nói rõ "thêm linh kiện gì", "nối chân nào với chân nào".
 
 [LINH KIỆN CẦN DỰNG]
@@ -483,7 +479,7 @@ Tôi đã có mạch Wokwi ở bài 4.1. Giờ tôi muốn chạy thử thuật 
                         time: "45 Phút",
                         summary: "Bảng đấu dây chi tiết từng màu, cách cấp nguồn pin Li-ion qua L298N nuôi Arduino, tránh cháy mạch và tránh xung đột Timer PWM.",
                         aiPrompt: `[VAI TRÒ & ĐỐI TƯỢNG]
-Tôi chưa từng đấu dây điện bao giờ. Tôi sợ làm cháy Arduino. Hãy hướng dẫn tôi từng bước như cầm tay chỉ việc.
+Tôi chưa từng đấu dây điện bao giờ. Tôi sợ làm cháy Arduino. Hãy hướng dẫn tôi từng bước rõ ràng, có cảnh báo an toàn.
 
 [NGUYÊN TẮC]
 - Mỗi dây: nói rõ "cắm từ chân nào → chân nào", dùng màu dây gì.
@@ -515,7 +511,7 @@ Phòng lab HCMUTE có ánh sáng thay đổi, sàn không đồng nhất. Tôi c
 
 [YÊU CẦU CHI TIẾT]
 1. Giải thích tại sao cần calibrate: cùng 1 mắt IR, khi trời sáng đọc 200, khi trời tối đọc 400 — nếu dùng ngưỡng cố định thì sai.
-2. Ý tưởng "Dynamic Threshold": đo Min (nền trắng) và Max (vạch đen) của từng mắt → Threshold = (Min+Max)/2.
+2. Nguyên lý "Dynamic Threshold": đo Min (nền trắng) và Max (vạch đen) của từng mắt → Threshold = (Min+Max)/2.
 3. Viết hàm Arduino \`calibrate()\`:
    - Chạy trong 3 giây khi nhấn Reset.
    - LED nháy báo hiệu đang calibrate.
@@ -534,44 +530,43 @@ Phòng lab HCMUTE có ánh sáng thay đổi, sàn không đồng nhất. Tôi c
                 lessons: [
                     {
                         id: "m6-l1",
-                        title: "6.1 PID Cho Người Mới — Hiểu Bằng Ví Von Lái Xe",
+                        title: "6.1 PID Cho Người Mới — Hiểu Bằng Phép So Sánh Lái Xe",
                         time: "60 Phút",
-                        summary: "Hiểu PID bằng ví von tay lái xe đạp: P là phản ứng tức thì, I là nhớ lỗi cũ, D là phanh trước khi văng. Tuning 3 bước đơn giản.",
+                        summary: "Hiểu PID qua phép so sánh với tay lái xe đạp: P là phản ứng tức thì, I là nhớ lỗi cũ, D là hãm trước khi văng. Tuning 3 bước đơn giản.",
                         aiPrompt: `[VAI TRÒ & ĐỐI TƯỢNG]
-Xe tôi đã chạy dò line ổn với if-else. Giờ tôi muốn chạy NHANH hơn mà không bị văng khỏi line — tôi nghe nói cần PID nhưng chưa hiểu gì.
+Xe tôi đã chạy dò line ổn với if-else. Giờ tôi muốn chạy NHANH hơn mà không bị văng khỏi line — tôi nghe nói cần PID nhưng chưa hiểu rõ.
 
 [NGUYÊN TẮC GIẢNG DẠY]
-- Giải thích PID bằng ví von lái xe đạp, KHÔNG dùng công thức toán trước.
-- Sau khi hiểu ý tưởng mới đưa công thức.
-- Tuning từng bước nhỏ, dễ làm.
+- Giải thích PID bằng phép so sánh trực quan (tay lái xe đạp), sau đó mới đưa công thức toán.
+- Tuning từng bước nhỏ, dễ áp dụng.
 - Code là ARDUINO C++ (setup/loop), không phải C++ máy tính.
 
 [YÊU CẦU CHI TIẾT]
-1. Ví von PID:
-   - P (Proportional - Tỷ lệ): "Thấy lệch bao nhiêu thì bẻ lái bấy nhiêu". Lệch nhiều bẻ mạnh.
-   - I (Integral - Tích lũy): "Nhớ dai — nếu xe cứ lệch mãi về 1 phía thì tăng lực bù".
-   - D (Derivative - Đạo hàm): "Phanh trước khi văng — thấy xe đang lệch nhanh thì ghìm lại".
+1. Giải thích PID:
+   - P (Proportional - Tỷ lệ): đầu ra tỉ lệ với sai số hiện tại. Sai lệch nhiều → bù mạnh.
+   - I (Integral - Tích phân): tích lũy sai số theo thời gian — khử sai lệch tĩnh.
+   - D (Derivative - Đạo hàm): phản ứng theo tốc độ biến thiên sai số — hãm dao động.
 2. Sai số Error từ 5 mắt IR: gán vị trí -4, -2, 0, +2, +4 tương ứng 5 mắt.
 3. Công thức PID: output = Kp*error + Ki*tổngLỗi + Kd*(error - errorTrước).
 4. Viết hàm Arduino \`calculatePID()\` và \`dieuKhienDongCo()\` với constrain(-255, 255).
 5. Chống tích lũy quá mức (Anti-windup): giới hạn tổng lỗi.
 6. Quy trình Tuning 3 bước:
-   - Bước 1: Chỉnh Kp đến khi xe bám line nhưng còn lắc.
-   - Bước 2: Thêm Kd để hết lắc.
-   - Bước 3: Thêm Ki (nhỏ) để hết lệch tĩnh.
+   - Bước 1: Chỉnh Kp đến khi xe bám line nhưng còn dao động.
+   - Bước 2: Thêm Kd để hết dao động.
+   - Bước 3: Thêm Ki (nhỏ) để khử sai lệch tĩnh.
 7. Bảng gợi ý giá trị Kp/Ki/Kd khởi đầu cho xe 2WD 0.5kg.`
                     },
                     {
                         id: "m6-l2",
                         title: "6.2 Né Vật Cản Với HC-SR04 & Máy Trạng Thái FSM",
                         time: "60 Phút",
-                        summary: "Gắn cảm biến siêu âm HC-SR04, dùng switch-case xây dựng máy trạng thái 5 bước né vật cản rồi tự tìm lại line — giải thích FSM bằng ví von đèn giao thông.",
+                        summary: "Gắn cảm biến siêu âm HC-SR04, dùng switch-case xây dựng máy trạng thái 5 bước né vật cản rồi tự tìm lại line — giải thích FSM qua phép so sánh với đèn giao thông.",
                         aiPrompt: `[VAI TRÒ & ĐỐI TƯỢNG]
 Xe tôi đã dò line tốt. Giờ tôi muốn thêm chức năng né vật cản bằng HC-SR04 — nhưng tôi chưa biết "máy trạng thái" là gì.
 
 [NGUYÊN TẮC]
-- Giải thích FSM (Finite State Machine) bằng ví von đèn giao thông: Đỏ → Xanh → Vàng → Đỏ...
-- Mỗi trạng thái là 1 hành động riêng, chuyển trạng thái khi có điều kiện.
+- Giải thích FSM (Finite State Machine) qua ví dụ trực quan: đèn giao thông chuyển tuần tự Đỏ → Xanh → Vàng → Đỏ...
+- Mỗi trạng thái là 1 hành động riêng, chuyển trạng thái khi thỏa điều kiện.
 - Code là ARDUINO C++ (setup/loop), không phải C++ máy tính.
 
 [KIẾN TRÚC FSM]
@@ -582,7 +577,7 @@ Xe tôi đã dò line tốt. Giờ tôi muốn thêm chức năng né vật cả
 - State 4: Quét mắt IR, thấy vạch đen → quay về State 0.
 
 [YÊU CẦU CHI TIẾT]
-1. HC-SR04 là gì? Ví von: giống con dơi phát siêu âm, đo thời gian vọng lại để tính khoảng cách.
+1. HC-SR04 là gì? Nguyên lý: phát xung siêu âm, đo thời gian xung phản hồi để tính khoảng cách (d = v*t/2).
 2. Đấu dây HC-SR04: VCC(5V), GND, Trig(D12), Echo(D13).
 3. Viết hàm Arduino đọc HC-SR04 KHÔNG chặn (non-blocking):
    - Dùng millis() thay vì delay().
@@ -705,7 +700,7 @@ Xe tôi đã dò line tốt. Giờ tôi muốn thêm chức năng né vật cả
             closeDrawer();
         }
 
-        // Helper: ghép prompt gốc + khối nguyên tắc sâu
+        // Ghép prompt gốc + khối nguyên tắc sâu
         function buildFullPrompt(lesson) {
             return lesson.aiPrompt + '\n\n' + COMMON_PROMPT_SUFFIX;
         }
@@ -759,7 +754,6 @@ Xe tôi đã dò line tốt. Giờ tôi muốn thêm chức năng né vật cả
                         </button>
                     </div>
 
-                    <!-- Badge thông báo đã nhúng nguyên tắc sâu -->
                     <div class="mb-3 flex flex-wrap gap-2 text-[10px] sm:text-[11px]">
                         <span class="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-emerald-950 text-emerald-300 border border-emerald-800">
                             ✓ Mổ xẻ cú pháp ( ) { } ; == && ++
@@ -768,14 +762,14 @@ Xe tôi đã dò line tốt. Giờ tôi muốn thêm chức năng né vật cả
                             ✓ Luồng chạy từng bước 1→2→3
                         </span>
                         <span class="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-purple-950 text-purple-300 border border-purple-800">
-                            ✓ Không bỏ qua dòng code nào
+                            ✓ Chuẩn khoa học lập trình
                         </span>
                     </div>
 
                     <div class="bg-slate-950 p-3 sm:p-4 rounded-lg sm:rounded-xl border border-slate-800 font-mono text-[10px] sm:text-xs text-cyan-200 whitespace-pre-wrap leading-relaxed select-all max-h-72 sm:max-h-96 overflow-y-auto" id="prompt-lesson-text-${targetLesson.id}">${fullPrompt}</div>
 
                     <div class="mt-3 text-[10px] sm:text-[11px] text-slate-400 leading-relaxed">
-                        💡 Mẹo: Nếu AI trả lời khó hiểu, hãy nhắn tiếp "Giải thích lại như cho học sinh cấp 2" hoặc "Cho ví dụ cụ thể hơn".
+                        💡 Mẹo: Nếu AI trả lời khó hiểu, hãy nhắn tiếp "Giải thích lại đơn giản hơn, dễ hiểu hơn" hoặc "Cho ví dụ cụ thể hơn".
                     </div>
                 </div>
 
