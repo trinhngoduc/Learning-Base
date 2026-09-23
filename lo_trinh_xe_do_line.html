@@ -117,7 +117,7 @@
                 <div class="flex-1 bg-slate-800 h-2 rounded-full overflow-hidden border border-slate-700">
                     <div id="progress-bar-mobile" class="h-full bg-gradient-to-r from-cyan-400 via-cyan-500 to-blue-500 w-0 rounded-r-full"></div>
                 </div>
-                <span id="progress-percent-mobile" class="text-[11px] font-mono text-cyan-400 font-bold flex-shrink-0 min-w-[52px] text-right">0% (0/12)</span>
+                <span id="progress-percent-mobile" class="text-[11px] font-mono text-cyan-400 font-bold flex-shrink-0 min-w-[52px] text-right">0% (0/10)</span>
             </div>
         </div>
     </header>
@@ -206,7 +206,7 @@
 ═══════════════════════════════════════════
 [NGUYÊN TẮC BẮT BUỘC — GIẢI THÍCH SÂU CẤU TRÚC & LUỒNG CHẠY]
 ═══════════════════════════════════════════
-⚠️ Với MỌI đoạn code C++/Arduino xuất hiện trong câu trả lời, bạn PHẢI tuân thủ 4 quy tắc sau:
+⚠️ Với MỌI đoạn code C++/Arduino xuất hiện trong câu trả lời, bạn PHẢI tuân thủ 5 quy tắc sau:
 
 ▸ QUY TẮC 1 — MỔ XẺ CÚ PHÁP (SYNTAX) TỪNG DẤU:
    Chỉ rõ ý nghĩa và vai trò của từng ký tự trong câu lệnh:
@@ -248,7 +248,7 @@ Nếu câu trả lời thiếu 1 trong 5 quy tắc trên → coi như chưa đ�
         `.trim();
 
         /* ══════════════════════════════════════════════════════
-           COURSE DATA — 100% ARDUINO C++, KHÔNG WEBOTS
+           COURSE DATA — 100% ARDUINO C++ (ĐÃ XÓA WOKWI)
            ══════════════════════════════════════════════════════ */
         const courseData = [
             {
@@ -283,7 +283,7 @@ Hãy giảng dạy với ngôn ngữ RÕ RÀNG - CHÍNH XÁC - DỄ HIỂU, đú
                         id: "m1-l2",
                         title: "1.2 Cài VS Code + PlatformIO Từ A đến Z (Không Cần Biết Gì)",
                         time: "35 Phút",
-                        summary: "Cài đặt môi trường lập trình chuyên nghiệp từ con số 0: tải VS Code, cài PlatformIO, tạo project đầu tiên và chạy thử chương trình 'Hello Robot' — tất cả có ảnh minh họa từng bước.",
+                        summary: "Cài đặt môi trường lập trình chuyên nghiệp từ con số 0: tải VS Code, cài PlatformIO, tạo project đầu tiên và chạy thử chương trình 'Hello Robot' — tất cả có hướng dẫn từng bước.",
                         aiPrompt: `[VAI TRÒ & ĐỐI TƯỢNG]
 Tôi CHƯA TỪNG cài phần mềm lập trình bao giờ. Máy tôi là Windows. Hãy hướng dẫn tôi từng bước như đang ngồi cạnh tôi.
 
@@ -411,71 +411,12 @@ Xe tôi đã chạy được đường thẳng. Giờ tôi muốn xử lý cua 9
             },
             {
                 id: "mod-4",
-                title: "Module 4: Thực Hành Wokwi Nâng Cao (Arduino C++)",
-                desc: "Mô phỏng xe dò line trên Wokwi trước khi nạp xe thật — cùng cú pháp Arduino, không đổi 'tiếng'.",
-                lessons: [
-                    {
-                        id: "m4-l1",
-                        title: "4.1 Dựng Mạch Wokwi Đầy Đủ: Arduino + L298N + 5 IR + 2 Motor",
-                        time: "45 Phút",
-                        summary: "Dựng mạch giả lập hoàn chỉnh trên Wokwi: Arduino Uno R3, L298N, 5 nút nhấn giả lập mắt IR, 2 động cơ DC — tất cả bằng file diagram.json, không cần cắm dây thật.",
-                        aiPrompt: `[VAI TRÒ & ĐỐI TƯỢNG]
-Tôi muốn dựng mạch giả lập Wokwi đầy đủ để test thuật toán dò line TRƯỚC KHI nạp xe thật. Tôi dùng ARDUINO C++ (có setup() và loop()), không phải C++ máy tính.
-
-[NGUYÊN TẮC]
-- Giải thích Wokwi là gì: trình mô phỏng mạch điện - vi điều khiển chạy trực tiếp trên trình duyệt, cho phép nạp code và quan sát phản ứng mà không cần phần cứng thật.
-- Mỗi bước: nói rõ "thêm linh kiện gì", "nối chân nào với chân nào".
-
-[LINH KIỆN CẦN DỰNG]
-- Arduino Uno R3
-- Module L298N (2 motor)
-- 5 nút nhấn (mô phỏng 5 mắt IR) — nối vào A0, A1, A2, A3, A4
-- 2 Động cơ DC (mô phỏng 2 bánh xe)
-- 1 LED báo nguồn + 1 điện trở 220Ω
-
-[YÊU CẦU CHI TIẾT]
-1. Wokwi là gì? Tại sao nên test trên Wokwi trước khi nạp xe thật?
-2. Cách tạo project Wokwi mới cho Arduino Uno.
-3. Nội dung file \`diagram.json\` đầy đủ (Arduino + L298N + 5 button + 2 motor).
-4. Nội dung file \`sketch.ino\` test: đọc 5 nút nhấn, in ra Serial Monitor trạng thái "1 1 0 1 1".
-5. Cách chạy mô phỏng, bấm nút, xem Serial Monitor.
-6. Cách lưu project và chia sẻ link cho bạn bè.`
-                    },
-                    {
-                        id: "m4-l2",
-                        title: "4.2 Chạy Thử Thuật Toán Dò Line Trên Wokwi (Tái Sử Dụng Code Module 3)",
-                        time: "50 Phút",
-                        summary: "Copy thuật toán if-else đã viết ở Module 3 dán vào Wokwi, bấm nút giả lập vạch đen để xem xe phản ứng — không cần đụng xe thật.",
-                        aiPrompt: `[VAI TRÒ & ĐỐI TƯỢNG]
-Tôi đã có mạch Wokwi ở bài 4.1. Giờ tôi muốn chạy thử thuật toán dò line if-else đã học ở Module 3.
-
-[NGUYÊN TẮC]
-- Code là ARDUINO C++ thuần, KHÔNG phải Webots C++.
-- Tái sử dụng tối đa code Module 3, chỉ thay đổi cách đọc cảm biến (từ nút nhấn thay vì mắt IR thật).
-
-[YÊU CẦU CHI TIẾT]
-1. Copy hàm \`docCamBien()\`, \`diThang()\`, \`reTrai()\`, \`rePhai()\`, \`dungLai()\` từ Module 3 vào Wokwi.
-2. Sửa \`docCamBien()\` để đọc 5 nút nhấn thay vì mắt IR thật (dùng \`digitalRead\` thay vì \`analogRead\`).
-3. Viết \`loop()\` chính: đọc 5 nút → if-else chọn hành động → in trạng thái ra Serial Monitor.
-4. Cách bấm nút trên Wokwi để giả lập:
-   - Bấm nút giữa (S3) → xe đi thẳng.
-   - Bấm nút S2 → xe rẽ trái nhẹ.
-   - Bấm nút S1 → xe rẽ trái mạnh.
-   - Bấm nút S4 → xe rẽ phải nhẹ.
-   - Bấm nút S5 → xe rẽ phải mạnh.
-5. Cách xem motor quay trên Wokwi (Wokwi có hiển thị tốc độ motor).
-6. So sánh kết quả Wokwi vs xe thật: cái nào sát thực tế hơn, cái nào dễ debug hơn.`
-                    }
-                ]
-            },
-            {
-                id: "mod-5",
-                title: "Module 5: Nạp Xe Thật Kit HCMUTE",
+                title: "Module 4: Nạp Xe Thật Kit HCMUTE",
                 desc: "Đấu dây an toàn, cấp nguồn đúng, calibrate cảm biến — không làm cháy mạch.",
                 lessons: [
                     {
-                        id: "m5-l1",
-                        title: "5.1 Đấu Dây An Toàn — Không Sợ Cháy Mạch",
+                        id: "m4-l1",
+                        title: "4.1 Đấu Dây An Toàn — Không Sợ Cháy Mạch",
                         time: "45 Phút",
                         summary: "Bảng đấu dây chi tiết từng màu, cách cấp nguồn pin Li-ion qua L298N nuôi Arduino, tránh cháy mạch và tránh xung đột Timer PWM.",
                         aiPrompt: `[VAI TRÒ & ĐỐI TƯỢNG]
@@ -502,8 +443,8 @@ Tôi chưa từng đấu dây điện bao giờ. Tôi sợ làm cháy Arduino. H
 6. Code Arduino test đầu tiên: quay từng bánh 1 giây để kiểm tra chiều quay đúng.`
                     },
                     {
-                        id: "m5-l2",
-                        title: "5.2 Tự Động Calibrate Cảm Biến IR — Chống Nhiễu Ánh Sáng",
+                        id: "m4-l2",
+                        title: "4.2 Tự Động Calibrate Cảm Biến IR — Chống Nhiễu Ánh Sáng",
                         time: "50 Phút",
                         summary: "Viết hàm calibrate 3 giây đầu: người dùng lia xe qua lại trên vạch đen/trắng, xe tự tính ngưỡng Threshold cho từng mắt — chống nhiễu ánh sáng phòng lab.",
                         aiPrompt: `[VAI TRÒ & ĐỐI TƯỢNG]
@@ -524,13 +465,13 @@ Phòng lab HCMUTE có ánh sáng thay đổi, sàn không đồng nhất. Tôi c
                 ]
             },
             {
-                id: "mod-6",
-                title: "Module 6: Nâng Cao — PID & Né Vật Cản",
+                id: "mod-5",
+                title: "Module 5: Nâng Cao — PID & Né Vật Cản",
                 desc: "Dành cho xe đã chạy ổn. Nâng cấp tốc độ bằng PID và né vật cản bằng HC-SR04.",
                 lessons: [
                     {
-                        id: "m6-l1",
-                        title: "6.1 PID Cho Người Mới — Hiểu Bằng Phép So Sánh Lái Xe",
+                        id: "m5-l1",
+                        title: "5.1 PID Cho Người Mới — Hiểu Bằng Phép So Sánh Lái Xe",
                         time: "60 Phút",
                         summary: "Hiểu PID qua phép so sánh với tay lái xe đạp: P là phản ứng tức thì, I là nhớ lỗi cũ, D là hãm trước khi văng. Tuning 3 bước đơn giản.",
                         aiPrompt: `[VAI TRÒ & ĐỐI TƯỢNG]
@@ -557,8 +498,8 @@ Xe tôi đã chạy dò line ổn với if-else. Giờ tôi muốn chạy NHANH 
 7. Bảng gợi ý giá trị Kp/Ki/Kd khởi đầu cho xe 2WD 0.5kg.`
                     },
                     {
-                        id: "m6-l2",
-                        title: "6.2 Né Vật Cản Với HC-SR04 & Máy Trạng Thái FSM",
+                        id: "m5-l2",
+                        title: "5.2 Né Vật Cản Với HC-SR04 & Máy Trạng Thái FSM",
                         time: "60 Phút",
                         summary: "Gắn cảm biến siêu âm HC-SR04, dùng switch-case xây dựng máy trạng thái 5 bước né vật cản rồi tự tìm lại line — giải thích FSM qua phép so sánh với đèn giao thông.",
                         aiPrompt: `[VAI TRÒ & ĐỐI TƯỢNG]
@@ -599,13 +540,28 @@ Xe tôi đã dò line tốt. Giờ tôi muốn thêm chức năng né vật cả
             lesson: 'hcmute_current_lesson'
         };
 
+        // Danh sách id bài học hợp lệ (để lọc dữ liệu cũ trong localStorage)
+        function getAllLessonIds() {
+            const ids = [];
+            courseData.forEach(m => m.lessons.forEach(l => ids.push(l.id)));
+            return ids;
+        }
+
         let completedLessons = [];
         try {
             const saved = JSON.parse(localStorage.getItem(LS_KEYS.completed) || '[]');
-            if (Array.isArray(saved)) completedLessons = saved;
+            if (Array.isArray(saved)) {
+                // Lọc bỏ các id không còn tồn tại (ví dụ: các id Wokwi đã xóa)
+                const validIds = getAllLessonIds();
+                completedLessons = saved.filter(id => validIds.includes(id));
+            }
         } catch(e) {}
 
         let currentLessonId = localStorage.getItem(LS_KEYS.lesson) || 'm1-l1';
+        // Nếu bài hiện tại không còn tồn tại → fallback về bài đầu
+        if (!getAllLessonIds().includes(currentLessonId)) {
+            currentLessonId = 'm1-l1';
+        }
 
         document.addEventListener('DOMContentLoaded', () => {
             renderSidebar();
@@ -627,8 +583,9 @@ Xe tôi đã dò line tốt. Giờ tôi muốn thêm chức năng né vật cả
         function restoreFromCloud() {
             LBSync.load('completedLessons', (v) => {
                 if (Array.isArray(v)) {
-                    completedLessons = v;
-                    try { localStorage.setItem(LS_KEYS.completed, JSON.stringify(v)); } catch(e){}
+                    const validIds = getAllLessonIds();
+                    completedLessons = v.filter(id => validIds.includes(id));
+                    try { localStorage.setItem(LS_KEYS.completed, JSON.stringify(completedLessons)); } catch(e){}
                     renderSidebar();
                     renderSidebarMobile();
                     updateProgress();
@@ -636,7 +593,7 @@ Xe tôi đã dò line tốt. Giờ tôi muốn thêm chức năng né vật cả
                 }
             });
             LBSync.load('currentLessonId', (v) => {
-                if (typeof v === 'string' && v) {
+                if (typeof v === 'string' && v && getAllLessonIds().includes(v)) {
                     currentLessonId = v;
                     try { localStorage.setItem(LS_KEYS.lesson, v); } catch(e){}
                     renderSidebar();
