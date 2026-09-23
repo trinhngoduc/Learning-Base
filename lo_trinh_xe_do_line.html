@@ -43,7 +43,8 @@
         .safe-bottom { padding-bottom: env(safe-area-inset-bottom, 0); }
         .safe-top { padding-top: env(safe-area-inset-top, 0); }
 
-        @media (max-width: 1024px) {
+        /* Chế độ mobile: chỉ tắt backdrop-filter khi < 768px */
+        @media (max-width: 767px) {
             * { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
             header { background-color: rgba(15, 23, 42, 0.98) !important; }
             .shadow-2xl { box-shadow: 0 2px 4px rgba(0,0,0,0.4) !important; }
@@ -60,12 +61,14 @@
         #drawerBackdrop { opacity: 0; pointer-events: none; transition: opacity 0.3s; }
         #drawerBackdrop.open { opacity: 1; pointer-events: auto; }
 
-        @media (max-width: 1024px) { button { min-height: 40px; } }
+        @media (max-width: 767px) { button { min-height: 40px; } }
 
         #progress-bar-mobile { transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 0 6px rgba(34, 211, 238, 0.4); }
         #progress-bar { transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 0 6px rgba(34, 211, 238, 0.4); }
 
-        @media (min-width: 1025px) { #progressRowMobile { display: none !important; } }
+        /* ═══ ĐỔI 1025px → 768px ═══ */
+        @media (min-width: 768px) { #progressRowMobile { display: none !important; } }
+
         @media (max-width: 400px) {
             .app-brand-text h1 { font-size: 12px !important; }
             .app-brand-text p { font-size: 9px !important; }
@@ -74,17 +77,15 @@
         /* ═══ LAYOUT — CỘT TRÁI RỘNG, CỘT PHẢI HẸP ═══ */
         .layout-wrap { max-width: 1800px; }
 
-        /* Cột trái (sidebar) rộng hơn */
-        @media (min-width: 1025px) {
+        @media (min-width: 768px) {
+            .sidebar-col { width: 26rem; }   /* 416px */
+            main { max-width: 1100px; }
+        }
+        @media (min-width: 1024px) {
             .sidebar-col { width: 32rem; }   /* 512px */
         }
         @media (min-width: 1440px) {
             .sidebar-col { width: 34rem; }   /* 544px */
-        }
-
-        /* Cột phải (nội dung bài học) hẹp lại */
-        @media (min-width: 1025px) {
-            main { max-width: 1100px; }
         }
 
         /* Tiêu đề bài học cho phép xuống 2 dòng */
@@ -94,7 +95,6 @@
             line-height: 1.35;
             display: -webkit-box;
             -webkit-line-clamp: 2;
-            line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
@@ -108,7 +108,7 @@
         <div class="layout-wrap mx-auto px-3 sm:px-6 lg:px-8">
             <div class="h-14 sm:h-16 flex items-center justify-between gap-2">
                 <div class="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
-                    <button onclick="toggleDrawer()" class="lg:hidden flex-shrink-0 w-9 h-9 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300 active:bg-slate-700" aria-label="Mở danh sách bài học">
+                    <button onclick="toggleDrawer()" class="md:hidden flex-shrink-0 w-9 h-9 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300 active:bg-slate-700" aria-label="Mở danh sách bài học">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
                         </svg>
@@ -124,7 +124,7 @@
                 </div>
 
                 <div class="flex items-center gap-1.5 sm:gap-3 flex-shrink-0">
-                    <div class="hidden lg:flex flex-col items-end pl-2">
+                    <div class="hidden md:flex flex-col items-end pl-2">
                         <div class="flex items-center gap-2 text-xs font-semibold text-slate-300">
                             <span>Tiến độ:</span>
                             <span id="progress-percent" class="text-cyan-400 font-mono">0%</span>
@@ -142,7 +142,7 @@
                 </div>
             </div>
 
-            <div id="progressRowMobile" class="lg:hidden pb-3 flex items-center gap-2.5">
+            <div id="progressRowMobile" class="md:hidden pb-3 flex items-center gap-2.5">
                 <div class="flex-1 bg-slate-800 h-2 rounded-full overflow-hidden border border-slate-700">
                     <div id="progress-bar-mobile" class="h-full bg-gradient-to-r from-cyan-400 via-cyan-500 to-blue-500 w-0 rounded-r-full"></div>
                 </div>
@@ -152,8 +152,8 @@
     </header>
 
     <!-- ═══ MOBILE DRAWER ═══ -->
-    <div id="drawerBackdrop" onclick="closeDrawer()" class="fixed inset-0 bg-black/80 z-40 lg:hidden"></div>
-    <aside id="mobileDrawer" class="fixed top-0 left-0 h-full w-[85vw] max-w-[320px] bg-slate-900 border-r border-slate-800 z-50 lg:hidden flex flex-col safe-top">
+    <div id="drawerBackdrop" onclick="closeDrawer()" class="fixed inset-0 bg-black/80 z-40 md:hidden"></div>
+    <aside id="mobileDrawer" class="fixed top-0 left-0 h-full w-[85vw] max-w-[320px] bg-slate-900 border-r border-slate-800 z-50 md:hidden flex flex-col safe-top">
         <div class="p-3 border-b border-slate-800 flex items-center justify-between">
             <div>
                 <div class="text-xs font-bold uppercase tracking-wider text-cyan-400">📚 Danh Sách Bài Học</div>
@@ -174,9 +174,9 @@
     </aside>
 
     <!-- ═══ MAIN ═══ -->
-    <div class="layout-wrap flex-1 w-full mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 flex flex-col lg:flex-row gap-4 sm:gap-6">
+    <div class="layout-wrap flex-1 w-full mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 flex flex-col md:flex-row gap-4 sm:gap-6">
 
-        <aside class="hidden lg:block sidebar-col flex-shrink-0">
+        <aside class="hidden md:block sidebar-col flex-shrink-0">
             <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sticky top-24">
                 <div class="flex items-center justify-between mb-3 px-2">
                     <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">Danh Sách Bài Học</h2>
@@ -277,7 +277,7 @@ Nếu câu trả lời thiếu 1 trong 5 quy tắc trên → coi như chưa đ�
         `.trim();
 
         /* ══════════════════════════════════════════════════════
-           COURSE DATA — 100% ARDUINO C++ (ĐÃ XÓA WOKWI)
+           COURSE DATA
            ══════════════════════════════════════════════════════ */
         const courseData = [
             {
