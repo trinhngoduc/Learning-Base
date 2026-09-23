@@ -70,13 +70,22 @@
             .app-brand-text h1 { font-size: 12px !important; }
             .app-brand-text p { font-size: 9px !important; }
         }
+
+        /* ═══ LAYOUT RỘNG — 2 CỘT TO HƠN ═══ */
+        .layout-wrap { max-width: 1700px; }
+        @media (min-width: 1025px) {
+            .sidebar-col { width: 24rem; } /* 384px */
+        }
+        @media (min-width: 1536px) {
+            .sidebar-col { width: 26rem; } /* 416px trên màn rất rộng */
+        }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col">
 
     <!-- ═══ HEADER ═══ -->
     <header class="border-b border-slate-800 bg-slate-900/90 sticky top-0 z-40 safe-top">
-        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div class="layout-wrap mx-auto px-3 sm:px-6 lg:px-8">
             <div class="h-14 sm:h-16 flex items-center justify-between gap-2">
                 <div class="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
                     <button onclick="toggleDrawer()" class="lg:hidden flex-shrink-0 w-9 h-9 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300 active:bg-slate-700" aria-label="Mở danh sách bài học">
@@ -145,9 +154,9 @@
     </aside>
 
     <!-- ═══ MAIN ═══ -->
-    <div class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 flex flex-col lg:flex-row gap-4 sm:gap-6">
+    <div class="layout-wrap flex-1 w-full mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 flex flex-col lg:flex-row gap-4 sm:gap-6">
 
-        <aside class="hidden lg:block w-80 flex-shrink-0">
+        <aside class="hidden lg:block sidebar-col flex-shrink-0">
             <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sticky top-24">
                 <div class="flex items-center justify-between mb-3 px-2">
                     <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">Danh Sách Bài Học</h2>
@@ -540,7 +549,6 @@ Xe tôi đã dò line tốt. Giờ tôi muốn thêm chức năng né vật cả
             lesson: 'hcmute_current_lesson'
         };
 
-        // Danh sách id bài học hợp lệ (để lọc dữ liệu cũ trong localStorage)
         function getAllLessonIds() {
             const ids = [];
             courseData.forEach(m => m.lessons.forEach(l => ids.push(l.id)));
@@ -551,14 +559,12 @@ Xe tôi đã dò line tốt. Giờ tôi muốn thêm chức năng né vật cả
         try {
             const saved = JSON.parse(localStorage.getItem(LS_KEYS.completed) || '[]');
             if (Array.isArray(saved)) {
-                // Lọc bỏ các id không còn tồn tại (ví dụ: các id Wokwi đã xóa)
                 const validIds = getAllLessonIds();
                 completedLessons = saved.filter(id => validIds.includes(id));
             }
         } catch(e) {}
 
         let currentLessonId = localStorage.getItem(LS_KEYS.lesson) || 'm1-l1';
-        // Nếu bài hiện tại không còn tồn tại → fallback về bài đầu
         if (!getAllLessonIds().includes(currentLessonId)) {
             currentLessonId = 'm1-l1';
         }
@@ -657,7 +663,6 @@ Xe tôi đã dò line tốt. Giờ tôi muốn thêm chức năng né vật cả
             closeDrawer();
         }
 
-        // Ghép prompt gốc + khối nguyên tắc sâu
         function buildFullPrompt(lesson) {
             return lesson.aiPrompt + '\n\n' + COMMON_PROMPT_SUFFIX;
         }
