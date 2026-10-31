@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#101827" />
+  <title>C++ Engineering Roadmap</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#top"><span class="brand-mark">C++</span><span><b>Engineering</b><small>LEARNING ROADMAP</small></span></a>
+      <div class="nav-label">KHÔNG GIAN HỌC TẬP</div>
+      <a class="nav-item active" href="#top"><span>▦</span> Tổng quan</a>
+      <a class="nav-item" href="#roadmap"><span>☷</span> Lộ trình học</a>
+      <a class="nav-item" href="#notes"><span>✎</span> Ghi chú</a>
+      <div class="sidebar-bottom"><div class="mini-orb">⌘</div><b>Học từng bước.</b><p>Hiểu nền tảng, luyện tư duy, rồi ứng dụng vào kỹ thuật.</p></div>
+      <div class="sidebar-foot">YOUR PERSONAL LEARNING SPACE</div>
+    </aside>
+
+    <main class="main" id="top">
+      <header class="topbar"><div><div class="eyebrow">LEARNING DASHBOARD</div><h1>Chào mừng trở lại <span>👋</span></h1><p class="muted">Mỗi bài học hoàn thành là một bước tiến gần hơn đến mục tiêu.</p></div><div class="date-chip" id="today"></div></header>
+
+      <section class="hero-card">
+        <div class="hero-copy"><div class="pill"><i></i> HÀNH TRÌNH CỦA BẠN</div><h2>Làm chủ C++<br/><em>từ nền tảng đến kỹ thuật.</em></h2><p>Học chắc cú pháp, rèn tư duy giải quyết vấn đề và từng bước kết nối C++ với các ứng dụng kỹ thuật.</p><a class="primary-btn" href="#roadmap">Tiếp tục lộ trình <span>↗</span></a></div>
+        <div class="hero-art" aria-hidden="true"><div class="ring ring-one"></div><div class="ring ring-two"></div><div class="code-window"><div class="window-dots"><i></i><i></i><i></i><span>main.cpp</span></div><div class="code-lines"><p><b>01</b> <span class="pink">#include</span> <span class="green">&lt;iostream&gt;</span></p><p><b>02</b> <span class="blue">using namespace</span> std;</p><p><b>03</b> </p><p><b>04</b> <span class="blue">int</span> main() {</p><p><b>05</b> &nbsp;&nbsp;cout <span class="pink">&lt;&lt;</span> <span class="yellow">"Hello, world!"</span>;</p><p><b>06</b> &nbsp;&nbsp;<span class="blue">return</span> 0;</p><p><b>07</b> }</p></div><div class="code-cursor"></div></div><div class="floating-tag tag-top">&lt;/&gt; C++</div><div class="floating-tag tag-bottom">BUILD · LEARN · CREATE</div></div>
+      </section>
+
+      <section class="stats-grid">
+        <article class="stat-card progress-stat"><div class="stat-top"><span>TIẾN ĐỘ TỔNG THỂ</span><span class="stat-icon">◉</span></div><div class="stat-value"><strong id="overallPercent">0%</strong><span id="completedCount">0 / 0 bài học</span></div><div class="progress-track"><div id="overallBar" class="progress-fill"></div></div><small>Tiến độ được tự động lưu trên thiết bị này.</small></article>
+        <article class="stat-card"><div class="stat-top"><span>CHƯƠNG ĐÃ HỌC</span><span class="stat-icon violet">▤</span></div><div class="stat-value"><strong id="chapterCount">0</strong><span>chương có tiến độ</span></div><small class="stat-note">Bắt đầu từ chương đầu tiên nhé.</small></article>
+        <article class="stat-card"><div class="stat-top"><span>BÀI HỌC CÒN LẠI</span><span class="stat-icon orange">◷</span></div><div class="stat-value"><strong id="remainingCount">0</strong><span>bài cần hoàn thành</span></div><small class="stat-note">Học đều đặn quan trọng hơn học nhanh.</small></article>
+      </section>
+
+      <section class="content-grid">
+        <div class="panel roadmap-panel" id="roadmap"><div class="section-heading"><div><div class="eyebrow">YOUR ROADMAP</div><h2>Lộ trình học tập</h2><p class="muted">Tích vào bài học sau khi bạn đã học và thực hành.</p></div><span class="count-chip" id="roadmapCount">0 bài học</span></div><div id="roadmapList" class="roadmap-list"></div></div>
+        <aside class="right-column"><div class="panel next-panel"><div class="eyebrow">KEEP MOVING</div><h3>Bài tiếp theo</h3><div class="next-icon">→</div><p class="next-title" id="nextTitle">Bắt đầu hành trình C++</p><p class="muted next-desc" id="nextDesc">Chọn bài đầu tiên trong lộ trình để bắt đầu.</p><a href="#roadmap" class="text-link">Đi đến lộ trình <span>↗</span></a></div>
+          <div class="panel ai-panel"><div class="eyebrow">AI LEARNING PARTNERS</div><h3>Học cùng AI</h3><p class="muted">Dùng AI để hỏi lại kiến thức, phân tích lỗi và luyện tư duy.</p><a class="ai-link" href="https://chatgpt.com/" target="_blank" rel="noreferrer"><span class="ai-logo">✳</span><span><b>ChatGPT</b><small>Giải thích & hướng dẫn</small></span><i>↗</i></a><a class="ai-link" href="https://gemini.google.com/" target="_blank" rel="noreferrer"><span class="ai-logo gemini">✦</span><span><b>Gemini</b><small>Khám phá & hỏi đáp</small></span><i>↗</i></a><a class="ai-link" href="https://claude.ai/" target="_blank" rel="noreferrer"><span class="ai-logo claude">✳</span><span><b>Claude</b><small>Phân tích & phản biện</small></span><i>↗</i></a></div></aside>
+      </section>
+
+      <section class="panel notes-panel" id="notes"><div class="section-heading"><div><div class="eyebrow">PERSONAL KNOWLEDGE</div><h2>Ghi chú học tập</h2><p class="muted">Lưu lại những điều quan trọng, câu hỏi hoặc lỗi bạn thường gặp.</p></div><span class="saved-label" id="saveStatus">● Tự động lưu</span></div><textarea id="notesInput" placeholder="Ví dụ: Phân biệt while và do-while...&#10;Câu hỏi cần tìm hiểu: Vì sao phải truyền tham chiếu?&#10;Bài tập muốn làm lại: ..."></textarea></section>
+      <footer>ĐƯỢC THIẾT KẾ ĐỂ HỌC TẬP TỪNG BƯỚC <span>·</span> C++ ENGINEERING ROADMAP</footer>
+    </main>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
