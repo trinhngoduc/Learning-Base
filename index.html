@@ -645,6 +645,35 @@ body.sidebar-open #sidebar { transform: translateX(0); }
     color: #64748b; font-size: 10px; font-weight: 600;
     text-align: right; text-overflow: ellipsis; white-space: nowrap;
 }
+.file-choice-list {
+    display: flex; flex-direction: column; gap: 5px;
+    max-height: 132px; overflow-y: auto;
+    margin-top: 7px; padding: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 12px; background: rgba(7, 5, 18, 0.28);
+}
+.file-choice-item {
+    display: flex; align-items: center; gap: 8px;
+    width: 100%; min-width: 0; padding: 6px 8px;
+    border: 1px solid transparent; border-radius: 10px;
+    background: transparent; color: var(--text);
+    text-align: left; cursor: pointer;
+    transition: background 0.16s, border-color 0.16s;
+}
+.file-choice-item:hover { background: rgba(139, 92, 246, 0.12); border-color: rgba(139, 92, 246, 0.18); }
+.file-choice-item.selected { background: rgba(139, 92, 246, 0.18); border-color: rgba(167, 139, 250, 0.32); }
+.file-choice-icon {
+    display: grid; place-items: center; flex: 0 0 26px;
+    width: 26px; height: 26px; border-radius: 8px;
+    background: rgba(139, 92, 246, 0.13); font-size: 12px;
+}
+.file-choice-name {
+    min-width: 0; overflow: hidden; color: #e2e8f0;
+    font-size: 10px; font-weight: 650;
+    text-overflow: ellipsis; white-space: nowrap;
+}
+.file-choice-check { flex-shrink: 0; margin-left: auto; color: #c4b5fd; font-size: 12px; opacity: 0; }
+.file-choice-item.selected .file-choice-check { opacity: 1; }
 textarea.modal-input { resize: vertical; min-height: 60px; line-height: 1.5; }
 .mlabel {
     display: block; margin-bottom: 7px;
@@ -1064,9 +1093,12 @@ body.sidebar-open #sidebarBackdrop { opacity: 1; pointer-events: auto; }
     position: relative; text-align: center;
 }
 .dashboard-hero { text-align: center; margin-bottom: 28px; position: relative; z-index: 1; }
-.dashboard-search-wrap { margin-bottom: 22px; position: relative; z-index: 1; }
+.dashboard-search-wrap {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 22px; position: relative; z-index: 1;
+}
 .dashboard-search {
-    width: 100%; padding: 13px 20px;
+    flex: 1; min-width: 0; width: 100%; padding: 13px 20px;
     border-radius: 14px;
     background: rgba(0, 0, 0, 0.28);
     border: 1px solid rgba(255, 255, 255, 0.08);
@@ -1079,6 +1111,17 @@ body.sidebar-open #sidebarBackdrop { opacity: 1; pointer-events: auto; }
     box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.08);
 }
 .dashboard-search::placeholder { color: #64748b; }
+.create-folder-btn {
+    flex-shrink: 0; padding: 11px 15px; border-radius: 12px;
+    color: #e9d5ff; background: rgba(139, 92, 246, 0.14);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    font: 700 11px var(--font-base); cursor: pointer;
+    transition: background 0.18s, border-color 0.18s;
+}
+.create-folder-btn:hover {
+    background: rgba(139, 92, 246, 0.24);
+    border-color: rgba(167, 139, 250, 0.55);
+}
 
 .folder-section { margin-bottom: 22px; position: relative; z-index: 1; }
 .folder-section.dragging-folder { opacity: 0.5; }
@@ -1283,6 +1326,8 @@ body.sidebar-open #sidebarBackdrop { opacity: 1; pointer-events: auto; }
     .tile-emoji { font-size: 26px; }
     .tile-name { font-size: 9.5px; }
     .sb-tile-grid { grid-template-columns: 1fr; }
+    .dashboard-search-wrap { align-items: stretch; }
+    .create-folder-btn { padding: 9px 10px; font-size: 10px; }
 }
 </style>
 </head>
@@ -1403,6 +1448,7 @@ body.sidebar-open #sidebarBackdrop { opacity: 1; pointer-events: auto; }
                 <!-- SEARCH -->
                 <div class="dashboard-search-wrap">
                     <input id="dashboardSearch" class="dashboard-search" placeholder="🔍 Tìm app, khóa học, đường dẫn…" autocomplete="off" />
+                    <button class="create-folder-btn" type="button" onclick="openCreateFolderModal()">＋ Thư mục</button>
                 </div>
 
                 <!-- FOLDER GRID -->
@@ -1449,6 +1495,24 @@ body.sidebar-open #sidebarBackdrop { opacity: 1; pointer-events: auto; }
     </div>
 </div>
 
+<!-- MODAL: TẠO THƯ MỤC -->
+<div id="createFolderModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:60;align-items:center;justify-content:center;padding:16px;">
+    <form class="modal-card" style="width:100%;max-width:400px;padding:24px;" onsubmit="createFolder(event)">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:16px;margin-bottom:20px;border-bottom:1px solid rgba(255,255,255,0.06);">
+            <span style="font-size:11px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#a78bfa;">Tạo thư mục</span>
+            <button class="icon-btn" type="button" onclick="closeCreateFolderModal()" aria-label="Đóng">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+        <label class="mlabel" for="newFolderName">Tên thư mục</label>
+        <input class="modal-input" id="newFolderName" maxlength="60" placeholder="Ví dụ: Môn học, Tài liệu…" autocomplete="off">
+        <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.05);">
+            <button class="btn-sec" type="button" onclick="closeCreateFolderModal()">Hủy</button>
+            <button class="btn-pri" type="submit">Tạo thư mục</button>
+        </div>
+    </form>
+</div>
+
 <!-- MODAL: THÊM APP -->
 <div id="addModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:60;align-items:center;justify-content:center;padding:16px;">
     <div class="modal-card" style="width:100%;max-width:440px;padding:24px;max-height:92vh;overflow-y:auto;">
@@ -1473,13 +1537,14 @@ body.sidebar-open #sidebarBackdrop { opacity: 1; pointer-events: auto; }
             <div>
                 <label class="mlabel">Đường dẫn tệp tin</label>
                 <input class="modal-input" id="appPath" placeholder="index.html">
-                <p id="addPathHint" style="font-size:10px;color:#334155;margin-top:6px;">Chọn một tệp để tự điền tên và đường dẫn tương đối. Trình duyệt không cung cấp đường dẫn tuyệt đối.</p>
+                <p id="addPathHint" style="font-size:10px;color:#334155;margin-top:6px;">Chọn thư mục đang chứa dashboard index.html, rồi chọn tệp. Đường dẫn sẽ giữ nguyên toàn bộ thư mục con.</p>
                 <div style="margin-top:10px;">
-                    <input type="file" id="addFilePicker" style="display:none;">
+                    <input type="file" id="addFilePicker" webkitdirectory directory multiple style="display:none;">
                     <div class="file-picker-head">
-                        <button type="button" class="btn-sec" id="addPickBtn" onclick="document.getElementById('addFilePicker').click()">📄 Chọn tệp HTML…</button>
-                        <div class="file-picker-status" id="addFileStatus" aria-live="polite">Chưa chọn tệp</div>
+                        <button type="button" class="btn-sec" id="addPickBtn" onclick="document.getElementById('addFilePicker').click()">📁 Chọn thư mục gốc…</button>
+                        <div class="file-picker-status" id="addFileStatus" aria-live="polite">Chưa chọn thư mục gốc</div>
                     </div>
+                    <div class="file-choice-list" id="addFileChoice" role="listbox" aria-label="Chọn tệp trong thư mục gốc" style="display:none;"></div>
                 </div>
             </div>
         </div>
@@ -1515,13 +1580,14 @@ body.sidebar-open #sidebarBackdrop { opacity: 1; pointer-events: auto; }
             <div>
                 <label class="mlabel">Đường dẫn</label>
                 <input class="modal-input" id="editAppPath" placeholder="index.html">
-                <p id="editPathHint" style="font-size:10px;color:#334155;margin-top:6px;">Chọn một tệp để tự điền tên và đường dẫn tương đối. Trình duyệt không cung cấp đường dẫn tuyệt đối.</p>
+                <p id="editPathHint" style="font-size:10px;color:#334155;margin-top:6px;">Chọn thư mục đang chứa dashboard index.html, rồi chọn tệp. Đường dẫn sẽ giữ nguyên toàn bộ thư mục con.</p>
                 <div style="margin-top:10px;">
-                    <input type="file" id="editFilePicker" style="display:none;">
+                    <input type="file" id="editFilePicker" webkitdirectory directory multiple style="display:none;">
                     <div class="file-picker-head">
-                        <button type="button" class="btn-sec" id="editPickBtn" onclick="document.getElementById('editFilePicker').click()">📄 Chọn tệp HTML…</button>
-                        <div class="file-picker-status" id="editFileStatus" aria-live="polite">Chưa chọn tệp</div>
+                        <button type="button" class="btn-sec" id="editPickBtn" onclick="document.getElementById('editFilePicker').click()">📁 Chọn thư mục gốc…</button>
+                        <div class="file-picker-status" id="editFileStatus" aria-live="polite">Chưa chọn thư mục gốc</div>
                     </div>
+                    <div class="file-choice-list" id="editFileChoice" role="listbox" aria-label="Chọn tệp trong thư mục gốc" style="display:none;"></div>
                 </div>
             </div>
         </div>
@@ -1534,7 +1600,7 @@ body.sidebar-open #sidebarBackdrop { opacity: 1; pointer-events: auto; }
 
 <!-- MODAL: XÓA -->
 <div id="deleteConfirmModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:60;align-items:center;justify-content:center;padding:16px;">
-    <div class="modal-card" style="width:100%;maxpadding:28px;text-align:center;">
+    <div class="modal-card" style="width:100%;max-width:440px;padding:28px;text-align:center;">
         <div style="width:56px;height:56px;border-radius:9999px;background:rgba(185,28,28,0.15);border:1px solid rgba(248,113,113,0.15);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
@@ -1874,6 +1940,9 @@ function groupAppsByFolder(apps) {
         const f = getAppFolder(app);
         if (!map.has(f)) map.set(f, []);
         map.get(f).push(app);
+    });
+    folderOrder.forEach(name => {
+        if (name && name !== 'Khác' && name !== '⭐ Pinned' && !map.has(name)) map.set(name, []);
     });
     map.forEach(list => {
         list.sort((a, b) => {
@@ -2627,7 +2696,8 @@ function renderDashboard() {
     const visible = userApps.filter(match);
     const pinned = visible.filter(a => a.pinned);
     const unpinned = visible.filter(a => !a.pinned);
-    const groups = groupAppsByFolder(unpinned);
+    let groups = groupAppsByFolder(unpinned);
+    if (q) groups = groups.filter(([, apps]) => apps.length > 0);
 
     let html = '';
 
@@ -2801,7 +2871,9 @@ function handleAppDrop(draggedId, targetId, targetFolder) {
 function handleFolderDrop(draggedName, targetName) {
     if (!draggedName || !targetName || draggedName === targetName || draggedName === 'Khác') return;
 
-    const names = groupAppsByFolder(userApps.filter(app => !app.pinned)).map(([name]) => name);
+    const names = groupAppsByFolder(userApps.filter(app => !app.pinned))
+        .map(([name]) => name)
+        .filter(name => name !== 'Khác');
     const nextOrder = folderOrder.filter(name => names.includes(name));
     names.forEach(name => { if (!nextOrder.includes(name)) nextOrder.push(name); });
     const draggedIndex = nextOrder.indexOf(draggedName);
@@ -2821,6 +2893,60 @@ function handleFolderDrop(draggedName, targetName) {
     folderOrder = nextOrder;
     renderApps();
     showToast('Đã sắp xếp lại thư mục!');
+}
+
+function openCreateFolderModal() {
+    const modal = document.getElementById('createFolderModal');
+    const input = document.getElementById('newFolderName');
+    if (!modal || !input) return;
+    modal.style.display = 'flex';
+    input.value = '';
+    setTimeout(() => input.focus(), 0);
+}
+
+function closeCreateFolderModal() {
+    const modal = document.getElementById('createFolderModal');
+    if (modal) modal.style.display = 'none';
+}
+
+function createFolder(e) {
+    e.preventDefault();
+    const input = document.getElementById('newFolderName');
+    const name = input.value.trim();
+    if (!name) {
+        showToast('Nhập tên thư mục trước nhé.', 'error');
+        input.focus();
+        return;
+    }
+    if (name === 'Khác' || name === '⭐ Pinned') {
+        showToast('Tên này được dành riêng cho hệ thống.', 'error');
+        input.focus();
+        return;
+    }
+
+    const existing = groupAppsByFolder(userApps.filter(app => !app.pinned)).map(([folder]) => folder);
+    if (existing.some(folder => folder.toLocaleLowerCase() === name.toLocaleLowerCase())) {
+        showToast('Thư mục này đã tồn tại.', 'error');
+        input.focus();
+        return;
+    }
+
+    const nextOrder = groupAppsByFolder(userApps.filter(app => !app.pinned))
+        .map(([folder]) => folder)
+        .filter(folder => folder !== 'Khác');
+    nextOrder.push(name);
+    try {
+        localStorage.setItem('lb_folder_order_v1', JSON.stringify(nextOrder));
+    } catch (error) {
+        console.error(error);
+        showToast('Không thể lưu thư mục trên thiết bị.', 'error');
+        return;
+    }
+
+    folderOrder = nextOrder;
+    closeCreateFolderModal();
+    renderApps();
+    showToast('Đã tạo thư mục. Kéo app vào đây để sắp xếp!');
 }
 
 function renderSidebar() {
@@ -2925,6 +3051,7 @@ function handleDragLeave(e) {}
 function handleDrop(e) {}
 
 /* S) APP MODAL */
+const pickedDirectoryFiles = { add: [], edit: [] };
 function setModalType(which, type) {
     if (type !== 'html' && type !== 'pdf' && type !== 'image') type = 'html';
     const hidden = document.getElementById(which + 'Type');
@@ -2939,18 +3066,17 @@ function setModalType(which, type) {
         else picker.accept = '.html,.htm,text/html';
     }
     if (pickBtn) {
-        if (type === 'pdf') pickBtn.textContent = '📄 Chọn tệp PDF…';
-        else if (type === 'image') pickBtn.textContent = '🖼️ Chọn tệp ảnh…';
-        else pickBtn.textContent = '📄 Chọn tệp HTML…';
+        pickBtn.textContent = '📁 Chọn thư mục gốc…';
     }
     const hint = document.getElementById(which + 'PathHint');
-    if (hint) hint.textContent = 'Chọn một tệp để tự điền tên và đường dẫn tương đối. Trình duyệt không cung cấp đường dẫn tuyệt đối.';
+    if (hint) hint.textContent = 'Chọn thư mục đang chứa dashboard index.html, rồi chọn tệp. Đường dẫn sẽ giữ nguyên toàn bộ thư mục con.';
     const pathInput = document.getElementById(which === 'add' ? 'appPath' : 'editAppPath');
     if (pathInput) {
-        if (type === 'pdf') pathInput.placeholder = 'DeThi.pdf';
-        else if (type === 'image') pathInput.placeholder = 'avatar.png';
-        else pathInput.placeholder = 'index.html';
+        if (type === 'pdf') pathInput.placeholder = 'Study_C++/DeThi.pdf';
+        else if (type === 'image') pathInput.placeholder = 'Study_C++/avatar.png';
+        else pathInput.placeholder = 'Study_C++/index.html';
     }
+    updateFileChoices(which);
 }
 function pickFileEmoji(fileName, type) {
     const n = String(fileName || '').toLowerCase();
@@ -2961,34 +3087,102 @@ function pickFileEmoji(fileName, type) {
 }
 function handleFilePick(which) {
     const picker = document.getElementById(which + 'FilePicker');
-    const file = picker && picker.files && picker.files[0];
-    if (!file) return;
+    if (!picker || !picker.files || !picker.files.length) return;
+    const files = Array.from(picker.files);
     picker.value = '';
+    if (files.some(file => !String(file.webkitRelativePath || '').includes('/'))) {
+        clearPickedDirectory(which);
+        showToast('Không đọc được đường dẫn thư mục. Hãy chọn lại thư mục gốc của web.', 'error');
+        return;
+    }
+    pickedDirectoryFiles[which] = files;
+    updateFileChoices(which);
+}
+function updateFileChoices(which) {
     const type = document.getElementById(which + 'Type').value;
+    const choice = document.getElementById(which + 'FileChoice');
+    const status = document.getElementById(which + 'FileStatus');
+    if (!choice) return;
     const extensionPattern = type === 'pdf'
         ? /\.pdf$/i
         : type === 'image'
             ? /\.(png|jpe?g|gif|webp|svg|bmp|avif|ico)$/i
             : /\.html?$/i;
-    if (!extensionPattern.test(file.name)) {
-        showToast('Tệp không đúng loại ứng dụng đã chọn.', 'error');
+    const files = pickedDirectoryFiles[which]
+        .map(file => {
+            const segments = file.webkitRelativePath.split('/');
+            return { file, path: segments.slice(1).join('/') };
+        })
+        .filter(entry => entry.path && extensionPattern.test(entry.file.name));
+    choice.replaceChildren();
+    choice.style.display = files.length ? '' : 'none';
+    if (!files.length) {
+        if (status) {
+            status.textContent = pickedDirectoryFiles[which].length
+                ? 'Không tìm thấy tệp phù hợp trong thư mục gốc'
+                : 'Chưa chọn thư mục gốc';
+        }
         return;
     }
-    const relativePath = file.webkitRelativePath || file.name;
-    const pathInput = document.getElementById(which === 'add' ? 'appPath' : 'editAppPath');
-    const nameInput = document.getElementById(which === 'add' ? 'appName' : 'editAppName');
-    const emojiInput = document.getElementById(which === 'add' ? 'appEmoji' : 'editAppEmoji');
-    if (pathInput) pathInput.value = relativePath;
-    if (nameInput) nameInput.value = file.name.replace(/\.[^.]+$/, '');
-    if (emojiInput && !emojiInput.value.trim()) emojiInput.value = pickFileEmoji(file.name, type);
+
+    const rootName = pickedDirectoryFiles[which][0].webkitRelativePath.split('/')[0];
+    if (status) status.textContent = '📂 ' + rootName + ' · ' + files.length + ' tệp';
+    files.forEach(entry => {
+        const item = document.createElement('button');
+        item.type = 'button';
+        item.className = 'file-choice-item';
+        item.setAttribute('role', 'option');
+        item.setAttribute('aria-selected', 'false');
+
+        const icon = document.createElement('span');
+        icon.className = 'file-choice-icon';
+        icon.textContent = pickFileEmoji(entry.file.name, type);
+
+        const name = document.createElement('span');
+        name.className = 'file-choice-name';
+        name.textContent = entry.path;
+        name.title = entry.path;
+
+        const check = document.createElement('span');
+        check.className = 'file-choice-check';
+        check.setAttribute('aria-hidden', 'true');
+        check.textContent = '✓';
+
+        item.append(icon, name, check);
+        item.addEventListener('click', () => {
+            choice.querySelectorAll('.file-choice-item').forEach(button => {
+                const selected = button === item;
+                button.classList.toggle('selected', selected);
+                button.setAttribute('aria-selected', String(selected));
+            });
+            const pathInput = document.getElementById(which === 'add' ? 'appPath' : 'editAppPath');
+            const nameInput = document.getElementById(which === 'add' ? 'appName' : 'editAppName');
+            const emojiInput = document.getElementById(which === 'add' ? 'appEmoji' : 'editAppEmoji');
+            if (pathInput) pathInput.value = entry.path;
+            if (nameInput) nameInput.value = entry.file.name.replace(/\.[^.]+$/, '');
+            if (emojiInput && !emojiInput.value.trim()) emojiInput.value = pickFileEmoji(entry.file.name, type);
+            if (status) status.textContent = 'Đã chọn: ' + entry.path;
+        });
+        choice.appendChild(item);
+    });
+}
+function clearPickedDirectory(which) {
+    pickedDirectoryFiles[which] = [];
+    const picker = document.getElementById(which + 'FilePicker');
+    if (picker) picker.value = '';
+    const choice = document.getElementById(which + 'FileChoice');
+    if (choice) {
+        choice.replaceChildren();
+        choice.style.display = 'none';
+    }
     const status = document.getElementById(which + 'FileStatus');
-    if (status) status.textContent = 'Đã chọn: ' + file.name;
+    if (status) status.textContent = 'Chưa chọn thư mục gốc';
 }
 function openAddModal() { setModalType('add', 'html'); document.getElementById('addModal').style.display = 'flex'; setTimeout(() => document.getElementById('appName').focus(), 60); }
 function closeAddModal() {
     document.getElementById('addModal').style.display = 'none';
     ['appEmoji', 'appName', 'appPath'].forEach(id => document.getElementById(id).value = '');
-    document.getElementById('addFileStatus').textContent = 'Chưa chọn tệp';
+    clearPickedDirectory('add');
     setModalType('add', 'html');
 }
 function openEditModal(id) {
@@ -3004,7 +3198,7 @@ function openEditModal(id) {
 }
 function closeEditModal() {
     document.getElementById('editModal').style.display = 'none';
-    document.getElementById('editFileStatus').textContent = 'Chưa chọn tệp';
+    clearPickedDirectory('edit');
 }
 function saveEditApp() {
     const id = document.getElementById('editAppId').value;
