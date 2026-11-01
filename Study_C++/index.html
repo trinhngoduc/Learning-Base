@@ -1,411 +1,1177 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>C++ Engineering Roadmap</title>
-  <meta name="description" content="Lộ trình tự học C++ ứng dụng trong kỹ thuật, học qua thực hành.">
-  <style>
-    :root {
-      --bg: #0b1020;
-      --panel: #121a2d;
-      --panel-2: #182238;
-      --border: #28344d;
-      --text: #edf2ff;
-      --muted: #9aa8c2;
-      --accent: #82aaff;
-      --accent-2: #a4f0c6;
-      --warning: #f4d38b;
-      --shadow: 0 18px 45px rgba(0,0,0,.18);
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0; background: radial-gradient(ellipse at top left, #172747 0, var(--bg) 48%);
-      color: var(--text); font: 15px/1.55 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-    button, input { font: inherit; }
-    button { cursor: pointer; }
-    .app { display: grid; grid-template-columns: 245px minmax(0,1fr); min-height: 100vh; }
-    aside { border-right: 1px solid var(--border); padding: 25px 17px; background: rgba(9,14,28,.72); }
-    .brand { display:flex; align-items:center; gap:11px; padding: 0 8px 26px; }
-    .brand-mark { display:grid; place-items:center; width:40px; height:40px; border-radius:13px; background:linear-gradient(135deg,#8bb6ff,#8ee4c0); color:#10182b; font-weight:900; font-size:17px; }
-    .brand strong { display:block; letter-spacing:.2px; }
-    .brand small { color:var(--muted); font-size:12px; }
-    .nav-label { color:#74829f; text-transform:uppercase; letter-spacing:1.5px; font-size:10px; font-weight:800; padding: 8px 10px; }
-    .nav-btn { display:flex; align-items:center; gap:10px; width:100%; border:0; background:transparent; color:var(--muted); padding:11px 12px; border-radius:10px; text-align:left; margin:3px 0; }
-    .nav-btn.active, .nav-btn:hover { background:var(--panel-2); color:var(--text); }
-    .sidebar-note { margin-top:30px; padding:14px; border:1px solid var(--border); background:rgba(18,26,45,.7); border-radius:14px; color:var(--muted); font-size:12px; }
-    main { min-width:0; padding:32px clamp(18px,4vw,54px) 50px; max-width:1500px; width:100%; margin:0 auto; }
-    .topline { display:flex; align-items:center; justify-content:space-between; gap:14px; margin-bottom:28px; }
-    .eyebrow { color:var(--accent); font-size:12px; text-transform:uppercase; letter-spacing:1.6px; font-weight:800; }
-    h1 { font-size:clamp(27px,3vw,38px); line-height:1.15; margin:7px 0 10px; letter-spacing:-1px; }
-    h2 { margin:0; font-size:19px; letter-spacing:-.3px; }
-    h3 { margin:0; font-size:16px; }
-    p { margin:0; }
-    .muted { color:var(--muted); }
-    .pill { border:1px solid var(--border); border-radius:999px; padding:7px 11px; color:var(--muted); font-size:12px; white-space:nowrap; }
-    .hero { display:flex; align-items:flex-end; justify-content:space-between; gap:20px; margin-bottom:26px; }
-    .hero-copy { max-width:730px; }
-    .hero p { color:var(--muted); max-width:680px; }
-    .hero-icon { display:grid; place-items:center; flex:0 0 110px; height:110px; border:1px solid #314567; border-radius:28px; background:linear-gradient(145deg,#1c3151,#142035); font-size:45px; }
-    .stats { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:13px; margin:24px 0 32px; }
-    .stat, .panel { background:rgba(18,26,45,.88); border:1px solid var(--border); border-radius:16px; box-shadow:var(--shadow); }
-    .stat { padding:17px 18px; }
-    .stat-label { color:var(--muted); font-size:12px; }
-    .stat-value { font-size:27px; font-weight:750; margin-top:4px; letter-spacing:-.8px; }
-    .progress-track { height:6px; background:#26324a; border-radius:99px; overflow:hidden; margin-top:12px; }
-    .progress-fill { height:100%; background:linear-gradient(90deg,#80aaff,#a0edc6); width:0%; transition:width .2s ease; }
-    .section-head { display:flex; justify-content:space-between; align-items:center; gap:15px; margin-bottom:15px; }
-    .section-head .muted { font-size:12px; }
-    .roadmap { display:grid; gap:13px; }
-    .stage { border:1px solid var(--border); background:rgba(18,26,45,.82); border-radius:16px; overflow:hidden; }
-    .stage-head { display:flex; align-items:center; gap:14px; padding:18px 19px; cursor:pointer; }
-    .stage-num { display:grid; place-items:center; width:43px; height:43px; flex:0 0 43px; border-radius:13px; background:#202d46; color:var(--accent); font-weight:800; }
-    .stage-title { flex:1; min-width:0; }
-    .stage-title p { color:var(--muted); font-size:12px; margin-top:3px; }
-    .stage-count { color:var(--muted); font-size:12px; white-space:nowrap; }
-    .chevron { color:var(--muted); transition:transform .2s; }
-    .stage.open .chevron { transform:rotate(180deg); }
-    .lessons { display:none; border-top:1px solid var(--border); padding:8px 13px 13px; }
-    .stage.open .lessons { display:block; }
-    .lesson { display:grid; grid-template-columns:22px minmax(0,1fr) auto; align-items:start; gap:12px; padding:14px 8px; border-bottom:1px solid rgba(40,52,77,.65); }
-    .lesson:last-child { border-bottom:0; }
-    .check { appearance:none; width:19px; height:19px; border:1px solid #53627e; border-radius:6px; margin:3px 0 0; background:#111a2c; display:grid; place-items:center; cursor:pointer; }
-    .check:checked { background:#91e5bc; border-color:#91e5bc; }
-    .check:checked::after { content:"✓"; color:#0b1b18; font-weight:900; font-size:13px; }
-    .lesson-name { font-weight:650; }
-    .lesson-detail { color:var(--muted); font-size:12px; margin-top:4px; }
-    .lesson-actions { margin-top:9px; display:flex; gap:8px; flex-wrap:wrap; }
-    .ai-btn { border:1px solid #344c72; background:#1b2a47; color:#c8d9ff; border-radius:8px; padding:6px 9px; font-size:11px; }
-    .ai-btn:hover { border-color:var(--accent); background:#223555; }
-    .lesson.done .lesson-name { color:#9aa8c2; text-decoration:line-through; }
-    .tag { color:#9fbaff; background:#1b2a47; border-radius:7px; padding:4px 7px; font-size:10px; white-space:nowrap; }
-    .toast { position:fixed; left:50%; bottom:22px; transform:translate(-50%,20px); opacity:0; pointer-events:none; background:#e2f8eb; color:#10241b; border-radius:11px; padding:11px 15px; font-size:13px; font-weight:700; box-shadow:var(--shadow); transition:all .2s; z-index:10; max-width:calc(100vw - 28px); }
-    .toast.show { opacity:1; transform:translate(-50%,0); }
-    .bottom-grid { display:grid; grid-template-columns:1.15fr .85fr; gap:14px; margin-top:25px; }
-    .panel { padding:20px; }
-    .panel p { color:var(--muted); font-size:13px; margin-top:9px; }
-    .quick-links { display:flex; flex-wrap:wrap; gap:8px; margin-top:15px; }
-    .link { display:inline-flex; align-items:center; gap:7px; text-decoration:none; color:var(--text); background:#202d46; border:1px solid #30415f; border-radius:9px; padding:9px 11px; font-size:12px; }
-    .link:hover { border-color:var(--accent); }
-    .tip { margin-top:14px; padding:12px 13px; border-left:3px solid var(--warning); background:rgba(244,211,139,.07); color:#d6d9e4; border-radius:0 9px 9px 0; font-size:12px; }
-    .footer { color:#6f7d98; font-size:11px; margin-top:30px; text-align:center; }
-    .mobile-menu { display:none; }
-    @media (max-width:850px) {
-      .app { grid-template-columns:1fr; }
-      aside { display:none; }
-      main { padding:22px 16px 35px; }
-      .hero-icon { display:none; }
-      .bottom-grid { grid-template-columns:1fr; }
-    }
-    @media (max-width:520px) {
-      .stats { grid-template-columns:1fr; gap:9px; }
-      .stat { display:flex; align-items:center; justify-content:space-between; }
-      .stat-value { margin:0; }
-      .stat .progress-track { display:none; }
-      .stage-head { padding:14px 12px; gap:10px; }
-      .stage-count { display:none; }
-      .lesson { grid-template-columns:22px minmax(0,1fr); }
-      .tag { grid-column:2; justify-self:start; }
-      .topline { margin-bottom:22px; }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>C++ Engineering Lab — Lộ trình học C++</title>
+<meta name="description" content="Lộ trình học C++ cá nhân từ nền tảng đến ứng dụng kỹ thuật." />
+
+<style>
+/* ============================================================
+   THEME — Dark only (Đã tăng độ tương phản)
+   ============================================================ */
+:root {
+  --bg: #0b1120;           /* Nền tối hơn, sâu hơn */
+  --bg-elevated: #111827;
+  --card: #1e293b;         /* Thẻ sáng hơn để tách biệt */
+  --card-hover: #27354f;
+  --border: #2e3c56;
+  --border-strong: #475569;
+  
+  /* Chữ được làm sáng và rõ hơn */
+  --text: #f8fafc;         
+  --text-muted: #a1aebf;   
+  --text-dim: #738096;     
+  
+  --accent: #60a5fa;
+  --accent-2: #a78bfa;
+  --accent-glow: rgba(96, 165, 250, 0.15);
+  --accent-line: rgba(96, 165, 250, 0.4);
+  --success: #34d399;
+  --success-bg: rgba(52, 211, 153, 0.12);
+  --danger: #f87171;
+  --danger-bg: rgba(248, 113, 113, 0.12);
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+  --header-h: 64px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  min-height: 100vh;
+  font-variant-numeric: tabular-nums;
+  background-image:
+    radial-gradient(ellipse 900px 500px at 20% -50px, rgba(96, 165, 250, 0.08), transparent),
+    radial-gradient(ellipse 900px 500px at 80% -50px, rgba(167, 139, 250, 0.06), transparent);
+  background-repeat: no-repeat;
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: var(--header-h);
+  background: rgba(11, 17, 32, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.header-inner {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.brand-mark {
+  width: 38px; height: 38px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 9px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #fff; font-weight: 800; font-size: 13px;
+  letter-spacing: -0.5px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px var(--accent-glow);
+}
+.brand-text { display: flex; flex-direction: column; line-height: 1.2; min-width: 0; }
+.brand-name { font-weight: 700; font-size: 15px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.brand-sub { font-size: 11px; color: var(--text-muted); letter-spacing: 0.3px; }
+
+.header-mini-progress {
+  display: flex; align-items: center; gap: 12px;
+  padding: 6px 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+.header-mini-progress-text {
+  font-size: 12px; font-weight: 700;
+  color: var(--accent);
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  white-space: nowrap;
+}
+.header-mini-progress-bar {
+  width: 80px; height: 6px;
+  background: var(--bg);
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.header-mini-progress-fill {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+/* ============================================================
+   LAYOUT
+   ============================================================ */
+.app-layout {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 32px 24px 80px;
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+/* ============================================================
+   SIDEBAR / TOC (ĐÃ SỬA LỖI VIỀN XANH)
+   ============================================================ */
+.toc {
+  position: sticky;
+  top: calc(var(--header-h) + 24px);
+  max-height: calc(100vh - var(--header-h) - 48px);
+  overflow-y: auto;
+  border-right: 1px solid var(--border);
+  padding-right: 16px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+.toc::-webkit-scrollbar { width: 6px; }
+.toc::-webkit-scrollbar-track { background: transparent; }
+.toc::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
+
+.toc-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.toc-title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+}
+.toc-count {
+  font-size: 11px;
+  color: var(--text-dim);
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+}
+
+.toc-nav { display: flex; flex-direction: column; gap: 2px; }
+
+/* Sửa lại toàn bộ nút mục lục */
+.toc-link {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 14px; /* Tăng kích thước chữ */
+  transition: all 0.15s ease;
+  position: relative;
+}
+.toc-link:hover {
+  color: var(--text);
+  background: var(--card);
+}
+
+/* Hiệu ứng thanh dọc bên trái thay vì viền xanh bao quanh */
+.toc-link::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 20%;
+  height: 60%;
+  width: 3px;
+  background: transparent;
+  border-radius: 0 4px 4px 0;
+  transition: background 0.15s;
+}
+
+.toc-link.active {
+  color: var(--text);
+  background: var(--card);
+  font-weight: 600;
+}
+.toc-link.active::before {
+  background: var(--accent);
+}
+.toc-link.active .toc-num { color: var(--accent); }
+
+.toc-num {
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-dim);
+  flex-shrink: 0;
+  min-width: 20px;
+}
+.toc-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.toc-progress {
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 11px;
+  color: var(--text-dim);
+  flex-shrink: 0;
+}
+.toc-link.active .toc-progress { color: var(--accent); }
+
+.toc-footer {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+/* ============================================================
+   MAIN CONTENT
+   ============================================================ */
+.main-content { min-width: 0; }
+.overview { margin-bottom: 56px; }
+
+.hero-badge {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--accent-glow);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border: 1px solid var(--accent-line);
+  margin-bottom: 18px;
+}
+.hero h1 {
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 800;
+  letter-spacing: -0.8px;
+  line-height: 1.2;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, var(--text) 40%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-desc {
+  max-width: 640px;
+  color: var(--text-muted);
+  font-size: 15px;
+  margin-bottom: 28px;
+  line-height: 1.7;
+}
+.hero-stats {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+  padding: 20px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.stat { display: flex; flex-direction: column; gap: 4px; }
+.stat-value {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--accent);
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  line-height: 1;
+}
+.stat-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+}
+
+/* Progress card */
+.progress-card {
+  margin-top: 24px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+}
+.progress-head {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 16px; margin-bottom: 16px; flex-wrap: wrap;
+}
+.progress-head h2 { font-size: 16px; margin-bottom: 4px; font-weight: 700; color: var(--text); }
+.progress-head p { color: var(--text-muted); font-size: 14px; }
+.progress-percent {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--accent);
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  line-height: 1;
+}
+.progress-bar {
+  height: 8px;
+  background: var(--bg);
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+.progress-fill {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+.progress-actions { display: flex; justify-content: flex-end; }
+
+/* Buttons */
+.btn {
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 13.5px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+.btn-danger {
+  background: var(--danger-bg);
+  color: var(--danger);
+  border: 1px solid rgba(248, 113, 113, 0.4);
+}
+.btn-danger:hover { background: rgba(248, 113, 113, 0.2); }
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  font-size: 14.5px;
+  box-shadow: 0 4px 12px var(--accent-glow);
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 18px var(--accent-glow); }
+.btn-primary.copied { background: var(--success); box-shadow: none; transform: none; }
+.btn-secondary {
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 12px 20px;
+  font-size: 14.5px;
+}
+.btn-secondary:hover { background: var(--card-hover); }
+
+/* ============================================================
+   STAGE SECTIONS
+   ============================================================ */
+.stage-section {
+  scroll-margin-top: calc(var(--header-h) + 20px);
+  margin-bottom: 48px;
+}
+
+.stage-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  padding: 24px 0 16px;
+  border-top: 1px solid var(--border);
+  cursor: pointer;
+  user-select: none;
+  transition: opacity 0.15s;
+}
+.stage-header:hover { opacity: 0.9; }
+
+.stage-num {
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.5px;
+  padding-top: 4px;
+  flex-shrink: 0;
+  min-width: 32px;
+}
+.stage-info { flex: 1; min-width: 0; }
+.stage-info h2 {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  margin-bottom: 6px;
+  line-height: 1.3;
+  color: var(--text);
+}
+.stage-info p {
+  font-size: 14px;
+  color: var(--text-muted);
+  max-width: 620px;
+}
+.stage-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.stage-progress {
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+.stage-progress.done { color: var(--success); }
+.stage-chevron {
+  font-size: 12px;
+  color: var(--text-dim);
+  transition: transform 0.2s;
+}
+
+.stage-body {
+  display: none;
+  padding-left: 50px;
+}
+.stage-body.open { display: block; animation: fadeIn 0.25s ease; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Lesson items */
+.lessons-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 12px;
+}
+
+.lesson {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 18px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  transition: all 0.15s;
+}
+.lesson:hover { border-color: var(--border-strong); }
+.lesson.completed {
+  background: var(--success-bg);
+  border-color: rgba(52, 211, 153, 0.3);
+}
+.lesson.completed .lesson-info h3 {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.lesson-check {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  position: relative;
+  width: 22px;
+  height: 22px;
+}
+.lesson-check input {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+}
+.checkmark {
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--border-strong);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--card);
+  transition: all 0.15s;
+  pointer-events: none;
+}
+.checkmark::after {
+  content: "";
+  width: 4px;
+  height: 9px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) scale(0);
+  transition: transform 0.15s;
+  margin-top: -2px;
+}
+.lesson-check input:checked + .checkmark {
+  background: var(--success);
+  border-color: var(--success);
+}
+.lesson-check input:checked + .checkmark::after {
+  transform: rotate(45deg) scale(1);
+}
+
+.lesson-info { flex: 1; min-width: 0; }
+.lesson-info h3 {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  line-height: 1.4;
+  color: var(--text);
+}
+.lesson-info p {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.lesson-btn {
+  flex-shrink: 0;
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--accent-line);
+  background: var(--accent-glow);
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+  white-space: nowrap;
+}
+.lesson-btn:hover {
+  background: rgba(96, 165, 250, 0.25);
+  border-color: var(--accent);
+}
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(6px);
+}
+.modal.open { display: flex; }
+
+.modal-content {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  width: 100%;
+  max-width: 840px;
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  box-shadow: var(--shadow);
+  animation: fadeIn 0.2s ease;
+}
+.modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; margin-bottom: 8px;
+}
+.modal-header h3 { font-size: 18px; font-weight: 700; color: var(--text); }
+.modal-close {
+  background: none; border: none; color: var(--text-muted);
+  font-size: 28px; line-height: 1; cursor: pointer;
+  padding: 0 8px; border-radius: 6px; transition: all 0.15s;
+  font-family: inherit;
+}
+.modal-close:hover { color: var(--text); background: var(--card); }
+.modal-hint {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+.prompt-textarea {
+  flex: 1;
+  min-height: 340px;
+  max-height: 55vh;
+  width: 100%;
+  resize: vertical;
+  padding: 16px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: "SF Mono", Menlo, Consolas, "Courier New", monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  outline: none;
+}
+.prompt-textarea:focus { border-color: var(--accent); }
+.modal-actions {
+  display: flex; gap: 12px; justify-content: flex-end;
+  margin-top: 16px; flex-wrap: wrap;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.site-footer {
+  border-top: 1px solid var(--border);
+  padding: 32px 24px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 13.5px;
+}
+.footer-muted {
+  font-size: 12px;
+  margin-top: 6px;
+  color: var(--text-dim);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 960px) {
+  .app-layout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 24px 16px 60px;
+  }
+  .toc {
+    position: static;
+    max-height: none;
+    overflow: visible;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding-right: 0;
+    padding-bottom: 20px;
+  }
+  .toc-nav {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+  .toc-link { padding: 8px 10px; font-size: 13px; }
+  .toc-name { font-size: 13px; }
+  .toc-progress { display: none; }
+  .toc-footer { display: none; }
+
+  .stage-info h2 { font-size: 20px; }
+  .stage-body { padding-left: 0; }
+  .stage-header { gap: 12px; padding: 20px 0 12px; }
+}
+
+@media (max-width: 640px) {
+  .header-mini-progress-bar { display: none; }
+  .brand-sub { display: none; }
+  .toc-nav { grid-template-columns: 1fr; }
+  .lesson {
+    flex-wrap: wrap;
+    align-items: flex-start;
+    padding: 14px;
+  }
+  .lesson-info { flex-basis: calc(100% - 38px); }
+  .lesson-btn { width: 100%; margin-top: 8px; text-align: center; }
+  .modal-content { padding: 16px; }
+  .prompt-textarea { min-height: 240px; }
+  .progress-card { padding: 20px; }
+  .hero h1 { font-size: 26px; }
+  .hero-desc { font-size: 14.5px; }
+}
+</style>
 </head>
 <body>
-<div class="app">
-  <aside>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
     <div class="brand">
-      <div class="brand-mark">C++</div>
-      <div><strong>Engineering Lab</strong><small>Learning roadmap</small></div>
+      <span class="brand-mark">C++</span>
+      <div class="brand-text">
+        <span class="brand-name">C++ Engineering Lab</span>
+        <span class="brand-sub">Personal Learning Roadmap</span>
+      </div>
     </div>
-    <div class="nav-label">Không gian học tập</div>
-    <button class="nav-btn active" data-scroll="overview">◈ &nbsp; Tổng quan</button>
-    <button class="nav-btn" data-scroll="roadmap">▤ &nbsp; Lộ trình học</button>
-    <button class="nav-btn" data-scroll="resources">↗ &nbsp; Tài nguyên</button>
-    <div class="sidebar-note">
-      <strong style="color:var(--text)">Cách học</strong>
-      <p style="margin-top:7px">Đọc nhiệm vụ → thử viết code → nhờ AI giải thích → tự làm lại → tích hoàn thành.</p>
+    <div class="header-mini-progress">
+      <span class="header-mini-progress-text" id="header-progress-text">0 / 28</span>
+      <div class="header-mini-progress-bar">
+        <div class="header-mini-progress-fill" id="header-progress-fill"></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="app-layout">
+  <!-- SIDEBAR / TOC -->
+  <aside class="toc">
+    <div class="toc-head">
+      <span class="toc-title">Mục lục</span>
+      <span class="toc-count">07 chặng</span>
+    </div>
+    <nav class="toc-nav" id="toc-nav"></nav>
+    <div class="toc-footer">
+      <button id="reset-btn-sidebar" class="btn btn-danger" style="width:100%;">Đặt lại tiến độ</button>
     </div>
   </aside>
-  <main>
-    <div class="topline" id="overview">
-      <div>
-        <div class="eyebrow">Your learning workspace</div>
-        <div class="muted" style="font-size:12px;margin-top:3px">C++ · Kỹ thuật · Học qua thực hành</div>
-      </div>
-      <div class="pill">Bản cá nhân · Không cần tài khoản</div>
-    </div>
 
-    <section class="hero">
-      <div class="hero-copy">
-        <div class="eyebrow">Chào mừng đến phòng học của bạn</div>
-        <h1>Học C++ bằng cách<br>giải quyết vấn đề kỹ thuật.</h1>
-        <p>Đây là bản đồ chỉ đường, không phải một khóa học nhồi lý thuyết. Đi từng bài, đưa nhiệm vụ cho AI hướng dẫn và đánh dấu khi bạn thật sự tự làm được.</p>
-      </div>
-      <div class="hero-icon" aria-hidden="true">⌘</div>
-    </section>
-
-    <section class="stats" aria-label="Tiến độ học tập">
-      <div class="stat">
-        <div><div class="stat-label">Bài đã hoàn thành</div><div class="muted" style="font-size:11px">Trong toàn bộ lộ trình</div></div>
-        <div class="stat-value"><span id="done-count">0</span><span style="color:var(--muted);font-size:15px"> / <span id="total-count">0</span></span></div>
-      </div>
-      <div class="stat">
-        <div><div class="stat-label">Tiến độ tổng thể</div><div class="muted" style="font-size:11px">Tự đánh dấu</div></div>
-        <div class="stat-value" id="percent">0%</div>
-        <div class="progress-track" style="width:100%"><div class="progress-fill" id="main-progress"></div></div>
-      </div>
-      <div class="stat">
-        <div><div class="stat-label">Chặng đang học</div><div class="muted" style="font-size:11px">Theo tiến độ của bạn</div></div>
-        <div class="stat-value" id="current-stage" style="font-size:18px">Chặng 1</div>
-      </div>
-    </section>
-
-    <section id="roadmap">
-      <div class="section-head">
-        <div><h2>Lộ trình học tập</h2><div class="muted" style="margin-top:4px">Học từ nền tảng đến ứng dụng trong kỹ thuật</div></div>
-        <div class="muted">Mở từng chặng để xem bài</div>
-      </div>
-      <div class="roadmap" id="roadmap-list"></div>
-    </section>
-
-    <section class="bottom-grid" id="resources">
-      <div class="panel">
-        <div class="eyebrow">Học và thực hành</div>
-        <h2 style="margin-top:7px">Tài nguyên hữu ích</h2>
-        <p>Không cần tự xây trình chạy code. Khi bài học yêu cầu, dùng công cụ có sẵn và quay lại lộ trình sau khi luyện tập.</p>
-        <div class="quick-links">
-          <a class="link" href="https://www.learncpp.com/" target="_blank" rel="noreferrer">LearnCpp ↗</a>
-          <a class="link" href="https://www.learn-cpp.org/" target="_blank" rel="noreferrer">Luyện C++ ↗</a>
-          <a class="link" href="https://www.onlinegdb.com/online_c++_compiler" target="_blank" rel="noreferrer">Chạy C++ online ↗</a>
-          <a class="link" href="https://docs.arduino.cc/" target="_blank" rel="noreferrer">Arduino Docs ↗</a>
+  <!-- MAIN -->
+  <main class="main-content">
+    <section id="overview" class="overview">
+      <div class="hero">
+        <span class="hero-badge">Roadmap · C++ Engineering</span>
+        <h1>Học C++ để giải quyết<br/>những vấn đề kỹ thuật.</h1>
+        <p class="hero-desc">
+          Một lộ trình có cấu trúc từ nền tảng C++ đến ứng dụng cảm biến, động cơ và robot.
+          AI đảm nhiệm việc giảng dạy, VS Code là nơi thực hành, website này theo dõi tiến độ của bạn.
+        </p>
+        <div class="hero-stats">
+          <div class="stat"><span class="stat-value">07</span><span class="stat-label">Chặng</span></div>
+          <div class="stat"><span class="stat-value">28</span><span class="stat-label">Bài học</span></div>
+          <div class="stat"><span class="stat-value">100%</span><span class="stat-label">Thực hành</span></div>
         </div>
       </div>
-      <div class="panel">
-        <div class="eyebrow">Cách dùng AI</div>
-        <h2 style="margin-top:7px">Một bài học, một cuộc trò chuyện</h2>
-        <p>Gửi tên bài và nhiệm vụ cho AI. Yêu cầu giải thích từng bước, cho gợi ý trước khi đưa đáp án và giao bài tương tự để bạn tự làm.</p>
-        <button class="link" id="copy-prompt" style="margin-top:15px;border:1px solid #30415f">▣ Sao chép prompt mẫu</button>
-        <div class="tip">Đừng chỉ tích vì đã đọc xong. Hãy tích khi bạn có thể giải thích và tự viết lại chương trình.</div>
+
+      <div class="progress-card">
+        <div class="progress-head">
+          <div>
+            <h2>Tiến độ tổng thể</h2>
+            <p id="progress-text">0/28 bài đã hoàn thành</p>
+          </div>
+          <div class="progress-percent" id="progress-percent">0%</div>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="progress-actions">
+          <button id="reset-btn" class="btn btn-danger">Đặt lại tiến độ</button>
+        </div>
       </div>
     </section>
-    <div class="footer">Tiến độ được lưu trên trình duyệt hiện tại bằng localStorage. Không có máy chủ, không cần đăng nhập.</div>
+
+    <div id="stages-container"></div>
   </main>
 </div>
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<footer class="site-footer">
+  <p>C++ Engineering Lab — Website cá nhân quản lý lộ trình học C++.</p>
+  <p class="footer-muted">Tiến độ được lưu trên trình duyệt của bạn. Không có máy chủ, không có tài khoản.</p>
+</footer>
+
+<div id="ai-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 id="modal-title">Học bài với AI</h3>
+      <button id="modal-close" class="modal-close" aria-label="Đóng">&times;</button>
+    </div>
+    <p class="modal-hint">Bạn có thể chỉnh sửa prompt bên dưới trước khi sao chép. Sau đó dán vào ChatGPT, DeepSeek hoặc AI bạn muốn dùng.</p>
+    <textarea id="prompt-text" class="prompt-textarea" spellcheck="false"></textarea>
+    <div class="modal-actions">
+      <button id="copy-btn" class="btn btn-primary">Sao chép prompt</button>
+      <button id="modal-close-2" class="btn btn-secondary">Đóng</button>
+    </div>
+  </div>
+</div>
+
 <script>
-const stages = [
+/* DỮ LIỆU LỘ TRÌNH */
+const ROADMAP = [
   {
-    title: "Làm quen với C++",
-    desc: "Biết chương trình chạy như thế nào và nhập/xuất dữ liệu ra sao.",
+    id: 'stage-1', title: 'Nền tảng C++',
+    description: 'Hiểu chương trình và viết được những dòng code đầu tiên.',
     lessons: [
-      ["Chương trình C++ đầu tiên", "Biết cấu trúc cơ bản và cách chạy một chương trình.", "Bắt đầu"],
-      ["Biến và kiểu dữ liệu", "Lưu nhiệt độ, thời gian, khối lượng và các giá trị kỹ thuật.", "Nền tảng"],
-      ["Nhập dữ liệu và xuất kết quả", "Nhập số đo rồi in kết quả tính toán.", "Thực hành"],
-      ["Toán tử và biểu thức", "Tính vận tốc, quãng đường, thời gian và đổi đơn vị.", "Bài toán kỹ thuật"]
+      { id: 'bai-1', title: 'Chương trình C++ đầu tiên', desc: 'Viết, biên dịch và chạy chương trình đầu tiên trong VS Code.', goal: 'Hiểu cấu trúc tối thiểu của một chương trình C++, biết cách biên dịch và chạy trong VS Code.', concepts: ['Cấu trúc #include <iostream>','Hàm int main()','Lệnh std::cout để in ra màn hình','Dấu chấm phẩy và return 0'], practice: 'Viết chương trình in ra 3 dòng: tên của bạn, một dòng trống, và câu "Mục tiêu: trở thành kỹ sư C++."' },
+      { id: 'bai-2', title: 'Biến và kiểu dữ liệu', desc: 'Khai báo biến với các kiểu cơ bản và chọn đúng kiểu dữ liệu.', goal: 'Biết khai báo biến với các kiểu cơ bản, phân biệt kiểu số nguyên, số thực, ký tự, logic và chuỗi.', concepts: ['int cho số nguyên','double cho số thực','char cho ký tự','bool cho giá trị đúng/sai','std::string cho chuỗi ký tự','Quy tắc đặt tên biến'], practice: 'Khai báo các biến: double nhietDo = 36.5; int soCamBien = 8; bool ketNoi = true; std::string tenThietBi = "ESP32"; sau đó in tất cả ra màn hình.' },
+      { id: 'bai-3', title: 'Nhập và xuất dữ liệu', desc: 'Đọc dữ liệu từ bàn phím và hiển thị kết quả cho người dùng.', goal: 'Sử dụng std::cin và std::getline để đọc dữ liệu người dùng nhập, kết hợp với std::cout để hiển thị.', concepts: ['std::cin cho số và từ đơn','std::getline cho chuỗi có khoảng trắng','Tương tác cơ bản qua console'], practice: 'Viết chương trình đọc từ bàn phím tên thiết bị (chuỗi có khoảng trắng) và một giá trị đo (double). In ra theo mẫu: Thiết bị X đo được Y.' },
+      { id: 'bai-4', title: 'Toán tử và biểu thức', desc: 'Sử dụng thành thạo toán tử số học, hiểu thứ tự ưu tiên và ép kiểu.', goal: 'Sử dụng các toán tử +, -, *, /, %; hiểu thứ tự ưu tiên; phân biệt chia nguyên và chia thực.', concepts: ['Toán tử số học: + - * / %','Thứ tự ưu tiên và dấu ngoặc','Chia nguyên với int, chia thực với double','Ép kiểu cơ bản'], practice: 'Viết chương trình: nhập vận tốc (km/h) và thời gian (giờ), tính quãng đường = vận tốc × thời gian. Nhập công (J) và thời gian (s), tính công suất = công / thời gian. In kết quả kèm đơn vị.' }
     ]
   },
   {
-    title: "Ra quyết định với điều kiện",
-    desc: "Cho chương trình lựa chọn hành động dựa trên dữ liệu đầu vào.",
+    id: 'stage-2', title: 'Điều kiện',
+    description: 'Cho chương trình đưa ra quyết định.',
     lessons: [
-      ["if, else if, else", "Phân loại trạng thái theo ngưỡng nhiệt độ hoặc khoảng cách.", "Nền tảng"],
-      ["Toán tử so sánh và logic", "Kết hợp nhiều điều kiện để quyết định trạng thái.", "Thực hành"],
-      ["Bài tập: cảnh báo nhiệt độ", "Báo bình thường, cảnh báo hoặc quá nhiệt.", "Nhiệm vụ"],
-      ["Bài tập: quyết định động cơ", "Chạy hoặc dừng động cơ dựa trên điều kiện cho trước.", "Nhiệm vụ"]
+      { id: 'bai-5', title: 'if và else', desc: 'Ra quyết định trong chương trình dựa trên điều kiện.', goal: 'Viết được cấu trúc if / else if / else để rẽ nhánh chương trình theo điều kiện.', concepts: ['Cú pháp if (điều_kiện) { ... }','else if để kiểm tra nhiều trường hợp','else cho trường hợp còn lại','Khối lệnh với dấu ngoặc nhọn'], practice: 'Nhập phần trăm pin (0–100). In "Đầy" nếu > 80, "Ổn" nếu từ 20 đến 80, "Yếu" nếu < 20.' },
+      { id: 'bai-6', title: 'Toán tử so sánh và logic', desc: 'Kết hợp nhiều điều kiện với &&, ||, !.', goal: 'Sử dụng thành thạo toán tử so sánh và toán tử logic để diễn đạt điều kiện phức tạp.', concepts: ['So sánh: ==, !=, <, >, <=, >=','Logic: && (và), || (hoặc), ! (phủ định)','Kết hợp nhiều điều kiện','Ngắn mạch trong biểu thức logic'], practice: 'Nhập nhiệt độ (°C), dòng điện (A), mã lỗi (0 hoặc 1). In "Động cơ được phép chạy" nếu nhiệt độ < 60 VÀ dòng điện < 5 VÀ mã lỗi == 0. Ngược lại in "Động cơ bị khóa".' },
+      { id: 'bai-7', title: 'Bài tập cảnh báo nhiệt độ', desc: 'Áp dụng if/else để xây dựng hệ thống cảnh báo thực tế.', goal: 'Áp dụng điều kiện để phân loại trạng thái và đưa ra cảnh báo theo ngưỡng.', concepts: ['Ngưỡng và phân loại','Cấu trúc if lồng nhau','Thông báo trạng thái rõ ràng'], practice: 'Nhập nhiệt độ. In cảnh báo 3 mức: dưới 50°C là "Bình thường", từ 50 đến 80°C là "Cảnh báo", trên 80°C là "Nguy hiểm".' },
+      { id: 'bai-8', title: 'Logic điều khiển động cơ', desc: 'Kết hợp nhiều điều kiện để điều khiển thiết bị.', goal: 'Xây dựng bảng quyết định đơn giản dựa trên tổ hợp tín hiệu đầu vào.', concepts: ['Ma trận quyết định','Kết hợp nhiều điều kiện đầu vào','Ưu tiên an toàn trong điều khiển'], practice: 'Nhập nút nhấn (0/1) và công tắc hành trình (0/1). Quyết định động cơ quay thuận, quay ngược, hoặc dừng theo bảng: (0,0) dừng, (1,0) quay thuận, (0,1) quay ngược, (1,1) dừng an toàn.' }
     ]
   },
   {
-    title: "Lặp lại công việc",
-    desc: "Tự động hóa các thao tác cần thực hiện nhiều lần.",
+    id: 'stage-3', title: 'Vòng lặp',
+    description: 'Tự động hóa các thao tác lặp lại.',
     lessons: [
-      ["Vòng lặp for", "Lặp theo số lần xác định; tạo bảng dữ liệu theo thời gian.", "Nền tảng"],
-      ["Vòng lặp while", "Lặp khi điều kiện còn đúng.", "Nền tảng"],
-      ["Chọn vòng lặp phù hợp", "Nhận biết khi nào nên dùng for hoặc while.", "Thực hành"],
-      ["Bài tập: mô phỏng chuyển động", "Tính vị trí sau mỗi bước thời gian đơn giản.", "Nhiệm vụ"]
+      { id: 'bai-9', title: 'Vòng lặp for', desc: 'Lặp lại công việc khi biết trước số lần.', goal: 'Viết vòng lặp for với biến đếm, điều kiện dừng và bước nhảy đúng.', concepts: ['Cú pháp for (khởi_tạo; điều_kiện; bước_nhảy)','Biến đếm và phạm vi','Lặp xuôi và lặp ngược'], practice: 'In bảng chuyển đổi nhiệt độ từ 0°C đến 100°C, mỗi 10°C một dòng, kèm giá trị quy đổi °F = °C × 9/5 + 32.' },
+      { id: 'bai-10', title: 'Vòng lặp while', desc: 'Lặp theo điều kiện, không biết trước số lần.', goal: 'Sử dụng while và do-while khi số lần lặp không xác định trước.', concepts: ['Cú pháp while (điều_kiện)','do-while luôn chạy ít nhất một lần','Cập nhật biến điều kiện để tránh lặp vô hạn'], practice: 'Mô phỏng sạc pin: bắt đầu 0%, mỗi phút tăng 5%, dừng khi đạt 100%. In phần trăm mỗi phút cho đến khi đầy.' },
+      { id: 'bai-11', title: 'Chọn for hay while', desc: 'Biết chọn loại vòng lặp phù hợp với bài toán.', goal: 'Phân biệt khi nào nên dùng for, khi nào nên dùng while/do-while.', concepts: ['For: biết trước số lần lặp','While: lặp theo điều kiện','Do-while: cần chạy ít nhất một lần'], practice: 'Cho hai bài toán: (a) in 20 số chẵn đầu tiên, (b) đọc số từ bàn phím đến khi gặp 0. Viết cả hai, mỗi bài chọn loại vòng lặp phù hợp và giải thích lý do.' },
+      { id: 'bai-12', title: 'Mô phỏng chuyển động đơn giản', desc: 'Dùng vòng lặp mô phỏng trạng thái thay đổi theo thời gian.', goal: 'Biết dùng vòng lặp để mô phỏng quá trình vật lý đơn giản theo từng bước thời gian.', concepts: ['Mô phỏng theo bước thời gian','Cập nhật trạng thái trong vòng lặp','In trạng thái mỗi bước'], practice: 'Mô phỏng vật rơi tự do đơn giản: bắt đầu ở độ cao 100m, mỗi giây in độ cao hiện tại, giảm 10m mỗi giây, dừng khi độ cao <= 0.' }
     ]
   },
   {
-    title: "Hàm và tổ chức chương trình",
-    desc: "Chia bài toán lớn thành những phần nhỏ dễ kiểm tra.",
+    id: 'stage-4', title: 'Hàm',
+    description: 'Chia chương trình thành các thành phần nhỏ.',
     lessons: [
-      ["Hàm là gì?", "Tách một phép tính thành chức năng có tên.", "Nền tảng"],
-      ["Tham số và giá trị trả về", "Truyền dữ liệu vào hàm và nhận kết quả.", "Nền tảng"],
-      ["Phạm vi biến", "Hiểu biến được dùng ở đâu trong chương trình.", "Thực hành"],
-      ["Dự án nhỏ: bộ tính toán kỹ thuật", "Kết hợp nhiều hàm để giải quyết một bài toán.", "Dự án"]
+      { id: 'bai-13', title: 'Tạo và gọi hàm', desc: 'Chia chương trình thành các khối tái sử dụng.', goal: 'Biết khai báo hàm, gọi hàm và tổ chức code thành các khối nhỏ.', concepts: ['Cú pháp khai báo hàm','Hàm void không trả về giá trị','Gọi hàm trong main'], practice: 'Viết ba hàm: inLoiChao(), inDuongKe(), inThongBao(std::string). Gọi cả ba trong main để in một khung thông báo hoàn chỉnh.' },
+      { id: 'bai-14', title: 'Tham số và giá trị trả về', desc: 'Truyền dữ liệu vào hàm và nhận kết quả trả về.', goal: 'Biết truyền tham số và trả về giá trị với kiểu dữ liệu phù hợp.', concepts: ['Tham số hình thức và đối số','Từ khóa return','Kiểu trả về phù hợp'], practice: 'Viết hàm double congSuat(double U, double I) trả về P = U × I, và hàm double dienTro(double U, double I) trả về R = U / I. Gọi và in kết quả.' },
+      { id: 'bai-15', title: 'Phạm vi biến', desc: 'Hiểu biến cục bộ và toàn cục, tránh lỗi do phạm vi.', goal: 'Phân biệt biến cục bộ và biến toàn cục, hiểu vòng đời biến và tránh lạm dụng biến toàn cục.', concepts: ['Biến cục bộ trong hàm','Biến toàn cục','Vòng đời biến','Rủi ro khi lạm dụng biến toàn cục'], practice: 'Viết chương trình có biến toàn cục dem = 0, hàm tangDem() tăng dem. Gọi hàm 5 lần, in dem. Sau đó khai báo biến cục bộ cùng tên trong main và quan sát sự khác biệt.' },
+      { id: 'bai-16', title: 'Máy tính kỹ thuật mini', desc: 'Ứng dụng hàm để xây dựng công cụ tính toán thực tế.', goal: 'Tổ chức các hàm theo chức năng, xây dựng menu đơn giản để chọn phép tính.', concepts: ['Tổ chức hàm theo chức năng','Menu bằng switch hoặc if','Vòng lặp menu và điều kiện thoát'], practice: 'Xây dựng chương trình menu: 1 — tính công suất (P = U × I), 2 — tính điện trở (R = U / I), 3 — tính năng lượng (E = P × t). Mỗi chức năng là một hàm riêng. Menu lặp đến khi người dùng chọn 0 để thoát.' }
     ]
   },
   {
-    title: "Lưu trữ và xử lý dữ liệu",
-    desc: "Quản lý nhiều giá trị đo và nhóm dữ liệu liên quan.",
+    id: 'stage-5', title: 'Cấu trúc dữ liệu cơ bản',
+    description: 'Lưu trữ và xử lý nhiều dữ liệu.',
     lessons: [
-      ["Mảng", "Lưu một dãy số đo từ cảm biến.", "Nền tảng"],
-      ["string", "Xử lý văn bản và thông báo.", "Nền tảng"],
-      ["Tìm giá trị lớn nhất, nhỏ nhất và trung bình", "Phân tích một tập dữ liệu đo.", "Bài toán kỹ thuật"],
-      ["struct", "Gom các thông tin có liên quan thành một kiểu dữ liệu.", "Nền tảng"]
+      { id: 'bai-17', title: 'Mảng (Array)', desc: 'Lưu nhiều giá trị cùng loại và duyệt qua chúng.', goal: 'Khai báo mảng, truy cập phần tử theo chỉ số, duyệt mảng bằng vòng lặp.', concepts: ['Khai báo mảng: double a[10]','Chỉ số từ 0 đến n-1','Duyệt mảng bằng vòng lặp','sizeof để tính số phần tử'], practice: 'Khai báo mảng double nhietDo[10] và nhập 10 giá trị từ bàn phím. In tất cả giá trị và đếm xem có bao nhiêu giá trị vượt quá 50°C.' },
+      { id: 'bai-18', title: 'Chuỗi (String)', desc: 'Xử lý văn bản: nối, so sánh, đếm ký tự.', goal: 'Sử dụng std::string để lưu và xử lý văn bản: độ dài, truy cập ký tự, nối chuỗi.', concepts: ['Khai báo std::string','Hàm .size() và .length()','Truy cập ký tự bằng chỉ số','Nối chuỗi bằng dấu +'], practice: 'Đọc tên thiết bị dạng chuỗi. In độ dài chuỗi, in từng ký tự trên một dòng, và đếm số nguyên âm (a, e, i, o, u).' },
+      { id: 'bai-19', title: 'Thống kê dữ liệu cảm biến', desc: 'Tính toán thống kê cơ bản trên mảng dữ liệu.', goal: 'Áp dụng mảng và vòng lặp để tính các chỉ số thống kê: min, max, trung bình, đếm.', concepts: ['Tìm min, max trong mảng','Tính tổng và trung bình','Đếm phần tử thỏa điều kiện'], practice: 'Cho mảng 12 giá trị cảm biến. Tính giá trị nhỏ nhất, lớn nhất, trung bình, và đếm số giá trị bất thường (lớn hơn 100).' },
+      { id: 'bai-20', title: 'Struct', desc: 'Nhóm các thông tin liên quan thành một kiểu dữ liệu.', goal: 'Định nghĩa struct, tạo biến struct, truy cập trường và dùng mảng struct.', concepts: ['Định nghĩa struct','Truy cập trường bằng dấu chấm','Mảng các struct','Kết hợp struct và hàm'], practice: 'Định nghĩa struct CamBien { int id; std::string ten; double giaTri; }. Tạo mảng 3 cảm biến, nhập dữ liệu và in thông tin từng cảm biến theo định dạng rõ ràng.' }
     ]
   },
   {
-    title: "Tư duy lập trình vững hơn",
-    desc: "Đọc lỗi, kiểm thử và viết chương trình dễ hiểu, dễ sửa.",
+    id: 'stage-6', title: 'Kỹ năng C++ nâng cao',
+    description: 'Đọc lỗi, kiểm thử và tổ chức chương trình.',
     lessons: [
-      ["Đọc và sửa lỗi thường gặp", "Phân biệt lỗi cú pháp, lỗi khi chạy và lỗi logic.", "Thực hành"],
-      ["Kiểm thử nhiều trường hợp", "Thử dữ liệu bình thường, biên và bất thường.", "Thực hành"],
-      ["Tham chiếu và con trỏ cơ bản", "Hiểu cách truy cập dữ liệu thông qua địa chỉ.", "Nâng cao"],
-      ["Tổ chức code thành nhiều tệp", "Làm quen với cách sắp xếp chương trình lớn hơn.", "Nâng cao"]
+      { id: 'bai-21', title: 'Đọc và sửa lỗi', desc: 'Đọc hiểu thông báo lỗi và sửa lỗi hiệu quả.', goal: 'Đọc thông báo lỗi biên dịch, xác định dòng gây lỗi và sửa đúng nguyên nhân.', concepts: ['Lỗi biên dịch và lỗi runtime','Đọc thông báo lỗi từ trên xuống và từ dưới lên','Print debug để kiểm tra giá trị biến','Các lỗi phổ biến: thiếu ;, sai kiểu, biến chưa khởi tạo'], practice: 'Cho một chương trình có 3 lỗi: thiếu dấu chấm phẩy, sai kiểu dữ liệu, biến chưa khởi tạo. Tìm và sửa từng lỗi, giải thích nguyên nhân của mỗi lỗi.' },
+      { id: 'bai-22', title: 'Kiểm thử chương trình', desc: 'Kiểm tra chương trình hoạt động đúng ở nhiều trường hợp.', goal: 'Biết viết test case, kiểm tra giá trị biên và giá trị đặc biệt.', concepts: ['Test case và kết quả mong đợi','Giá trị biên (0, âm, rất lớn)','Kiểm tra đầu ra bằng mắt hoặc assert','Ghi chú kết quả kiểm thử'], practice: 'Viết hàm double trungBinh(double a, double b, double c). Viết 5 test case (gồm 0, số âm, số rất lớn), in kết quả từng test case và so sánh với kết quả mong đợi.' },
+      { id: 'bai-23', title: 'Tham chiếu và con trỏ cơ bản', desc: 'Hiểu tham chiếu & và con trỏ * ở mức cơ bản.', goal: 'Hiểu tham chiếu và con trỏ là gì, biết khi nào dùng tham chiếu để truyền tham số.', concepts: ['Toán tử & (lấy địa chỉ) và * (giải tham chiếu)','Tham chiếu trong khai báo hàm','Truyền tham trị vs truyền tham chiếu','Con trỏ cơ bản'], practice: 'Viết hàm void hoanDoi(int& a, int& b) dùng tham chiếu, sau đó viết void hoanDoiCon(int* a, int* b) dùng con trỏ. Gọi cả hai và so sánh cách sử dụng.' },
+      { id: 'bai-24', title: 'Tách chương trình thành nhiều tệp', desc: 'Tổ chức code lớn thành nhiều file dễ quản lý.', goal: 'Biết tách khai báo vào file .h và định nghĩa vào file .cpp, biên dịch nhiều file cùng lúc.', concepts: ['File header (.h) chứa khai báo','File nguồn (.cpp) chứa định nghĩa','#include "file.h"','Biên dịch nhiều file với g++'], practice: 'Tách chương trình máy tính kỹ thuật ở bài 16 thành 3 file: main.cpp, calc.h, calc.cpp. Biên dịch bằng g++ main.cpp calc.cpp -o calc và chạy thử.' }
     ]
   },
   {
-    title: "C++ trong kỹ thuật",
-    desc: "Kết nối kiến thức lập trình với cảm biến, hệ thống và mô phỏng.",
+    id: 'stage-7', title: 'C++ trong kỹ thuật và robot',
+    description: 'Vận dụng kiến thức vào các bài toán kỹ thuật.',
     lessons: [
-      ["Mô phỏng dữ liệu cảm biến", "Tạo dữ liệu giả lập rồi phân loại trạng thái.", "Ứng dụng"],
-      ["Mô phỏng robot dò line", "Dùng các trạng thái cảm biến để chọn hướng di chuyển.", "Ứng dụng"],
-      ["Lập trình hướng đối tượng cơ bản", "Mô hình hóa thành phần như động cơ hoặc cảm biến.", "Nâng cao"],
-      ["Dự án tổng hợp", "Tự chọn một vấn đề kỹ thuật và xây dựng chương trình giải quyết.", "Dự án"]
+      { id: 'bai-25', title: 'Mô phỏng dữ liệu cảm biến', desc: 'Tạo dữ liệu giả lập để kiểm tra logic chương trình.', goal: 'Biết sinh dữ liệu ngẫu nhiên để mô phỏng cảm biến và kiểm tra thuật toán trước khi có phần cứng thật.', concepts: ['Hàm rand() và srand()','Sinh số ngẫu nhiên trong khoảng','Mô phỏng nhiễu cảm biến','Kiểm tra logic trên dữ liệu giả lập'], practice: 'Viết chương trình sinh 20 giá trị nhiệt độ ngẫu nhiên trong khoảng 20–100°C. In tất cả giá trị và đếm số giá trị vượt quá 70°C.' },
+      { id: 'bai-26', title: 'Logic robot dò line', desc: 'Xây dựng logic điều khiển robot dò line đơn giản.', goal: 'Xây dựng bảng quyết định cho robot dò line dựa trên tổ hợp tín hiệu hai cảm biến.', concepts: ['Đọc tín hiệu cảm biến (0/1)','Bảng trạng thái quyết định','Điều khiển động cơ trái/phải','Xử lý trường hợp đặc biệt'], practice: 'Mô phỏng robot có 2 cảm biến (trái, phải). Đọc tổ hợp tín hiệu và in lệnh tương ứng: (0,0) đi thẳng, (0,1) rẽ phải, (1,0) rẽ trái, (1,1) dừng. Lặp lại cho 10 lần đọc.' },
+      { id: 'bai-27', title: 'Lập trình hướng đối tượng cơ bản', desc: 'Đóng gói dữ liệu và hành vi vào class.', goal: 'Hiểu class là gì, biết tạo class với thuộc tính, phương thức và constructor đơn giản.', concepts: ['Từ khóa class','Thuộc tính (biến thành viên)','Phương thức (hàm thành viên)','Constructor','Tạo đối tượng và gọi phương thức'], practice: 'Viết class DongCo với thuộc tính ten (string), congSuat (double), trangThai (bool). Phương thức bat(), tat(), inThongTin(). Tạo 2 đối tượng, thử bật/tắt và in thông tin.' },
+      { id: 'bai-28', title: 'Dự án cuối: Bộ điều khiển đơn giản', desc: 'Kết hợp tất cả kiến thức để xây dựng ứng dụng hoàn chỉnh.', goal: 'Tổng hợp kiến thức về class, hàm, mảng, vòng lặp, điều kiện để xây dựng một ứng dụng nhỏ hoàn chỉnh.', concepts: ['Thiết kế class với trạng thái','Cập nhật trạng thái theo dữ liệu đầu vào','Lưu lịch sử bằng mảng','In báo cáo tổng hợp'], practice: 'Xây dựng class Quat với thuộc tính nhietDoHienTai, nguongBat, nguongTat, trangThai. Phương thức capNhat(double nhietDo) tự bật khi > nguongBat và tắt khi < nguongTat. Phương thức inTrangThai(). Mô phỏng 10 giá trị nhiệt độ, in trạng thái sau mỗi lần cập nhật và in báo cáo cuối.' }
     ]
   }
 ];
 
-const STORE_KEY = "cpp-engineering-roadmap-v1";
-let completed = {};
-try { completed = JSON.parse(localStorage.getItem(STORE_KEY) || "{}"); } catch (_) { completed = {}; }
-const roadmap = document.getElementById("roadmap-list");
+const PROMPT_TEMPLATE = `# VAI TRÒ
 
-stages.forEach((stage, si) => {
-  const article = document.createElement("article");
-  article.className = "stage" + (si === 0 ? " open" : "");
-  const stageTotal = stage.lessons.length;
-  article.innerHTML = `
-    <div class="stage-head" role="button" tabindex="0" aria-expanded="${si===0}">
-      <div class="stage-num">${String(si+1).padStart(2,"0")}</div>
-      <div class="stage-title"><h3>${stage.title}</h3><p>${stage.desc}</p></div>
-      <div class="stage-count"><span class="stage-done">0</span> / ${stageTotal} bài</div>
-      <div class="chevron">⌄</div>
-    </div>
-    <div class="lessons"></div>`;
-  const head = article.querySelector(".stage-head");
-  const toggle = () => {
-    article.classList.toggle("open");
-    head.setAttribute("aria-expanded", article.classList.contains("open") ? "true" : "false");
+Bạn là giảng viên hướng dẫn C++ chuyên về ứng dụng kỹ thuật, có khả năng dạy người mới bắt đầu bằng phương pháp thực hành.
+
+# BỐI CẢNH NGƯỜI HỌC
+
+- Đang học C++ theo định hướng kỹ thuật.
+- Đã cài đặt VS Code và trình biên dịch C++.
+- Viết, biên dịch và chạy chương trình trực tiếp trong VS Code.
+- Có kiến thức lập trình cơ bản nhưng không mặc định đã thành thạo C++.
+- Muốn học thông qua thực hành thay vì chỉ đọc lý thuyết.
+
+# THÔNG TIN BÀI HỌC
+
+- Chặng: {STAGE_TITLE}
+- Tên bài: {LESSON_TITLE}
+- Mục tiêu bài học: {LESSON_GOAL}
+- Mô tả nội dung: {LESSON_DESC}
+- Kiến thức trọng tâm:
+{LESSON_CONCEPTS}
+- Nhiệm vụ thực hành bắt buộc cuối bài: {LESSON_PRACTICE}
+- Các bài đã đánh dấu hoàn thành (chỉ mang tính tham khảo, không đồng nghĩa đã thành thạo):{COMPLETED}
+
+# NGUYÊN TẮC GIẢNG DẠY
+
+1. Không bắt đầu bằng bài kiểm tra đầu vào.
+2. Không yêu cầu người học kể lại kiến thức từ các cuộc trò chuyện trước.
+3. Không giả định rằng bài đã đánh dấu hoàn thành đồng nghĩa với việc đã thành thạo.
+4. Bắt đầu ngay bằng một vấn đề thực tế có thể giải quyết bằng C++.
+5. Giải thích lý thuyết ngắn gọn ngay khi cần sử dụng.
+6. Hướng dẫn theo trình tự: Ý tưởng → Ví dụ → Thực hành → Nhận xét → Mở rộng.
+7. Không đưa toàn bộ code hoàn chỉnh ngay từ đầu.
+8. Để người học tự suy nghĩ và viết code.
+9. Khi người học gặp khó khăn, đưa gợi ý theo từng mức độ.
+10. Khi sửa code, giải thích nguyên nhân lỗi và cách khắc phục.
+11. Ưu tiên ví dụ liên quan đến kỹ thuật, cảm biến, động cơ, robot và tính toán.
+12. Cuối bài phải có một thử thách thực hành tổng hợp.
+
+# MÔI TRƯỜNG
+
+- Sử dụng VS Code.
+- Không hướng dẫn cài đặt lại môi trường.
+- Không sử dụng compiler online.
+- Không sử dụng giả lập hoặc máy chủ.
+- Không yêu cầu cài thêm công cụ nếu không thực sự cần thiết.
+
+# BẮT ĐẦU
+
+Hãy bắt đầu ngay bằng bài học được cung cấp. Chỉ trình bày lượng kiến thức cần thiết cho bước đầu tiên, sau đó giao nhiệm vụ thực hành để người học tự viết chương trình.`;
+
+const STORAGE_KEY = 'cpp-lab-progress-v1';
+let progress = loadProgress();
+
+function loadProgress() {
+  try { const raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : {}; } 
+  catch (e) { return {}; }
+}
+function saveProgress(p) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(p)); } catch (e) {}
+}
+function totalLessons() { return ROADMAP.reduce((s, st) => s + st.lessons.length, 0); }
+function completedCount() { return Object.keys(progress).filter(id => progress[id] === true).length; }
+function completedLessonTitles() {
+  const out = [];
+  ROADMAP.forEach(st => st.lessons.forEach(l => { if (progress[l.id]) out.push(l.title); }));
+  return out;
+}
+function findLesson(lessonId) {
+  for (const stage of ROADMAP) {
+    const lesson = stage.lessons.find(l => l.id === lessonId);
+    if (lesson) return { stage, lesson };
+  }
+  return null;
+}
+function escapeHtml(str) {
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+function generatePrompt(lesson, stage, completedTitles) {
+  const conceptsText = lesson.concepts.map(c => '  - ' + c).join('\n');
+  const completedText = (completedTitles && completedTitles.length) ? '\n' + completedTitles.map(t => '  - ' + t).join('\n') : ' Chưa có bài nào được đánh dấu.';
+  const map = {
+    '{STAGE_TITLE}': stage.title, '{LESSON_TITLE}': lesson.title, '{LESSON_GOAL}': lesson.goal,
+    '{LESSON_DESC}': lesson.desc, '{LESSON_CONCEPTS}': conceptsText, '{LESSON_PRACTICE}': lesson.practice, '{COMPLETED}': completedText
   };
-  head.addEventListener("click", toggle);
-  head.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); }});
-  const list = article.querySelector(".lessons");
-  stage.lessons.forEach((lesson, li) => {
-    const id = `${si}-${li}`;
-    const row = document.createElement("div");
-    row.className = "lesson" + (completed[id] ? " done" : "");
-    row.innerHTML = `
-      <input class="check" type="checkbox" aria-label="Đánh dấu ${lesson[0]}" ${completed[id] ? "checked" : ""}>
-      <div><div class="lesson-name">${lesson[0]}</div><div class="lesson-detail">${lesson[1]}</div>
-      <div class="lesson-actions"><button class="ai-btn" type="button">✦ Học bài này với AI</button></div></div>
-      <span class="tag">${lesson[2]}</span>`;
-    const checkbox = row.querySelector("input");
-    row.querySelector(".ai-btn").addEventListener("click", () => createLessonPrompt(si, li));
-    checkbox.addEventListener("change", () => {
-      completed[id] = checkbox.checked;
-      row.classList.toggle("done", checkbox.checked);
-      try { localStorage.setItem(STORE_KEY, JSON.stringify(completed)); } catch (_) {}
-      updateStats();
-    });
-    list.appendChild(row);
+  let r = PROMPT_TEMPLATE;
+  Object.keys(map).forEach(k => { r = r.split(k).join(map[k]); });
+  return r;
+}
+
+function renderStages() {
+  const container = document.getElementById('stages-container');
+  container.innerHTML = '';
+  ROADMAP.forEach((stage, index) => {
+    const num = String(index + 1).padStart(2, '0');
+    const stageId = `chang-${index + 1}`;
+    const done = stage.lessons.filter(l => progress[l.id]).length;
+    const total = stage.lessons.length;
+    const section = document.createElement('section');
+    section.className = 'stage-section';
+    section.id = stageId;
+    section.dataset.stageId = stage.id;
+    section.innerHTML = `
+      <div class="stage-header" role="button" tabindex="0" aria-expanded="false">
+        <span class="stage-num">§ ${num}</span>
+        <div class="stage-info">
+          <h2>${escapeHtml(stage.title)}</h2>
+          <p>${escapeHtml(stage.description)}</p>
+        </div>
+        <div class="stage-meta">
+          <span class="stage-progress" data-stage-progress="${stage.id}">${done} / ${total}</span>
+          <span class="stage-chevron">▼</span>
+        </div>
+      </div>
+      <div class="stage-body">
+        <div class="lessons-list"></div>
+      </div>
+    `;
+    const body = section.querySelector('.stage-body');
+    const list = section.querySelector('.lessons-list');
+    stage.lessons.forEach(l => list.appendChild(createLessonElement(l)));
+    const header = section.querySelector('.stage-header');
+    const toggle = () => {
+      const open = body.classList.toggle('open');
+      header.setAttribute('aria-expanded', String(open));
+      header.querySelector('.stage-chevron').textContent = open ? '▲' : '▼';
+    };
+    header.addEventListener('click', toggle);
+    header.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
+    container.appendChild(section);
   });
-  roadmap.appendChild(article);
-});
+}
 
-function updateStats() {
-  const total = stages.reduce((n,s) => n+s.lessons.length, 0);
-  const done = Object.values(completed).filter(Boolean).length;
-  const pct = Math.round(done / total * 100);
-  document.getElementById("done-count").textContent = done;
-  document.getElementById("total-count").textContent = total;
-  document.getElementById("percent").textContent = pct + "%";
-  document.getElementById("main-progress").style.width = pct + "%";
-  let current = stages.length;
-  for (let si=0; si<stages.length; si++) {
-    const allDone = stages[si].lessons.every((_,li) => completed[`${si}-${li}`]);
-    if (!allDone) { current = si+1; break; }
-  }
-  document.getElementById("current-stage").textContent = done === total ? "Hoàn thành!" : `Chặng ${current}`;
-  document.querySelectorAll(".stage").forEach((el, si) => {
-    const count = stages[si].lessons.filter((_,li) => completed[`${si}-${li}`]).length;
-    el.querySelector(".stage-done").textContent = count;
+function createLessonElement(lesson) {
+  const el = document.createElement('div');
+  el.className = 'lesson' + (progress[lesson.id] ? ' completed' : '');
+  el.innerHTML = `
+    <label class="lesson-check" aria-label="Đánh dấu hoàn thành ${escapeHtml(lesson.title)}">
+      <input type="checkbox" ${progress[lesson.id] ? 'checked' : ''}>
+      <span class="checkmark"></span>
+    </label>
+    <div class="lesson-info">
+      <h3>${escapeHtml(lesson.title)}</h3>
+      <p>${escapeHtml(lesson.desc)}</p>
+    </div>
+    <button class="lesson-btn" type="button">Học bài này với AI</button>
+  `;
+  const cb = el.querySelector('input[type="checkbox"]');
+  cb.addEventListener('change', e => {
+    if (e.target.checked) progress[lesson.id] = true;
+    else delete progress[lesson.id];
+    saveProgress(progress);
+    el.classList.toggle('completed', e.target.checked);
+    updateAllProgress();
   });
+  el.querySelector('.lesson-btn').addEventListener('click', () => openAiModal(lesson.id));
+  return el;
 }
-updateStats();
 
-document.querySelectorAll(".nav-btn").forEach(btn => btn.addEventListener("click", () => {
-  document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
-  btn.classList.add("active");
-  document.getElementById(btn.dataset.scroll).scrollIntoView({behavior:"smooth", block:"start"});
-}));
+function renderToc() {
+  const nav = document.getElementById('toc-nav');
+  nav.innerHTML = '';
+  
+  const overview = document.createElement('a');
+  overview.href = '#overview';
+  overview.className = 'toc-link';
+  overview.dataset.target = 'overview';
+  overview.innerHTML = `<span class="toc-num">·</span><span class="toc-name">Tổng quan</span>`;
+  nav.appendChild(overview);
 
-function completedLessonNames() {
-  const names = [];
-  stages.forEach((stage, si) => stage.lessons.forEach((lesson, li) => {
-    if (completed[`${si}-${li}`]) names.push(lesson[0]);
-  }));
-  return names;
-}
-function buildPrompt(si, li) {
-  const stage = stages[si];
-  const lesson = stage.lessons[li];
-  const previous = completedLessonNames();
-  const priorText = previous.length ? previous.map(x => "- " + x).join("\\n") : "- Chưa đánh dấu hoàn thành bài nào; hãy kiểm tra nhanh kiến thức nền trước khi bắt đầu.";
-  return `Bạn là người hướng dẫn C++ ứng dụng trong kỹ thuật cho một người học thích thực hành hơn lý thuyết.
+  ROADMAP.forEach((stage, index) => {
+    const num = String(index + 1).padStart(2, '0');
+    const done = stage.lessons.filter(l => progress[l.id]).length;
+    const total = stage.lessons.length;
+    const a = document.createElement('a');
+    a.href = `#chang-${index + 1}`;
+    a.className = 'toc-link';
+    a.dataset.target = `chang-${index + 1}`;
+    a.dataset.stageId = stage.id;
+    a.innerHTML = `
+      <span class="toc-num">${num}</span>
+      <span class="toc-name">${escapeHtml(stage.title)}</span>
+      <span class="toc-progress" data-toc-progress="${stage.id}">${done}/${total}</span>
+    `;
+    nav.appendChild(a);
+  });
 
-THÔNG TIN LỘ TRÌNH
-- Chặng: ${si + 1}. ${stage.title}
-- Bài hôm nay: ${lesson[0]}
-- Mục tiêu bài: ${lesson[1]}
-- Loại bài: ${lesson[2]}
-
-CÁC BÀI TÔI ĐÃ ĐÁNH DẤU HOÀN THÀNH
-${priorText}
-
-CÁCH DẠY BẮT BUỘC
-1. Dạy bằng tiếng Việt, dễ hiểu, đi từ trực giác đến code; giải thích thuật ngữ tiếng Anh khi xuất hiện.
-2. Ưu tiên học qua nhiệm vụ thực hành gắn với kỹ thuật. Bắt đầu bằng MỘT nhiệm vụ nhỏ có mục tiêu rõ ràng, đầu vào và đầu ra mong đợi.
-3. Đừng mở đầu bằng một bài lý thuyết dài. Chỉ giải thích kiến thức ngay lúc tôi cần để giải quyết nhiệm vụ.
-4. Đừng đưa toàn bộ lời giải ngay. Cho tôi cơ hội tự suy nghĩ và viết code; nếu tôi bí, hãy gợi ý từng mức trước khi tiết lộ lời giải.
-5. Khi xem code của tôi, chỉ rõ lỗi nằm ở đâu, vì sao sai và cách tự sửa. Đừng viết lại toàn bộ chương trình nếu chưa cần.
-6. Nếu cần chạy code, hãy chỉ tôi dùng một website thực hành trực tuyến phù hợp; không yêu cầu cài đặt máy chủ hay phần mềm phức tạp.
-7. Cuối bài, cho một thử thách tương tự nhưng thay đổi dữ kiện hoặc yêu cầu để kiểm tra tôi có tự làm được không.
-8. Chỉ đề xuất đánh dấu hoàn thành khi tôi đã tự giải thích được ý chính và làm được bài thực hành.
-
-BẮT ĐẦU
-Trước tiên, giới thiệu nhiệm vụ bằng vài câu và hỏi tôi cách giải hoặc cho tôi viết bước đầu tiên. Mỗi lần chỉ dẫn một bước, đừng dồn cả bài học vào một câu trả lời.`;
-}
-async function copyPrompt(prompt, button) {
-  try {
-    await navigator.clipboard.writeText(prompt);
-    showToast("Đã sao chép chỉ dẫn cho AI. Mở ChatGPT và dán vào cuộc trò chuyện mới nhé.");
-    if (button) {
-      const old = button.textContent;
-      button.textContent = "✓ Đã sao chép";
-      setTimeout(() => { button.textContent = old; }, 1800);
+  nav.addEventListener('click', e => {
+    const link = e.target.closest('.toc-link');
+    if (!link) return;
+    e.preventDefault();
+    const targetId = link.dataset.target;
+    const target = document.getElementById(targetId);
+    if (!target) return;
+    if (target.classList.contains('stage-section')) {
+      const body = target.querySelector('.stage-body');
+      const header = target.querySelector('.stage-header');
+      if (body && !body.classList.contains('open')) {
+        body.classList.add('open');
+        header.setAttribute('aria-expanded', 'true');
+        const chev = header.querySelector('.stage-chevron');
+        if (chev) chev.textContent = '▲';
+      }
     }
-  } catch (_) {
-    window.prompt("Sao chép toàn bộ chỉ dẫn này rồi dán vào ChatGPT:", prompt);
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+}
+
+function updateAllProgress() {
+  const total = totalLessons();
+  const done = completedCount();
+  const pct = total === 0 ? 0 : Math.round((done / total) * 100);
+
+  document.getElementById('header-progress-text').textContent = `${done} / ${total}`;
+  document.getElementById('header-progress-fill').style.width = `${pct}%`;
+  document.getElementById('progress-text').textContent = `${done}/${total} bài đã hoàn thành`;
+  document.getElementById('progress-percent').textContent = `${pct}%`;
+  document.getElementById('progress-fill').style.width = `${pct}%`;
+
+  ROADMAP.forEach(stage => {
+    const sd = stage.lessons.filter(l => progress[l.id]).length;
+    const st = stage.lessons.length;
+    const sp = document.querySelector(`[data-stage-progress="${stage.id}"]`);
+    if (sp) { sp.textContent = `${sd} / ${st}`; sp.classList.toggle('done', sd === st && st > 0); }
+    const tp = document.querySelector(`[data-toc-progress="${stage.id}"]`);
+    if (tp) tp.textContent = `${sd}/${st}`;
+  });
+}
+
+function initScrollSpy() {
+  const sections = [document.getElementById('overview'), ...ROADMAP.map((_, i) => document.getElementById(`chang-${i + 1}`))].filter(Boolean);
+  function update() {
+    const scrollY = window.scrollY + 140;
+    let currentId = 'overview';
+    for (const s of sections) { if (s.offsetTop <= scrollY) currentId = s.id; }
+    document.querySelectorAll('.toc-link').forEach(link => { link.classList.toggle('active', link.dataset.target === currentId); });
+  }
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) { window.requestAnimationFrame(() => { update(); ticking = false; }); ticking = true; }
+  }, { passive: true });
+  update();
+}
+
+const modal = document.getElementById('ai-modal');
+const modalTitle = document.getElementById('modal-title');
+const promptTextarea = document.getElementById('prompt-text');
+const copyBtn = document.getElementById('copy-btn');
+const modalClose = document.getElementById('modal-close');
+const modalClose2 = document.getElementById('modal-close-2');
+
+function openAiModal(lessonId) {
+  const found = findLesson(lessonId);
+  if (!found) return;
+  modalTitle.textContent = `Học bài: ${found.lesson.title}`;
+  promptTextarea.value = generatePrompt(found.lesson, found.stage, completedLessonTitles());
+  copyBtn.textContent = 'Sao chép prompt';
+  copyBtn.classList.remove('copied');
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeAiModal() { modal.classList.remove('open'); document.body.style.overflow = ''; }
+modalClose.addEventListener('click', closeAiModal);
+modalClose2.addEventListener('click', closeAiModal);
+modal.addEventListener('click', e => { if (e.target === modal) closeAiModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('open')) closeAiModal(); });
+
+copyBtn.addEventListener('click', async () => {
+  const text = promptTextarea.value;
+  try {
+    if (navigator.clipboard && window.isSecureContext) { await navigator.clipboard.writeText(text); } 
+    else { promptTextarea.select(); promptTextarea.setSelectionRange(0, text.length); document.execCommand('copy'); window.getSelection().removeAllRanges(); }
+    copyBtn.textContent = '✓ Đã sao chép!';
+    copyBtn.classList.add('copied');
+    setTimeout(() => { copyBtn.textContent = 'Sao chép prompt'; copyBtn.classList.remove('copied'); }, 1800);
+  } catch (err) { promptTextarea.select(); copyBtn.textContent = 'Hãy nhấn Ctrl+C'; }
+});
+
+function doReset() {
+  if (!window.confirm('Bạn có chắc muốn đặt lại toàn bộ tiến độ?\nHành động này không thể hoàn tác.')) return;
+  progress = {};
+  saveProgress(progress);
+  renderStages();
+  renderToc();
+  updateAllProgress();
+  const first = document.querySelector('.stage-body');
+  const firstHeader = document.querySelector('.stage-header');
+  if (first && firstHeader) {
+    first.classList.add('open');
+    firstHeader.setAttribute('aria-expanded', 'true');
+    const c = firstHeader.querySelector('.stage-chevron');
+    if (c) c.textContent = '▲';
   }
 }
-function showToast(message) {
-  const toast = document.getElementById("toast");
-  toast.textContent = message;
-  toast.classList.add("show");
-  clearTimeout(window.__toastTimeout);
-  window.__toastTimeout = setTimeout(() => toast.classList.remove("show"), 3200);
+document.getElementById('reset-btn').addEventListener('click', doReset);
+document.getElementById('reset-btn-sidebar').addEventListener('click', doReset);
+
+function init() {
+  renderStages();
+  renderToc();
+  updateAllProgress();
+  const first = document.querySelector('.stage-body');
+  const firstHeader = document.querySelector('.stage-header');
+  if (first && firstHeader) {
+    first.classList.add('open');
+    firstHeader.setAttribute('aria-expanded', 'true');
+    const c = firstHeader.querySelector('.stage-chevron');
+    if (c) c.textContent = '▲';
+  }
+  initScrollSpy();
 }
-function createLessonPrompt(si, li) {
-  copyPrompt(buildPrompt(si, li));
-}
-document.getElementById("copy-prompt").addEventListener("click", (e) => {
-  const current = stages.findIndex((stage, si) => stage.lessons.some((_, li) => !completed[`${si}-${li}`]));
-  const si = current === -1 ? 0 : current;
-  const li = current === -1 ? 0 : stages[si].lessons.findIndex((_, idx) => !completed[`${si}-${idx}`]);
-  copyPrompt(buildPrompt(si, li), e.currentTarget);
-});
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+else init();
 </script>
+
 </body>
 </html>
