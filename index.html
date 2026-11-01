@@ -1537,7 +1537,7 @@ body.sidebar-open #sidebarBackdrop { opacity: 1; pointer-events: auto; }
             <div>
                 <label class="mlabel">Đường dẫn tệp tin</label>
                 <input class="modal-input" id="appPath" placeholder="index.html">
-                <p id="addPathHint" style="font-size:10px;color:#334155;margin-top:6px;">Chọn thư mục đang chứa dashboard index.html, rồi chọn tệp. Đường dẫn sẽ giữ nguyên toàn bộ thư mục con.</p>
+                <p id="addPathHint" style="font-size:10px;color:#334155;margin-top:6px;">Chọn thư mục cha, rồi chọn tệp. Đường dẫn sẽ gồm tên thư mục đã chọn và toàn bộ thư mục con.</p>
                 <div style="margin-top:10px;">
                     <input type="file" id="addFilePicker" webkitdirectory directory multiple style="display:none;">
                     <div class="file-picker-head">
@@ -1580,7 +1580,7 @@ body.sidebar-open #sidebarBackdrop { opacity: 1; pointer-events: auto; }
             <div>
                 <label class="mlabel">Đường dẫn</label>
                 <input class="modal-input" id="editAppPath" placeholder="index.html">
-                <p id="editPathHint" style="font-size:10px;color:#334155;margin-top:6px;">Chọn thư mục đang chứa dashboard index.html, rồi chọn tệp. Đường dẫn sẽ giữ nguyên toàn bộ thư mục con.</p>
+                <p id="editPathHint" style="font-size:10px;color:#334155;margin-top:6px;">Chọn thư mục cha, rồi chọn tệp. Đường dẫn sẽ gồm tên thư mục đã chọn và toàn bộ thư mục con.</p>
                 <div style="margin-top:10px;">
                     <input type="file" id="editFilePicker" webkitdirectory directory multiple style="display:none;">
                     <div class="file-picker-head">
@@ -3069,7 +3069,7 @@ function setModalType(which, type) {
         pickBtn.textContent = '📁 Chọn thư mục gốc…';
     }
     const hint = document.getElementById(which + 'PathHint');
-    if (hint) hint.textContent = 'Chọn thư mục đang chứa dashboard index.html, rồi chọn tệp. Đường dẫn sẽ giữ nguyên toàn bộ thư mục con.';
+    if (hint) hint.textContent = 'Chọn thư mục cha, rồi chọn tệp. Đường dẫn sẽ gồm tên thư mục đã chọn và toàn bộ thư mục con.';
     const pathInput = document.getElementById(which === 'add' ? 'appPath' : 'editAppPath');
     if (pathInput) {
         if (type === 'pdf') pathInput.placeholder = 'Study_C++/DeThi.pdf';
@@ -3111,7 +3111,7 @@ function updateFileChoices(which) {
     const files = pickedDirectoryFiles[which]
         .map(file => {
             const segments = file.webkitRelativePath.split('/');
-            return { file, path: segments.slice(1).join('/') };
+            return { file, path: segments.join('/') };
         })
         .filter(entry => entry.path && extensionPattern.test(entry.file.name));
     choice.replaceChildren();
