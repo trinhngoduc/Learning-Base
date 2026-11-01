@@ -309,7 +309,14 @@ body {
   flex: 1; min-height: 320px; max-height: 55vh; width: 100%; resize: vertical;
   padding: 16px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm);
   color: var(--text); font-family: monospace; font-size: 13px; line-height: 1.6; outline: none;
+  scrollbar-width: thin; scrollbar-color: var(--border-strong) var(--bg);
 }
+.prompt-textarea::-webkit-scrollbar { width: 10px; height: 10px; }
+.prompt-textarea::-webkit-scrollbar-track { background: var(--bg); border-radius: var(--radius-sm); }
+.prompt-textarea::-webkit-scrollbar-thumb {
+  background: var(--border-strong); border: 2px solid var(--bg); border-radius: 999px;
+}
+.prompt-textarea::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
 .prompt-textarea:focus { border-color: var(--accent); }
 .modal-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 16px; }
 
