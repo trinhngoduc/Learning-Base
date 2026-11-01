@@ -284,8 +284,8 @@ body.sidebar-open #sidebar { transform: translateX(0); }
 #quoteText {
     position: relative;
     padding-left: 0;
-    font-size: clamp(12px, 1.1vw, 15px);   /* ↓ giảm từ 15-19 */
-    font-weight: 500;                        /* ↓ từ 800 → 500 */
+    font-size: clamp(12px, 1.1vw, 15px);
+    font-weight: 500;
     font-style: italic;
     line-height: 1.55; color: #f1f5f9;
     letter-spacing: -0.005em;
@@ -296,12 +296,12 @@ body.sidebar-open #sidebar { transform: translateX(0); }
 #quoteTrans strong,
 .quote-item-text strong,
 .quote-item-trans strong {
-    font-weight: 800;                        /* Ctrl+B → đậm thật */
+    font-weight: 800;
     color: #ffffff;
 }
 #quoteTrans {
-    font-size: clamp(11px, 1vw, 13px);       /* ↓ giảm từ 12.5-15 */
-    font-weight: 500;                        /* ↓ từ 600 */
+    font-size: clamp(11px, 1vw, 13px);
+    font-weight: 500;
     font-style: italic;
     line-height: 1.6; color: #cbd5e1;
     margin-top: 14px; word-break: break-word; white-space: pre-line;
@@ -336,7 +336,7 @@ body.sidebar-open #sidebar { transform: translateX(0); }
 #quoteBlock.empty .quote-attr-inline { display: none; }
 
 #quoteBlock.lang-ja #quoteText {
-    font-size: clamp(16px, 1.6vw, 20px);     /* ↓ giảm */
+    font-size: clamp(16px, 1.6vw, 20px);
     line-height: 1.75; letter-spacing: 0.02em;
 }
 #quoteBlock.lang-ja #quoteTrans { line-height: 1.7; letter-spacing: 0.01em; }
@@ -449,7 +449,6 @@ body.sidebar-open #sidebar { transform: translateX(0); }
     word-break: break-word;
 }
 
-/* Hint nhỏ dưới ô nhập */
 .bold-hint {
     font-size: 10px;
     color: #64748b;
@@ -646,44 +645,6 @@ body.sidebar-open #sidebar { transform: translateX(0); }
     color: #64748b; font-size: 10px; font-weight: 600;
     text-align: right; text-overflow: ellipsis; white-space: nowrap;
 }
-.file-choice-list {
-    display: flex; flex-direction: column; gap: 5px;
-    max-height: 132px; overflow-y: auto;
-    margin-top: 7px; padding: 4px;
-    border: 1px solid rgba(255, 255, 255, 0.07);
-    border-radius: 12px; background: rgba(7, 5, 18, 0.28);
-}
-.file-choice-item {
-    display: flex; align-items: center; gap: 8px;
-    width: 100%; min-width: 0; padding: 6px 8px;
-    border: 1px solid transparent; border-radius: 10px;
-    background: transparent; color: var(--text);
-    text-align: left; cursor: pointer;
-    transition: background 0.16s, border-color 0.16s;
-}
-.file-choice-item:hover {
-    background: rgba(139, 92, 246, 0.12);
-    border-color: rgba(139, 92, 246, 0.18);
-}
-.file-choice-item.selected {
-    background: rgba(139, 92, 246, 0.18);
-    border-color: rgba(167, 139, 250, 0.32);
-}
-.file-choice-icon {
-    display: grid; place-items: center; flex: 0 0 30px;
-    width: 26px; height: 26px; border-radius: 8px;
-    background: rgba(139, 92, 246, 0.13); font-size: 12px;
-}
-.file-choice-name {
-    min-width: 0; overflow: hidden;
-    color: #e2e8f0; font-size: 10px; font-weight: 650;
-    text-overflow: ellipsis; white-space: nowrap;
-}
-.file-choice-check {
-    flex-shrink: 0; margin-left: auto;
-    color: #c4b5fd; font-size: 12px; opacity: 0;
-}
-.file-choice-item.selected .file-choice-check { opacity: 1; }
 textarea.modal-input { resize: vertical; min-height: 60px; line-height: 1.5; }
 .mlabel {
     display: block; margin-bottom: 7px;
@@ -807,12 +768,13 @@ body.sidebar-open #sidebarBackdrop { opacity: 1; pointer-events: auto; }
         -webkit-text-fill-color: #c4b5fd !important;
         color: #c4b5fd !important;
     }
-    #appList { content-visibility: auto; contain-intrinsic-size: auto 300px; }
+    #sidebarFolders { content-visibility: auto; contain-intrinsic-size: auto 300px; }
     #pdfWrapper, #imageWrapper { background: #1a1530 !important; }
     #pdfToolbar, #imageToolbar { background: #241d44 !important; }
     .pdf-page { box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6) !important; }
     #imageDisplay { box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6) !important; }
     .lang-menu { background: #1f1a3a !important; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.8) !important; }
+    .app-tile, .sb-tile { box-shadow: none !important; }
 }
 
 @media (max-width: 767px) {
@@ -1083,6 +1045,245 @@ body.sidebar-open #sidebarBackdrop { opacity: 1; pointer-events: auto; }
     .quote-mark { font-size: 2em; }
     #quoteBlock.lang-ja .quote-mark { font-size: 1.6em; }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   NEW: DASHBOARD GRID (thay #welcomeState cũ)
+   ═══════════════════════════════════════════════════════════ */
+#welcomeState {
+    align-items: stretch; justify-content: flex-start;
+    padding: 0;
+}
+.dashboard-scroll {
+    flex: 1; overflow-y: auto; overflow-x: hidden;
+    padding: 36px 24px 48px; min-height: 0;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+.dashboard-content {
+    max-width: 1100px; margin: 0 auto;
+    position: relative; text-align: center;
+}
+.dashboard-hero { text-align: center; margin-bottom: 28px; position: relative; z-index: 1; }
+.dashboard-search-wrap { margin-bottom: 22px; position: relative; z-index: 1; }
+.dashboard-search {
+    width: 100%; padding: 13px 20px;
+    border-radius: 14px;
+    background: rgba(0, 0, 0, 0.28);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--text); font-family: inherit;
+    font-size: 13px; font-weight: 500;
+    outline: none; transition: border-color 0.18s, box-shadow 0.18s;
+}
+.dashboard-search:focus {
+    border-color: rgba(139, 92, 246, 0.4);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.08);
+}
+.dashboard-search::placeholder { color: #64748b; }
+
+.folder-section { margin-bottom: 22px; position: relative; z-index: 1; }
+.folder-section.dragging-folder { opacity: 0.5; }
+.folder-section.drag-over .folder-head {
+    border-color: rgba(139, 92, 246, 0.8);
+    background: rgba(139, 92, 246, 0.15);
+}
+.folder-head {
+    display: flex; align-items: center; gap: 10px; width: 100%;
+    padding: 9px 14px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px; color: var(--text);
+    font-family: inherit; font-size: 12px; font-weight: 700;
+    cursor: pointer; transition: all 0.15s; text-align: left;
+    margin-bottom: 10px;
+}
+.folder-head[data-drag-type="folder"] { cursor: grab; }
+.folder-head[data-drag-type="folder"]:active { cursor: grabbing; }
+.folder-head:hover {
+    background: rgba(139, 92, 246, 0.08);
+    border-color: rgba(139, 92, 246, 0.2);
+}
+.folder-icon { font-size: 14px; flex-shrink: 0; }
+.folder-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.folder-count {
+    font-size: 9px; font-weight: 800; color: var(--faint);
+    padding: 2px 8px; background: rgba(255, 255, 255, 0.05);
+    border-radius: 99px; flex-shrink: 0;
+}
+.folder-chevron {
+    color: var(--muted); transition: transform 0.2s; flex-shrink: 0;
+}
+.folder-section.collapsed .folder-chevron { transform: rotate(-90deg); }
+.folder-section.collapsed .app-grid { display: none; }
+
+.app-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
+    gap: 12px; padding: 2px; min-height: 20px;
+}
+.app-tile {
+    position: relative; aspect-ratio: 1;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 6px;
+    padding: 12px 8px; border-radius: 16px;
+    background: rgba(37, 31, 69, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--text); font-family: inherit;
+    cursor: pointer; transition: all 0.2s ease; overflow: hidden;
+}
+.app-tile:hover {
+    background: rgba(139, 92, 246, 0.15);
+    border-color: rgba(139, 92, 246, 0.35);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.2);
+}
+.app-tile:active { transform: scale(0.97); }
+.app-tile.dragging { opacity: 0.4; transform: scale(0.95); }
+.app-tile.drag-over, .app-tile.drag-over:hover {
+    border-color: rgba(139, 92, 246, 0.8);
+    background: rgba(139, 92, 246, 0.3);
+    transform: scale(1.05);
+}
+.app-tile.active {
+    background: rgba(139, 92, 246, 0.25);
+    border-color: rgba(196, 181, 253, 0.55);
+    box-shadow: 0 4px 16px rgba(139, 92, 246, 0.3);
+}
+.tile-emoji {
+    font-size: 30px; line-height: 1; user-select: none;
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.3));
+}
+.tile-name {
+    font-size: 10.5px; font-weight: 700; color: #e2e8f0;
+    text-align: center; line-height: 1.25;
+    max-width: 100%; overflow: hidden;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    word-break: break-word;
+}
+.tile-badge {
+    position: absolute; top: 6px; left: 6px;
+    font-size: 8px; font-weight: 800; letter-spacing: 0.04em;
+    padding: 1px 5px; border-radius: 4px;
+}
+.tile-badge-pdf { background: rgba(244, 114, 182, 0.25); color: #f9a8d4; }
+.tile-badge-image { background: rgba(56, 189, 248, 0.25); color: #7dd3fc; }
+.tile-pin {
+    position: absolute; top: 4px; right: 6px; font-size: 12px;
+    opacity: 0; transition: opacity 0.15s, transform 0.15s;
+    cursor: pointer; user-select: none;
+}
+.app-tile:hover .tile-pin { opacity: 0.7; }
+.tile-pin:hover { opacity: 1 !important; transform: scale(1.2); }
+.app-tile.pinned .tile-pin { opacity: 1; filter: drop-shadow(0 0 6px rgba(251, 191, 36, 0.6)); }
+
+.tile-actions {
+    position: absolute; bottom: 4px; right: 4px;
+    display: flex; gap: 2px; opacity: 0; transition: opacity 0.15s;
+}
+.app-tile:hover .tile-actions { opacity: 1; }
+.tile-action {
+    font-size: 10px; padding: 2px 4px; border-radius: 4px;
+    background: rgba(0, 0, 0, 0.5); cursor: pointer;
+    transition: background 0.15s;
+}
+.tile-action:hover { background: rgba(139, 92, 246, 0.6); }
+
+.app-tile.add-tile {
+    background: rgba(139, 92, 246, 0.06);
+    border: 1px dashed rgba(139, 92, 246, 0.3);
+}
+.app-tile.add-tile:hover {
+    background: rgba(139, 92, 246, 0.15);
+    border-color: rgba(139, 92, 246, 0.5);
+}
+.app-tile.add-tile .tile-emoji { font-size: 24px; }
+.app-tile.add-tile .tile-name { color: #c4b5fd; }
+
+.search-empty {
+    padding: 40px 20px; text-align: center;
+    font-size: 12px; color: #64748b; font-style: italic;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SIDEBAR FOLDER BROWSER
+   ═══════════════════════════════════════════════════════════ */
+.sidebar-folder { border-radius: 10px; margin-bottom: 2px; }
+.sidebar-folder-head {
+    display: flex; align-items: center; gap: 6px; width: 100%;
+    padding: 7px 10px; background: transparent;
+    border: 1px solid transparent; color: var(--muted);
+    font-family: inherit; font-size: 11.5px; font-weight: 700;
+    cursor: pointer; transition: all 0.15s; text-align: left;
+    border-radius: 9px;
+}
+.sidebar-folder-head:hover {
+    background: rgba(139, 92, 246, 0.1);
+    border-color: rgba(139, 92, 246, 0.18);
+    color: var(--text);
+}
+.sb-folder-chevron {
+    color: var(--faint); transition: transform 0.2s;
+    flex-shrink: 0; width: 11px; height: 11px;
+}
+.sidebar-folder.open .sb-folder-chevron { transform: rotate(90deg); }
+.sb-folder-icon { font-size: 12px; flex-shrink: 0; }
+.sb-folder-name {
+    flex: 1; min-width: 0; overflow: hidden;
+    text-overflow: ellipsis; white-space: nowrap;
+}
+.sb-folder-count {
+    font-size: 8.5px; font-weight: 800; color: var(--faint);
+    padding: 1px 6px; background: rgba(255, 255, 255, 0.05);
+    border-radius: 99px; flex-shrink: 0;
+}
+.sidebar-folder-body { display: none; padding: 4px 2px 8px; }
+.sidebar-folder.open .sidebar-folder-body { display: block; }
+
+.sb-tile-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4px; padding: 0 2px;
+}
+.sb-tile {
+    position: relative;
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px 8px; border-radius: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--muted); font-family: inherit;
+    font-size: 10px; font-weight: 600;
+    cursor: pointer; transition: all 0.15s;
+    min-width: 0; text-align: left;
+}
+.sb-tile:hover {
+    background: rgba(139, 92, 246, 0.15);
+    border-color: rgba(139, 92, 246, 0.3);
+    color: var(--text);
+}
+.sb-tile.active {
+    background: rgba(139, 92, 246, 0.22);
+    border-color: rgba(139, 92, 246, 0.4);
+    color: #fff;
+}
+.sb-tile-emoji { font-size: 13px; flex-shrink: 0; line-height: 1; user-select: none; }
+.sb-tile-name {
+    font-size: 10px; overflow: hidden;
+    text-overflow: ellipsis; white-space: nowrap;
+    flex: 1; min-width: 0;
+}
+.sb-pin-badge {
+    position: absolute; top: -3px; right: -3px;
+    font-size: 8px; line-height: 1;
+    filter: drop-shadow(0 0 3px rgba(251, 191, 36, 0.8));
+}
+
+@media (max-width: 767px) {
+    #welcomeState { padding: 0 !important; border-radius: 16px; }
+    .dashboard-scroll { padding: 24px 14px 40px; }
+    .app-grid { grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)); gap: 8px; }
+    .tile-emoji { font-size: 26px; }
+    .tile-name { font-size: 9.5px; }
+    .sb-tile-grid { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
@@ -1116,7 +1317,7 @@ body.sidebar-open #sidebarBackdrop { opacity: 1; pointer-events: auto; }
                 <div class="slabel">Thư viện cá nhân</div>
                 <div class="sync-badge" id="syncBadge"><span id="syncBadgeText">Đang tải…</span></div>
             </div>
-            <nav id="appList" style="display:flex;flex-direction:column;gap:4px;"></nav>
+            <div id="sidebarFolders" style="display:flex;flex-direction:column;gap:2px;"></div>
         </div>
     </div>
 
@@ -1166,36 +1367,47 @@ body.sidebar-open #sidebarBackdrop { opacity: 1; pointer-events: auto; }
     </div>
 
     <div id="welcomeState">
-        <div class="glow-vio"></div>
-        <div class="glow-pink"></div>
+        <div class="dashboard-scroll">
+            <div class="dashboard-content">
 
-        <div class="welcome-logo" style="position:relative;z-index:1;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation:spin 60s linear infinite;">
-                <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
-                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-            </svg>
-        </div>
+                <div class="glow-vio"></div>
+                <div class="glow-pink"></div>
 
-        <h2 id="currentDateDisplay" style="font-size:clamp(1.6rem,4vw,2.4rem);font-weight:900;letter-spacing:-0.02em;background:linear-gradient(135deg,#c4b5fd,#e2e8f0 40%,#fbcfe8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;position:relative;z-index:1;">
-            Đang tải...
-        </h2>
+                <!-- HERO: date + quote + stats -->
+                <div class="dashboard-hero">
+                    <div class="welcome-logo" style="position:relative;z-index:1;margin:0 auto 20px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                        </svg>
+                    </div>
+                    <h2 id="currentDateDisplay" style="font-size:clamp(1.4rem,3vw,2rem);font-weight:900;letter-spacing:-0.02em;background:linear-gradient(135deg,#c4b5fd,#e2e8f0 40%,#fbcfe8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;position:relative;z-index:1;">Đang tải...</h2>
+                    <div class="gdiv" style="position:relative;z-index:1;margin:20px auto;"></div>
+                    <div id="quoteBlock" title="Bấm để quản lý câu nói">
+                        <p id="quoteText"></p>
+                        <p id="quoteTrans"></p>
+                        <div id="quoteAttr"></div>
+                    </div>
+                    <div style="display:flex;gap:10px;margin-top:24px;justify-content:center;position:relative;z-index:1;flex-wrap:wrap;">
+                        <div class="stat-pill">
+                            <span id="statAppCount" style="font-size:18px;font-weight:900;color:#a78bfa;">0</span>
+                            <span style="font-size:9px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#475569;">Ứng Dụng</span>
+                        </div>
+                        <div class="stat-pill">
+                            <span id="statFolderCount" style="font-size:18px;font-weight:900;color:#f9a8d4;">0</span>
+                            <span style="font-size:9px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#475569;">Thư Mục</span>
+                        </div>
+                    </div>
+                </div>
 
-        <div class="gdiv" style="position:relative;z-index:1;"></div>
+                <!-- SEARCH -->
+                <div class="dashboard-search-wrap">
+                    <input id="dashboardSearch" class="dashboard-search" placeholder="🔍 Tìm app, khóa học, đường dẫn…" autocomplete="off" />
+                </div>
 
-        <div id="quoteBlock" title="Bấm để quản lý câu nói">
-            <p id="quoteText"></p>
-            <p id="quoteTrans"></p>
-            <div id="quoteAttr"></div>
-        </div>
+                <!-- FOLDER GRID -->
+                <div id="dashboardFolders"></div>
 
-        <div style="display:flex;gap:10px;margin-top:32px;position:relative;z-index:1;">
-            <div class="stat-pill">
-                <span id="statAppCount" style="font-size:18px;font-weight:900;color:#a78bfa;">0</span>
-                <span style="font-size:9px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#475569;">Ứng Dụng</span>
-            </div>
-            <div class="stat-pill">
-                <span style="font-size:18px;font-weight:900;color:#f9a8d4;">Cloud</span>
-                <span style="font-size:9px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#475569;">Lưu trữ</span>
             </div>
         </div>
     </div>
@@ -1260,15 +1472,14 @@ body.sidebar-open #sidebarBackdrop { opacity: 1; pointer-events: auto; }
             <div><label class="mlabel">Tên ứng dụng</label><input class="modal-input" id="appName" placeholder="Ví dụ: Luyện Đề Cambridge"></div>
             <div>
                 <label class="mlabel">Đường dẫn tệp tin</label>
-                <input class="modal-input" id="appPath" placeholder="Study_C++/index.html">
-                <p id="addPathHint" style="font-size:10px;color:#334155;margin-top:6px;">Chọn thư mục chứa tệp cần thêm (VD: Study_C++), rồi chọn tệp trong danh sách.</p>
+                <input class="modal-input" id="appPath" placeholder="index.html">
+                <p id="addPathHint" style="font-size:10px;color:#334155;margin-top:6px;">Chọn một tệp để tự điền tên và đường dẫn tương đối. Trình duyệt không cung cấp đường dẫn tuyệt đối.</p>
                 <div style="margin-top:10px;">
-                    <input type="file" id="addFilePicker" webkitdirectory directory multiple style="display:none;">
+                    <input type="file" id="addFilePicker" style="display:none;">
                     <div class="file-picker-head">
-                        <button type="button" class="btn-sec" id="addPickBtn" onclick="document.getElementById('addFilePicker').click()">📁 Chọn thư mục chứa tệp…</button>
-                        <div class="file-picker-status" id="addFileStatus" aria-live="polite">Chưa chọn thư mục</div>
+                        <button type="button" class="btn-sec" id="addPickBtn" onclick="document.getElementById('addFilePicker').click()">📄 Chọn tệp HTML…</button>
+                        <div class="file-picker-status" id="addFileStatus" aria-live="polite">Chưa chọn tệp</div>
                     </div>
-                    <div class="file-choice-list" id="addFileChoice" role="group" aria-label="Danh sách tệp" style="display:none;"></div>
                 </div>
             </div>
         </div>
@@ -1303,15 +1514,14 @@ body.sidebar-open #sidebarBackdrop { opacity: 1; pointer-events: auto; }
             <div><label class="mlabel">Tên ứng dụng</label><input class="modal-input" id="editAppName"></div>
             <div>
                 <label class="mlabel">Đường dẫn</label>
-                <input class="modal-input" id="editAppPath">
-                <p id="editPathHint" style="font-size:10px;color:#334155;margin-top:6px;">Chọn thư mục chứa tệp cần thêm (VD: Study_C++), rồi chọn tệp trong danh sách.</p>
+                <input class="modal-input" id="editAppPath" placeholder="index.html">
+                <p id="editPathHint" style="font-size:10px;color:#334155;margin-top:6px;">Chọn một tệp để tự điền tên và đường dẫn tương đối. Trình duyệt không cung cấp đường dẫn tuyệt đối.</p>
                 <div style="margin-top:10px;">
-                    <input type="file" id="editFilePicker" webkitdirectory directory multiple style="display:none;">
+                    <input type="file" id="editFilePicker" style="display:none;">
                     <div class="file-picker-head">
-                        <button type="button" class="btn-sec" id="editPickBtn" onclick="document.getElementById('editFilePicker').click()">📁 Chọn thư mục chứa tệp…</button>
-                        <div class="file-picker-status" id="editFileStatus" aria-live="polite">Chưa chọn thư mục</div>
+                        <button type="button" class="btn-sec" id="editPickBtn" onclick="document.getElementById('editFilePicker').click()">📄 Chọn tệp HTML…</button>
+                        <div class="file-picker-status" id="editFileStatus" aria-live="polite">Chưa chọn tệp</div>
                     </div>
-                    <div class="file-choice-list" id="editFileChoice" role="group" aria-label="Danh sách tệp" style="display:none;"></div>
                 </div>
             </div>
         </div>
@@ -1324,7 +1534,7 @@ body.sidebar-open #sidebarBackdrop { opacity: 1; pointer-events: auto; }
 
 <!-- MODAL: XÓA -->
 <div id="deleteConfirmModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:60;align-items:center;justify-content:center;padding:16px;">
-    <div class="modal-card" style="width:100%;max-width:360px;padding:28px;text-align:center;">
+    <div class="modal-card" style="width:100%;maxpadding:28px;text-align:center;">
         <div style="width:56px;height:56px;border-radius:9999px;background:rgba(185,28,28,0.15);border:1px solid rgba(248,113,113,0.15);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
@@ -1488,7 +1698,7 @@ function escapeHtml(str) {
         .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
-/* ⭐ Parse **bold** thành <strong>bold</strong> (đã escape HTML trước) */
+/* Parse **bold** thành <strong>bold</strong> */
 function parseBoldMarkdown(text) {
     const escaped = escapeHtml(text);
     return escaped.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
@@ -1500,6 +1710,7 @@ const LS_FIELDS = 'my_learning_hub_fields_v3';
 const LS_QUOTES = 'my_learning_hub_quotes_v2';
 const LS_SIDEBAR_W = 'sidebar_width_v1';
 const LS_SIDEBAR_OPEN = 'sidebar_open_v1';
+const LS_FOLDER_STATE = 'lb_folder_state_v1';
 
 let userApps = [];
 try { const c = JSON.parse(localStorage.getItem(LS_APPS)); if (Array.isArray(c)) userApps = c; } catch (e) {}
@@ -1507,6 +1718,8 @@ let fieldState = {};
 try { const f = JSON.parse(localStorage.getItem(LS_FIELDS)); if (f && typeof f === 'object') fieldState = f; } catch (e) {}
 let userQuotes = [];
 try { const q = JSON.parse(localStorage.getItem(LS_QUOTES)); if (Array.isArray(q)) userQuotes = q; } catch (e) {}
+let folderState = {};
+try { folderState = JSON.parse(localStorage.getItem(LS_FOLDER_STATE) || '{}'); } catch (e) {}
 
 let currentActiveAppId = null;
 let currentAppKind = null;
@@ -1519,6 +1732,14 @@ let currentIframeDoc = null;
 let _applyingFromCloud = false;
 let editingQuoteId = null;
 let currentQuoteSource = 'personal';
+let dashQuery = '';
+let folderOrder = [];
+try {
+    const savedFolderOrder = JSON.parse(localStorage.getItem('lb_folder_order_v1') || '[]');
+    if (Array.isArray(savedFolderOrder)) folderOrder = savedFolderOrder.filter(name => typeof name === 'string');
+} catch (e) {}
+let draggedAppId = null;
+let draggedFolderName = null;
 
 /* D) SYNC BADGE */
 let savingTimeout = null;
@@ -1540,6 +1761,7 @@ function flashSaving() {
 function saveAppsLocal() { try { localStorage.setItem(LS_APPS, JSON.stringify(userApps)); } catch (e) {} }
 function saveFieldsLocal() { try { localStorage.setItem(LS_FIELDS, JSON.stringify(fieldState)); } catch (e) {} }
 function saveQuotesLocal() { try { localStorage.setItem(LS_QUOTES, JSON.stringify(userQuotes)); } catch (e) {} }
+function saveFolderStateLocal() { try { localStorage.setItem(LS_FOLDER_STATE, JSON.stringify(folderState)); } catch (e) {} }
 
 /* F) CLOUD */
 function saveAppsCloud() {
@@ -1640,7 +1862,59 @@ QUOTES_DOC.onSnapshot(function (doc) {
     }
 }, err => { console.warn(err); cloudQuotesLoaded = true; loadRandomQuote(); });
 
-/* I) IFRAME SCANNER */
+/* I) FOLDER HELPERS */
+function getAppFolder(app) {
+    if (!app) return 'Khác';
+    if (app.folder && String(app.folder).trim()) return String(app.folder).trim();
+    return 'Khác';
+}
+function groupAppsByFolder(apps) {
+    const map = new Map();
+    apps.forEach(app => {
+        const f = getAppFolder(app);
+        if (!map.has(f)) map.set(f, []);
+        map.get(f).push(app);
+    });
+    map.forEach(list => {
+        list.sort((a, b) => {
+            const orderA = Number.isFinite(a.order) ? a.order : Infinity;
+            const orderB = Number.isFinite(b.order) ? b.order : Infinity;
+            return orderA - orderB;
+        });
+    });
+    return Array.from(map.entries()).sort((a, b) => {
+        if (a[0] === 'Khác') return 1;
+        if (b[0] === 'Khác') return -1;
+        const idxA = folderOrder.indexOf(a[0]);
+        const idxB = folderOrder.indexOf(b[0]);
+        if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+        if (idxA !== -1) return -1;
+        if (idxB !== -1) return 1;
+        return a[0].localeCompare(b[0], 'vi');
+    });
+}
+function togglePin(id) {
+    const app = userApps.find(a => a.id === id);
+    if (!app) return;
+    app.pinned = !app.pinned;
+    persistApps();
+    renderApps();
+    showToast(app.pinned ? '⭐ Đã ghim' : 'Đã bỏ ghim');
+}
+function toggleFolder(name, scope) {
+    const key = scope + ':' + name;
+    folderState[key] = !folderState[key];
+    saveFolderStateLocal();
+    if (scope === 'dash') renderDashboard();
+    else renderSidebar();
+}
+function isFolderOpen(name, scope, defaultOpen) {
+    const key = scope + ':' + name;
+    if (folderState[key] === undefined) return defaultOpen;
+    return !!folderState[key];
+}
+
+/* I2) IFRAME SCANNER */
 const SKIP_TYPES = ['file', 'submit', 'button', 'reset', 'image', 'password', 'hidden'];
 function isField(el) {
     if (!el || !el.tagName) return false;
@@ -2083,14 +2357,12 @@ function detectLang(text) {
 }
 function getQuoteMarks(lang) {
     if (lang === 'ja') return { open: '「', close: '」' };
-    if (lang === 'en') return { open: '\u201C', close: '\u201D' };   /* " " */
-    return { open: '\u201C', close: '\u201D' };                       /* Việt cũng dùng */
+    if (lang === 'en') return { open: '\u201C', close: '\u201D' };
+    return { open: '\u201C', close: '\u201D' };
 }
 function isWorkSource(type) { return type === 'movie' || type === 'book' || type === 'music'; }
 
-function alignQuoteOpeningMark() {
-    /* Dấu ngoặc được neo bằng CSS, không đo lại theo ký tự đầu tiên. */
-}
+function alignQuoteOpeningMark() {}
 
 function alignQuoteCreditToLongestLine() {
     const block = document.getElementById('quoteBlock');
@@ -2285,7 +2557,7 @@ function goHome() {
     currentIframeDoc = null;
     if (currentFieldObserver) { currentFieldObserver.disconnect(); currentFieldObserver = null; }
     closePdf(); closeImage();
-    document.querySelectorAll('.app-item').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.app-tile, .sb-tile').forEach(b => b.classList.remove('active'));
 }
 
 /* P) TYPE */
@@ -2307,55 +2579,303 @@ function getAppKind(app) {
     return 'html';
 }
 
-/* Q) APPS */
-function renderApps() {
-    const list = document.getElementById('appList');
-    if (!list) return;
-    list.innerHTML = '';
-    if (userApps.length === 0) {
-        const empty = document.createElement('div');
-        empty.style.cssText = 'padding:18px 10px;text-align:center;font-size:11px;color:#475569;font-style:italic;line-height:1.6;';
-        empty.textContent = 'Chưa có ứng dụng nào. Bấm "Thêm Ứng Dụng Mới" ở dưới nhé!';
-        list.appendChild(empty);
-    }
-    userApps.forEach((app, idx) => {
-        const kind = getAppKind(app);
-        const tag = kind === 'pdf' ? '<span class="pdf-tag">PDF</span>'
-                  : kind === 'image' ? '<span class="img-tag">ẢNH</span>' : '';
-        const btn = document.createElement('div');
-        btn.className = 'app-item' + (app.id === currentActiveAppId ? ' active' : '');
-        btn.draggable = true;
-        btn.dataset.index = idx;
-        btn.dataset.id = app.id;
-        btn.innerHTML =
-            '<div style="display:flex;align-items:center;gap:8px;overflow:hidden;flex:1;min-width:0;">' +
-                '<span class="drag-handle" style="font-size:12px;">⠿</span>' +
-                '<span style="font-size:20px;flex-shrink:0;line-height:1;user-select:none;">' + escapeHtml(app.emoji) + '</span>' +
-                '<div style="overflow:hidden;min-width:0;">' +
-                    '<div style="font-size:12px;font-weight:700;color:#e2e8f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + escapeHtml(app.name) + tag + '</div>' +
-                    '<div style="font-size:10px;color:#475569;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px;">' + escapeHtml(app.path) + '</div>' +
-                '</div>' +
-            '</div>' +
-            '<div class="app-actions">' +
-                '<button class="icon-btn edit-btn" title="Sửa" style="padding:5px;border-radius:9px;">' + svgIcon('edit', 12) + '</button>' +
-                '<button class="icon-btn danger del-btn" title="Xóa" style="padding:5px;border-radius:9px;">' + svgIcon('trash', 12) + '</button>' +
-            '</div>';
-        btn.querySelector('.edit-btn').addEventListener('click', ev => { ev.stopPropagation(); openEditModal(app.id); });
-        btn.querySelector('.del-btn').addEventListener('click', ev => { ev.stopPropagation(); askDeleteApp(app.id, app.name); });
-        btn.addEventListener('dragstart', handleDragStart);
-        btn.addEventListener('dragend', handleDragEnd);
-        btn.addEventListener('dragover', handleDragOver);
-        btn.addEventListener('dragleave', handleDragLeave);
-        btn.addEventListener('drop', handleDrop);
-        btn.addEventListener('click', e => {
-            if (e.target.closest('.edit-btn') || e.target.closest('.del-btn') || e.target.closest('.app-actions')) return;
-            if (btn.classList.contains('dragging')) return;
-            activateApp(app, btn);
-        });
-        list.appendChild(btn);
-    });
-    document.getElementById('statAppCount').textContent = userApps.length;
+/* Q) RENDER — APP TILES */
+function dashTileHTML(app, folderName) {
+    const kind = getAppKind(app);
+    const badge = kind === 'pdf' ? '<span class="tile-badge tile-badge-pdf">PDF</span>'
+                : kind === 'image' ? '<span class="tile-badge tile-badge-image">ẢNH</span>' : '';
+    const tileFolder = folderName || getAppFolder(app);
+    const draggable = !app.pinned && !dashQuery.trim();
+    return '<button class="app-tile' + (app.id === currentActiveAppId ? ' active' : '') + (app.pinned ? ' pinned' : '') + '"' +
+        (draggable ? ' draggable="true" data-drag-type="app" data-folder="' + escapeHtml(tileFolder) + '"' : '') +
+        ' data-id="' + escapeHtml(app.id) + '" title="' + escapeHtml(app.name + ' — ' + app.path) + '">' +
+        '<span class="tile-pin" data-pin-id="' + escapeHtml(app.id) + '" title="' + (app.pinned ? 'Bỏ ghim' : 'Ghim') + '">⭐</span>' +
+        '<span class="tile-emoji">' + escapeHtml(app.emoji || '💡') + '</span>' +
+        '<span class="tile-name">' + escapeHtml(app.name) + '</span>' +
+        badge +
+        '<span class="tile-actions">' +
+            '<span class="tile-action" data-edit-id="' + escapeHtml(app.id) + '" title="Sửa">✏️</span>' +
+            '<span class="tile-action" data-del-id="' + escapeHtml(app.id) + '" title="Xóa">🗑️</span>' +
+        '</span>' +
+    '</button>';
 }
+
+function sbTileHTML(app) {
+    return '<button class="sb-tile' + (app.id === currentActiveAppId ? ' active' : '') + '" data-id="' + escapeHtml(app.id) + '" title="' + escapeHtml(app.name) + '">' +
+        '<span class="sb-tile-emoji">' + escapeHtml(app.emoji || '💡') + '</span>' +
+        '<span class="sb-tile-name">' + escapeHtml(app.name) + '</span>' +
+        (app.pinned ? '<span class="sb-pin-badge">⭐</span>' : '') +
+    '</button>';
+}
+
+function addTileHTML() {
+    return '<button class="app-tile add-tile" onclick="openAddModal()" title="Thêm ứng dụng mới">' +
+        '<span class="tile-emoji">➕</span>' +
+        '<span class="tile-name">Thêm</span>' +
+    '</button>';
+}
+
+function renderDashboard() {
+    const root = document.getElementById('dashboardFolders');
+    if (!root) return;
+
+    const q = dashQuery.trim().toLowerCase();
+    const match = a => !q
+        || (a.name || '').toLowerCase().includes(q)
+        || (a.path || '').toLowerCase().includes(q);
+
+    const visible = userApps.filter(match);
+    const pinned = visible.filter(a => a.pinned);
+    const unpinned = visible.filter(a => !a.pinned);
+    const groups = groupAppsByFolder(unpinned);
+
+    let html = '';
+
+    if (pinned.length > 0) {
+        const open = isFolderOpen('⭐ Pinned', 'dash', true);
+        html += '<section class="folder-section' + (open ? '' : ' collapsed') + '" data-folder="⭐ Pinned">' +
+            '<button class="folder-head" data-toggle-folder="⭐ Pinned">' +
+                '<span class="folder-icon">⭐</span>' +
+                '<span class="folder-name">Đã ghim</span>' +
+                '<span class="folder-count">' + pinned.length + '</span>' +
+                '<svg class="folder-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>' +
+            '</button>' +
+            '<div class="app-grid" data-folder="⭐ Pinned">' + pinned.map(app => dashTileHTML(app, '⭐ Pinned')).join('') + '</div>' +
+        '</section>';
+    }
+
+    groups.forEach(([name, apps]) => {
+        const open = isFolderOpen(name, 'dash', true);
+        html += '<section class="folder-section' + (open ? '' : ' collapsed') + '" data-folder="' + escapeHtml(name) + '">' +
+            '<button class="folder-head" data-toggle-folder="' + escapeHtml(name) + '"' + (!q && name !== 'Khác' ? ' draggable="true" data-drag-type="folder"' : '') + '>' +
+                '<span class="folder-icon">📂</span>' +
+                '<span class="folder-name">' + escapeHtml(name) + '</span>' +
+                '<span class="folder-count">' + apps.length + '</span>' +
+                '<svg class="folder-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>' +
+            '</button>' +
+            '<div class="app-grid" data-folder="' + escapeHtml(name) + '">' + apps.map(app => dashTileHTML(app, name)).join('') + '</div>' +
+        '</section>';
+    });
+
+    if (!html) {
+        if (q) {
+            html = '<div class="search-empty">Không tìm thấy app nào khớp "<b>' + escapeHtml(dashQuery) + '</b>"</div>';
+        } else {
+            html = '<section class="folder-section"><div class="app-grid" style="justify-content:center;">' +
+                addTileHTML() + '</div></section>' +
+                '<div class="search-empty">Chưa có app nào. Bấm tile ➕ để thêm ứng dụng đầu tiên!</div>';
+        }
+    } else if (!q) {
+        /* Thêm tile + vào cuối nhóm cuối cùng */
+        const lastGridEnd = html.lastIndexOf('</div></section>');
+        if (lastGridEnd > -1) {
+            html = html.substring(0, lastGridEnd) + addTileHTML() + html.substring(lastGridEnd);
+        }
+    }
+
+    root.innerHTML = html;
+
+    const stat = document.getElementById('statAppCount');
+    if (stat) stat.textContent = userApps.length;
+    const fcount = document.getElementById('statFolderCount');
+    if (fcount) fcount.textContent = groupAppsByFolder(userApps.filter(a => !a.pinned)).length;
+}
+
+function clearDashboardDragStyles(root) {
+    root.querySelectorAll('.dragging, .drag-over, .dragging-folder').forEach(element => {
+        element.classList.remove('dragging', 'drag-over', 'dragging-folder');
+    });
+}
+
+function clearDashboardDropTargets(root) {
+    root.querySelectorAll('.drag-over').forEach(element => element.classList.remove('drag-over'));
+}
+
+function handleDashboardDragStart(e) {
+    const tile = e.target.closest('.app-tile[data-drag-type="app"][data-id]');
+    if (tile) {
+        draggedAppId = tile.dataset.id;
+        draggedFolderName = null;
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', draggedAppId);
+        tile.classList.add('dragging');
+        return;
+    }
+
+    const folderHead = e.target.closest('.folder-head[data-drag-type="folder"]');
+    if (!folderHead) return;
+    draggedFolderName = folderHead.dataset.toggleFolder;
+    draggedAppId = null;
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', draggedFolderName);
+    folderHead.closest('.folder-section').classList.add('dragging-folder');
+}
+
+function handleDashboardDragEnd(e) {
+    clearDashboardDragStyles(e.currentTarget);
+    draggedAppId = null;
+    draggedFolderName = null;
+}
+
+function handleDashboardDragOver(e) {
+    if (!draggedAppId && !draggedFolderName) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    clearDashboardDropTargets(e.currentTarget);
+
+    if (draggedAppId) {
+        const tile = e.target.closest('.app-tile[data-drag-type="app"][data-id]');
+        if (tile && tile.dataset.id !== draggedAppId) {
+            tile.classList.add('drag-over');
+            return;
+        }
+        const section = e.target.closest('.folder-section[data-folder]');
+        if (section && section.dataset.folder !== '⭐ Pinned') section.classList.add('drag-over');
+        return;
+    }
+
+    const folderHead = e.target.closest('.folder-head[data-drag-type="folder"]');
+    if (folderHead && folderHead.dataset.toggleFolder !== draggedFolderName) {
+        folderHead.closest('.folder-section').classList.add('drag-over');
+    }
+}
+
+function handleDashboardDrop(e) {
+    if (!draggedAppId && !draggedFolderName) return;
+    e.preventDefault();
+    e.stopPropagation();
+
+    const appId = draggedAppId;
+    const folderName = draggedFolderName;
+    draggedAppId = null;
+    draggedFolderName = null;
+    clearDashboardDragStyles(e.currentTarget);
+
+    if (appId) {
+        const targetTile = e.target.closest('.app-tile[data-drag-type="app"][data-id]');
+        const targetGrid = e.target.closest('.app-grid[data-folder]');
+        const targetSection = e.target.closest('.folder-section[data-folder]');
+        const targetFolder = targetTile ? targetTile.dataset.folder
+            : targetGrid ? targetGrid.dataset.folder
+            : targetSection ? targetSection.dataset.folder : null;
+        if (!targetFolder || targetFolder === '⭐ Pinned') return;
+        const targetId = targetTile ? targetTile.dataset.id : '__end__';
+        if (targetId !== appId) handleAppDrop(appId, targetId, targetFolder);
+        return;
+    }
+
+    const targetHead = e.target.closest('.folder-head[data-drag-type="folder"]');
+    if (targetHead) handleFolderDrop(folderName, targetHead.dataset.toggleFolder);
+}
+
+function handleAppDrop(draggedId, targetId, targetFolder) {
+    const draggedApp = userApps.find(app => app.id === draggedId);
+    if (!draggedApp || draggedApp.pinned || targetFolder === '⭐ Pinned') return;
+
+    const sourceFolder = getAppFolder(draggedApp);
+    const groups = groupAppsByFolder(userApps.filter(app => !app.pinned));
+    const sourceGroup = groups.find(([name]) => name === sourceFolder);
+    const targetGroup = groups.find(([name]) => name === targetFolder);
+    if (!sourceGroup || !targetGroup) return;
+
+    const sourceApps = sourceGroup[1].slice();
+    const draggedIndex = sourceApps.findIndex(app => app.id === draggedId);
+    if (draggedIndex === -1) return;
+    sourceApps.splice(draggedIndex, 1);
+
+    const targetApps = sourceFolder === targetFolder ? sourceApps : targetGroup[1].slice();
+    const targetIndex = targetId === '__end__'
+        ? targetApps.length
+        : targetApps.findIndex(app => app.id === targetId);
+    if (targetIndex === -1) return;
+
+    if (sourceFolder !== targetFolder) draggedApp.folder = targetFolder;
+    targetApps.splice(targetIndex, 0, draggedApp);
+    sourceApps.forEach((app, index) => { app.order = index; });
+    targetApps.forEach((app, index) => { app.order = index; });
+
+    persistApps();
+    renderApps();
+}
+
+function handleFolderDrop(draggedName, targetName) {
+    if (!draggedName || !targetName || draggedName === targetName || draggedName === 'Khác') return;
+
+    const names = groupAppsByFolder(userApps.filter(app => !app.pinned)).map(([name]) => name);
+    const nextOrder = folderOrder.filter(name => names.includes(name));
+    names.forEach(name => { if (!nextOrder.includes(name)) nextOrder.push(name); });
+    const draggedIndex = nextOrder.indexOf(draggedName);
+    if (draggedIndex === -1 || !names.includes(targetName)) return;
+
+    nextOrder.splice(draggedIndex, 1);
+    const targetIndex = nextOrder.indexOf(targetName);
+    nextOrder.splice(targetIndex, 0, draggedName);
+
+    try {
+        localStorage.setItem('lb_folder_order_v1', JSON.stringify(nextOrder));
+    } catch (error) {
+        console.error(error);
+        showToast('Không thể lưu thứ tự thư mục trên thiết bị.', 'error');
+        return;
+    }
+    folderOrder = nextOrder;
+    renderApps();
+    showToast('Đã sắp xếp lại thư mục!');
+}
+
+function renderSidebar() {
+    const root = document.getElementById('sidebarFolders');
+    if (!root) return;
+
+    const pinned = userApps.filter(a => a.pinned);
+    const unpinned = userApps.filter(a => !a.pinned);
+    const groups = groupAppsByFolder(unpinned);
+
+    let html = '';
+
+    if (pinned.length > 0) {
+        const open = isFolderOpen('⭐ Pinned', 'side', true);
+        html += '<div class="sidebar-folder' + (open ? ' open' : '') + '">' +
+            '<button class="sidebar-folder-head" data-toggle-folder="⭐ Pinned">' +
+                '<svg class="sb-folder-chevron" xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>' +
+                '<span class="sb-folder-icon">⭐</span>' +
+                '<span class="sb-folder-name">Đã ghim</span>' +
+                '<span class="sb-folder-count">' + pinned.length + '</span>' +
+            '</button>' +
+            '<div class="sidebar-folder-body"><div class="sb-tile-grid">' +
+                pinned.map(sbTileHTML).join('') +
+            '</div></div>' +
+        '</div>';
+    }
+
+    groups.forEach(([name, apps]) => {
+        const open = isFolderOpen(name, 'side', true);
+        html += '<div class="sidebar-folder' + (open ? ' open' : '') + '">' +
+            '<button class="sidebar-folder-head" data-toggle-folder="' + escapeHtml(name) + '">' +
+                '<svg class="sb-folder-chevron" xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>' +
+                '<span class="sb-folder-icon">📂</span>' +
+                '<span class="sb-folder-name">' + escapeHtml(name) + '</span>' +
+                '<span class="sb-folder-count">' + apps.length + '</span>' +
+            '</button>' +
+            '<div class="sidebar-folder-body"><div class="sb-tile-grid">' +
+                apps.map(sbTileHTML).join('') +
+            '</div></div>' +
+        '</div>';
+    });
+
+    if (!html) {
+        html = '<div style="padding:16px 8px;text-align:center;font-size:11px;color:#475569;font-style:italic;line-height:1.6;">Chưa có ứng dụng nào.<br>Bấm "Thêm" ở dưới nhé!</div>';
+    }
+
+    root.innerHTML = html;
+}
+
+/* Wrapper — mọi call renderApps() cũ vẫn hoạt động */
+function renderApps() {
+    renderSidebar();
+    renderDashboard();
+}
+
 function buildAppChip(emoji, name) {
     return '<span class="app-chip">' +
         '<span style="font-size:14px;flex-shrink:0;line-height:1;user-select:none;">' + escapeHtml(emoji || '💡') + '</span>' +
@@ -2368,8 +2888,8 @@ function activateApp(app, el) {
     document.body.classList.add('has-active-app');
     currentActiveAppId = app.id;
     currentAppKind = kind;
-    document.querySelectorAll('.app-item').forEach(b => b.classList.remove('active'));
-    if (el) el.classList.add('active');
+    document.querySelectorAll('.app-tile, .sb-tile').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('[data-id="' + app.id + '"]').forEach(b => b.classList.add('active'));
     document.getElementById('currentAppName').innerHTML = buildAppChip(app.emoji, app.name);
     closeSidebar();
     document.getElementById('welcomeState').style.display = 'none';
@@ -2397,47 +2917,14 @@ function activateApp(app, el) {
     }
 }
 
-/* R) DRAG */
-function handleDragStart(e) {
-    const item = e.target.closest('.app-item');
-    if (!item) return;
-    if (e.target.closest('.edit-btn') || e.target.closest('.del-btn') || e.target.closest('.app-actions')) { e.preventDefault(); return; }
-    dragIndex = parseInt(item.dataset.index, 10);
-    item.classList.add('dragging');
-    e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/plain', String(dragIndex));
-}
-function handleDragEnd(e) {
-    const item = e.target.closest('.app-item');
-    if (item) item.classList.remove('dragging');
-    document.querySelectorAll('.app-item.drag-over').forEach(el => el.classList.remove('drag-over'));
-    dragIndex = null;
-}
-function handleDragOver(e) {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
-    const target = e.target.closest('.app-item');
-    if (target && !target.classList.contains('dragging')) target.classList.add('drag-over');
-}
-function handleDragLeave(e) {
-    const target = e.target.closest('.app-item');
-    if (target) target.classList.remove('drag-over');
-}
-function handleDrop(e) {
-    e.preventDefault();
-    const target = e.target.closest('.app-item');
-    if (!target) return;
-    target.classList.remove('drag-over');
-    const dropIdx = parseInt(target.dataset.index, 10);
-    if (dragIndex === null || dragIndex === dropIdx || isNaN(dropIdx)) return;
-    const moved = userApps.splice(dragIndex, 1)[0];
-    userApps.splice(dropIdx, 0, moved);
-    persistApps(); renderApps();
-    showToast('Đã sắp xếp lại thứ tự!');
-}
+/* R) DRAG — không còn dùng vì đã dùng grid, nhưng giữ hàm để tương thích */
+function handleDragStart(e) { e.preventDefault && e.preventDefault(); }
+function handleDragEnd(e) {}
+function handleDragOver(e) {}
+function handleDragLeave(e) {}
+function handleDrop(e) {}
 
 /* S) APP MODAL */
-const pickedDirectoryFiles = { add: [], edit: [] };
 function setModalType(which, type) {
     if (type !== 'html' && type !== 'pdf' && type !== 'image') type = 'html';
     const hidden = document.getElementById(which + 'Type');
@@ -2452,23 +2939,18 @@ function setModalType(which, type) {
         else picker.accept = '.html,.htm,text/html';
     }
     if (pickBtn) {
-        if (type === 'pdf') pickBtn.textContent = '📁 Chọn thư mục chứa PDF…';
-        else if (type === 'image') pickBtn.textContent = '📁 Chọn thư mục chứa ảnh…';
-        else pickBtn.textContent = '📁 Chọn thư mục chứa HTML…';
+        if (type === 'pdf') pickBtn.textContent = '📄 Chọn tệp PDF…';
+        else if (type === 'image') pickBtn.textContent = '🖼️ Chọn tệp ảnh…';
+        else pickBtn.textContent = '📄 Chọn tệp HTML…';
     }
     const hint = document.getElementById(which + 'PathHint');
-    if (hint) {
-        if (type === 'pdf') hint.textContent = 'Chọn thư mục chứa tệp PDF (VD: Study_C++), rồi chọn tệp trong danh sách.';
-        else if (type === 'image') hint.textContent = 'Chọn thư mục chứa ảnh (VD: Study_C++), rồi chọn tệp trong danh sách.';
-        else hint.textContent = 'Chọn thư mục chứa tệp HTML (VD: Study_C++), rồi chọn tệp trong danh sách.';
-    }
+    if (hint) hint.textContent = 'Chọn một tệp để tự điền tên và đường dẫn tương đối. Trình duyệt không cung cấp đường dẫn tuyệt đối.';
     const pathInput = document.getElementById(which === 'add' ? 'appPath' : 'editAppPath');
     if (pathInput) {
-        if (type === 'pdf') pathInput.placeholder = 'Study_C++/DeThi.pdf';
-        else if (type === 'image') pathInput.placeholder = 'Study_C++/avatar.png';
-        else pathInput.placeholder = 'Study_C++/index.html';
+        if (type === 'pdf') pathInput.placeholder = 'DeThi.pdf';
+        else if (type === 'image') pathInput.placeholder = 'avatar.png';
+        else pathInput.placeholder = 'index.html';
     }
-    updateFileChoices(which);
 }
 function pickFileEmoji(fileName, type) {
     const n = String(fileName || '').toLowerCase();
@@ -2479,100 +2961,34 @@ function pickFileEmoji(fileName, type) {
 }
 function handleFilePick(which) {
     const picker = document.getElementById(which + 'FilePicker');
-    if (!picker || !picker.files || !picker.files[0]) return;
-    const files = Array.from(picker.files);
+    const file = picker && picker.files && picker.files[0];
+    if (!file) return;
     picker.value = '';
-    if (files.some(file => !String(file.webkitRelativePath || '').includes('/'))) {
-        clearPickedDirectory(which);
-        showToast('Trình duyệt không cung cấp đường dẫn thư mục. Hãy nhập đường dẫn tương đối trong ô bên trên.', 'error');
-        return;
-    }
-    pickedDirectoryFiles[which] = files;
-    updateFileChoices(which);
-}
-function updateFileChoices(which) {
     const type = document.getElementById(which + 'Type').value;
-    const choice = document.getElementById(which + 'FileChoice');
-    const status = document.getElementById(which + 'FileStatus');
-    if (!choice) return;
     const extensionPattern = type === 'pdf'
         ? /\.pdf$/i
         : type === 'image'
             ? /\.(png|jpe?g|gif|webp|svg|bmp|avif|ico)$/i
             : /\.html?$/i;
-    const files = pickedDirectoryFiles[which]
-        .map(file => {
-            const segments = file.webkitRelativePath.split('/');
-            return { file, path: segments.join('/') };
-        })
-        .filter(entry => extensionPattern.test(entry.file.name));
-    choice.replaceChildren();
-    choice.style.display = files.length ? '' : 'none';
-    if (!files.length) {
-        if (status) {
-            status.textContent = pickedDirectoryFiles[which].length
-                ? 'Không tìm thấy tệp phù hợp trong thư mục đã chọn'
-                : 'Chưa chọn thư mục';
-        }
+    if (!extensionPattern.test(file.name)) {
+        showToast('Tệp không đúng loại ứng dụng đã chọn.', 'error');
         return;
     }
-
-    if (status) {
-        const folderName = pickedDirectoryFiles[which][0].webkitRelativePath.split('/')[0];
-        status.textContent = '📂 ' + folderName + ' · ' + files.length + ' tệp';
-    }
-    files.forEach(entry => {
-        const item = document.createElement('button');
-        item.type = 'button';
-        item.className = 'file-choice-item';
-        item.setAttribute('aria-pressed', 'false');
-
-        const icon = document.createElement('span');
-        icon.className = 'file-choice-icon';
-        icon.textContent = pickFileEmoji(entry.file.name, type);
-
-        const name = document.createElement('span');
-        name.className = 'file-choice-name';
-        name.textContent = entry.path;
-        name.title = entry.path;
-
-        const check = document.createElement('span');
-        check.className = 'file-choice-check';
-        check.setAttribute('aria-hidden', 'true');
-        check.textContent = '✓';
-
-        item.append(icon, name, check);
-        item.onclick = () => {
-            choice.querySelectorAll('.file-choice-item').forEach(button => {
-                const selected = button === item;
-                button.classList.toggle('selected', selected);
-                button.setAttribute('aria-pressed', String(selected));
-            });
-            const pathInput = document.getElementById(which === 'add' ? 'appPath' : 'editAppPath');
-            if (pathInput) pathInput.value = entry.path;
-            const nameInput = document.getElementById(which === 'add' ? 'appName' : 'editAppName');
-            if (nameInput && !nameInput.value.trim()) nameInput.value = entry.file.name.replace(/\.[^.]+$/, '');
-            const emojiInput = document.getElementById(which === 'add' ? 'appEmoji' : 'editAppEmoji');
-            if (emojiInput && !emojiInput.value.trim()) emojiInput.value = pickFileEmoji(entry.file.name, type);
-        };
-        choice.appendChild(item);
-    });
-}
-function clearPickedDirectory(which) {
-    pickedDirectoryFiles[which] = [];
-    const choice = document.getElementById(which + 'FileChoice');
-    if (choice) {
-        choice.replaceChildren();
-        choice.style.display = 'none';
-    }
+    const relativePath = file.webkitRelativePath || file.name;
+    const pathInput = document.getElementById(which === 'add' ? 'appPath' : 'editAppPath');
+    const nameInput = document.getElementById(which === 'add' ? 'appName' : 'editAppName');
+    const emojiInput = document.getElementById(which === 'add' ? 'appEmoji' : 'editAppEmoji');
+    if (pathInput) pathInput.value = relativePath;
+    if (nameInput) nameInput.value = file.name.replace(/\.[^.]+$/, '');
+    if (emojiInput && !emojiInput.value.trim()) emojiInput.value = pickFileEmoji(file.name, type);
     const status = document.getElementById(which + 'FileStatus');
-    if (status) status.textContent = 'Chưa chọn thư mục';
+    if (status) status.textContent = 'Đã chọn: ' + file.name;
 }
 function openAddModal() { setModalType('add', 'html'); document.getElementById('addModal').style.display = 'flex'; setTimeout(() => document.getElementById('appName').focus(), 60); }
 function closeAddModal() {
     document.getElementById('addModal').style.display = 'none';
     ['appEmoji', 'appName', 'appPath'].forEach(id => document.getElementById(id).value = '');
-    clearPickedDirectory('add');
+    document.getElementById('addFileStatus').textContent = 'Chưa chọn tệp';
     setModalType('add', 'html');
 }
 function openEditModal(id) {
@@ -2588,7 +3004,7 @@ function openEditModal(id) {
 }
 function closeEditModal() {
     document.getElementById('editModal').style.display = 'none';
-    clearPickedDirectory('edit');
+    document.getElementById('editFileStatus').textContent = 'Chưa chọn tệp';
 }
 function saveEditApp() {
     const id = document.getElementById('editAppId').value;
@@ -2628,7 +3044,7 @@ function saveNewApp() {
     const path = document.getElementById('appPath').value.trim();
     const type = document.getElementById('addType').value;
     if (!name || !path) { showToast('Điền đủ thông tin nhé!', 'error'); return; }
-    userApps.push({ id: 'app-' + Date.now(), emoji, name, path, type });
+    userApps.push({ id: 'app-' + Date.now(), emoji, name, path, type, pinned: false });
     persistApps(); renderApps();
     closeAddModal();
     showToast('Đã thêm ứng dụng!');
@@ -2661,14 +3077,12 @@ document.addEventListener('click', function (e) {
     if (dd && !dd.contains(e.target)) dd.classList.remove('open');
 });
 
-/* ⭐ U1) Ctrl+B — bọc đoạn chọn với ** ** */
+/* Ctrl+B — bọc đoạn chọn với ** ** */
 function toggleBoldInTextarea(ta) {
     const start = ta.selectionStart;
     const end = ta.selectionEnd;
     const value = ta.value;
     const selected = value.substring(start, end);
-
-    // Đã có ** ở 2 bên → bỏ đậm
     const before = value.substring(Math.max(0, start - 2), start);
     const after = value.substring(end, end + 2);
 
@@ -2677,7 +3091,6 @@ function toggleBoldInTextarea(ta) {
         ta.selectionStart = Math.max(0, start - 2);
         ta.selectionEnd = Math.max(0, end - 2);
     } else {
-        // Thêm ** ở 2 bên (nếu không có selection thì chèn **|** và đặt cursor ở giữa)
         ta.value = value.substring(0, start) + '**' + selected + '**' + value.substring(end);
         if (selected.length === 0) {
             ta.selectionStart = ta.selectionEnd = start + 2;
@@ -2885,6 +3298,32 @@ function showToast(msg, type) {
     }, 3000);
 }
 
+/* Delegation handler cho dashboard + sidebar */
+function handleTileAreaClick(e) {
+    const scope = e.currentTarget.id === 'sidebarFolders' ? 'side' : 'dash';
+    const toggle = e.target.closest('[data-toggle-folder]');
+    if (toggle) {
+        toggleFolder(toggle.dataset.toggleFolder, scope);
+        return;
+    }
+    const pin = e.target.closest('[data-pin-id]');
+    if (pin) { e.stopPropagation(); togglePin(pin.dataset.pinId); return; }
+    const edit = e.target.closest('[data-edit-id]');
+    if (edit) { e.stopPropagation(); openEditModal(edit.dataset.editId); return; }
+    const del = e.target.closest('[data-del-id]');
+    if (del) {
+        e.stopPropagation();
+        const app = userApps.find(a => a.id === del.dataset.delId);
+        if (app) askDeleteApp(app.id, app.name);
+        return;
+    }
+    const tile = e.target.closest('.app-tile[data-id], .sb-tile[data-id]');
+    if (tile) {
+        const app = userApps.find(a => a.id === tile.dataset.id);
+        if (app) activateApp(app, tile);
+    }
+}
+
 /* W) BOOT */
 document.addEventListener('DOMContentLoaded', function () {
     loadSidebarWidth();
@@ -2906,6 +3345,26 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.getElementById('appFrame').addEventListener('load', bindIframe);
 
+    /* Event delegation cho dashboard + sidebar */
+    const dashboardFolders = document.getElementById('dashboardFolders');
+    dashboardFolders.addEventListener('click', handleTileAreaClick);
+    dashboardFolders.addEventListener('dragstart', handleDashboardDragStart);
+    dashboardFolders.addEventListener('dragend', handleDashboardDragEnd);
+    dashboardFolders.addEventListener('dragover', handleDashboardDragOver);
+    dashboardFolders.addEventListener('drop', handleDashboardDrop);
+    document.getElementById('sidebarFolders').addEventListener('click', handleTileAreaClick);
+
+    /* Dashboard search */
+    const ds = document.getElementById('dashboardSearch');
+    if (ds) {
+        let deb;
+        ds.addEventListener('input', function () {
+            clearTimeout(deb);
+            const v = this.value;
+            deb = setTimeout(() => { dashQuery = v; renderDashboard(); }, 120);
+        });
+    }
+
     /* Click vào khối quote → mở modal quản lý câu nói */
     document.getElementById('quoteBlock').addEventListener('click', function (e) {
         const sel = window.getSelection();
@@ -2914,7 +3373,7 @@ document.addEventListener('DOMContentLoaded', function () {
         openQuotesModal();
     });
 
-    /* ⭐ Ctrl+B trong 2 ô nhập câu → bọc ** ** */
+    /* Ctrl+B trong 2 ô nhập câu */
     const quoteTextEl = document.getElementById('quoteInputText');
     const quoteTransEl = document.getElementById('quoteInputTrans');
     [quoteTextEl, quoteTransEl].forEach(ta => {
@@ -3014,6 +3473,18 @@ document.addEventListener('DOMContentLoaded', function () {
             if (tag === 'input' || tag === 'textarea' || tag === 'select' || (t && t.isContentEditable)) return;
             e.preventDefault();
             toggleSidebar();
+        }
+        /* Ctrl+K để focus search dashboard */
+        if ((e.key === 'k' || e.key === 'K') && (e.ctrlKey || e.metaKey)) {
+            const searchInput = document.getElementById('dashboardSearch');
+            if (searchInput) {
+                const welcome = document.getElementById('welcomeState');
+                if (welcome && welcome.style.display !== 'none') {
+                    e.preventDefault();
+                    searchInput.focus();
+                    searchInput.select();
+                }
+            }
         }
     });
 
