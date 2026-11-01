@@ -10,18 +10,16 @@
    THEME — Dark Navy Workspace
    ============================================================ */
 :root {
-  --bg: #070b14;           /* Nền xanh đen cực tối */
+  --bg: #070b14;
   --bg-elevated: #0b111e;
-  --card: #0f172a;         /* Màu thẻ */
+  --card: #0f172a;
   --card-hover: #162036;
-  --border: #1e293b;       /* Viền thẻ xanh xám */
+  --border: #1e293b;
   --border-strong: #334155;
-  
-  --text: #f8fafc;         /* Trắng sáng */
-  --text-muted: #94a3b8;   /* Xám xanh */
+  --text: #f8fafc;
+  --text-muted: #94a3b8;
   --text-dim: #64748b;
-  
-  --accent: #3b82f6;       /* Xanh dương chủ đạo */
+  --accent: #3b82f6;
   --accent-2: #8b5cf6;
   --accent-glow: rgba(59, 130, 246, 0.15);
   --accent-line: rgba(59, 130, 246, 0.4);
@@ -29,7 +27,6 @@
   --success-bg: rgba(16, 185, 129, 0.1);
   --danger: #ef4444;
   --danger-bg: rgba(239, 68, 68, 0.1);
-  
   --radius: 12px;
   --radius-sm: 8px;
   --header-h: 64px;
@@ -47,92 +44,52 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
-/* ============================================================
-   HEADER
-   ============================================================ */
+/* HEADER */
 .site-header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  height: var(--header-h);
-  background: rgba(7, 11, 20, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  position: sticky; top: 0; z-index: 100; height: var(--header-h);
+  background: rgba(7, 11, 20, 0.85); backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
 }
 .header-inner {
-  max-width: 1360px;
-  margin: 0 auto;
-  padding: 0 24px;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  max-width: 1360px; margin: 0 auto; padding: 0 24px; height: 100%;
+  display: flex; align-items: center; justify-content: space-between;
 }
 .brand { display: flex; align-items: center; gap: 12px; }
 .brand-mark {
-  width: 36px; height: 36px;
-  display: flex; align-items: center; justify-content: center;
-  border-radius: 8px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
+  border-radius: 8px; background: linear-gradient(135deg, var(--accent), var(--accent-2));
   color: #fff; font-weight: 800; font-size: 13px;
 }
 .brand-text { display: flex; flex-direction: column; line-height: 1.2; }
 .brand-name { font-weight: 700; font-size: 15px; }
 .brand-sub { font-size: 11px; color: var(--text-muted); letter-spacing: 0.3px; }
-
 .header-badge {
-  font-size: 12px;
-  color: var(--text-muted);
-  border: 1px solid var(--border-strong);
-  padding: 4px 12px;
-  border-radius: 999px;
-  background: var(--card);
+  font-size: 12px; color: var(--text-muted); border: 1px solid var(--border-strong);
+  padding: 4px 12px; border-radius: 999px; background: var(--card);
 }
 
-/* ============================================================
-   LAYOUT
-   ============================================================ */
+/* LAYOUT */
 .app-layout {
-  max-width: 1360px;
-  margin: 0 auto;
-  padding: 32px 24px 80px;
-  display: grid;
-  grid-template-columns: 260px 1fr;
-  gap: 40px;
-  align-items: start;
+  max-width: 1360px; margin: 0 auto; padding: 32px 24px 80px;
+  display: grid; grid-template-columns: 260px 1fr; gap: 40px; align-items: start;
 }
 
-/* ============================================================
-   SIDEBAR / TOC
-   ============================================================ */
+/* SIDEBAR */
 .toc {
-  position: sticky;
-  top: calc(var(--header-h) + 24px);
-  max-height: calc(100vh - var(--header-h) - 48px);
-  overflow-y: auto;
-  border-right: 1px solid var(--border);
-  padding-right: 16px;
-  scrollbar-width: thin;
-  scrollbar-color: var(--border-strong) transparent;
+  position: sticky; top: calc(var(--header-h) + 24px);
+  max-height: calc(100vh - var(--header-h) - 48px); overflow-y: auto;
+  border-right: 1px solid var(--border); padding-right: 16px;
 }
-.toc::-webkit-scrollbar { width: 4px; }
-.toc::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
-
 .toc-head {
   display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 12px; padding-bottom: 12px;
-  border-bottom: 1px solid var(--border);
+  margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border);
 }
 .toc-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); }
-.toc-count { font-size: 11px; color: var(--text-dim); font-family: monospace; }
-
 .toc-nav { display: flex; flex-direction: column; gap: 2px; }
 .toc-link {
-  display: flex; align-items: center; gap: 12px;
-  padding: 10px 12px; border-radius: 8px;
-  color: var(--text-muted); text-decoration: none; font-size: 14px;
-  transition: all 0.15s ease; position: relative;
+  display: flex; align-items: center; gap: 12px; padding: 10px 12px;
+  border-radius: 8px; color: var(--text-muted); text-decoration: none;
+  font-size: 14px; transition: all 0.15s ease; position: relative;
 }
 .toc-link:hover { color: var(--text); background: var(--card); }
 .toc-link::before {
@@ -141,105 +98,52 @@ body {
 }
 .toc-link.active { color: var(--text); background: var(--card); font-weight: 600; }
 .toc-link.active::before { background: var(--accent); }
-.toc-link.active .toc-num { color: var(--accent); }
 .toc-num { font-family: monospace; font-size: 12px; font-weight: 700; color: var(--text-dim); min-width: 20px; }
 .toc-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .toc-progress { font-family: monospace; font-size: 11px; color: var(--text-dim); }
-.toc-link.active .toc-progress { color: var(--accent); }
 .toc-footer { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
 
-/* ============================================================
-   MAIN CONTENT
-   ============================================================ */
+/* MAIN CONTENT */
 .main-content { min-width: 0; }
+.workspace-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px; }
+.workspace-title { font-size: 12px; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 4px; display: block; }
+.workspace-sub { font-size: 13px; color: var(--text-muted); }
 
-/* Workspace Header */
-.workspace-header {
-  display: flex; justify-content: space-between; align-items: flex-end;
-  margin-bottom: 24px;
-}
-.workspace-title {
-  font-size: 12px; font-weight: 800; color: var(--accent);
-  text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 4px; display: block;
-}
-.workspace-sub {
-  font-size: 13px; color: var(--text-muted);
-}
-
-/* Hero Section */
-.hero {
-  display: flex; justify-content: space-between; align-items: center;
-  gap: 24px; margin-bottom: 32px;
-}
+/* Hero */
+.hero { display: flex; justify-content: space-between; align-items: center; gap: 24px; margin-bottom: 32px; }
 .hero-text { max-width: 680px; }
-.hero-tag {
-  font-size: 11px; font-weight: 700; color: var(--accent);
-  text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; display: block;
-}
-.hero h1 {
-  font-size: clamp(28px, 4vw, 38px); font-weight: 800; line-height: 1.2;
-  margin-bottom: 16px; color: var(--text);
-}
-.hero p {
-  font-size: 15px; color: var(--text-muted); line-height: 1.6;
-}
+.hero-tag { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; display: block; }
+.hero h1 { font-size: clamp(28px, 4vw, 38px); font-weight: 800; line-height: 1.2; margin-bottom: 16px; color: var(--text); }
+.hero p { font-size: 15px; color: var(--text-muted); line-height: 1.6; }
 .hero-icon {
-  width: 80px; height: 80px; border-radius: 16px;
-  background: var(--card); border: 1px solid var(--border-strong);
-  display: flex; align-items: center; justify-content: center;
+  width: 80px; height: 80px; border-radius: 16px; background: var(--card);
+  border: 1px solid var(--border-strong); display: flex; align-items: center; justify-content: center;
   flex-shrink: 0; box-shadow: 0 4px 20px rgba(0,0,0,0.2);
 }
 .hero-icon svg { width: 36px; height: 36px; stroke: var(--text-muted); stroke-width: 2; fill: none; }
 
-/* Stats Cards */
-.stats-row {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
-  margin-bottom: 48px;
-}
-.stat-card {
-  background: var(--card); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 20px 24px;
-  display: flex; flex-direction: column;
-}
+/* Stats */
+.stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 48px; }
+.stat-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; display: flex; flex-direction: column; }
 .stat-label { font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; }
 .stat-sub { font-size: 12px; color: var(--text-dim); margin-bottom: 16px; }
 .stat-value { font-size: 28px; font-weight: 800; color: var(--text); line-height: 1; margin-top: auto; }
-
-/* Custom Progress Bar inside Card 2 */
-.stat-progress-bar {
-  height: 4px; background: var(--border); border-radius: 99px; margin-top: 12px; overflow: hidden;
-}
-.stat-progress-fill {
-  height: 100%; width: 0%; background: var(--accent); border-radius: 99px;
-  transition: width 0.4s ease;
-}
+.stat-progress-bar { height: 4px; background: var(--border); border-radius: 99px; margin-top: 12px; overflow: hidden; }
+.stat-progress-fill { height: 100%; width: 0%; background: var(--accent); border-radius: 99px; transition: width 0.4s ease; }
 
 /* Buttons */
-.btn {
-  padding: 8px 16px; border-radius: var(--radius-sm); font-weight: 600; font-size: 13px;
-  cursor: pointer; border: 1px solid transparent; transition: all 0.15s; font-family: inherit;
-}
+.btn { padding: 8px 16px; border-radius: var(--radius-sm); font-weight: 600; font-size: 13px; cursor: pointer; border: 1px solid transparent; transition: all 0.15s; font-family: inherit; }
 .btn-danger { background: var(--danger-bg); color: var(--danger); border: 1px solid rgba(239,68,68,0.3); }
 .btn-danger:hover { background: rgba(239,68,68,0.2); }
-.btn-primary {
-  background: var(--accent); color: #fff; border: none; padding: 10px 20px; font-size: 14px;
-}
+.btn-primary { background: var(--accent); color: #fff; border: none; padding: 10px 20px; font-size: 14px; }
 .btn-primary:hover { filter: brightness(1.1); }
 .btn-primary.copied { background: var(--success); }
-.btn-secondary {
-  background: var(--card); color: var(--text); border: 1px solid var(--border);
-  padding: 10px 20px; font-size: 14px;
-}
+.btn-secondary { background: var(--card); color: var(--text); border: 1px solid var(--border); padding: 10px 20px; font-size: 14px; }
 .btn-secondary:hover { background: var(--card-hover); }
 
-/* ============================================================
-   STAGE SECTIONS
-   ============================================================ */
+/* Stages */
 .stage-section { scroll-margin-top: calc(var(--header-h) + 20px); margin-bottom: 40px; }
-.stage-header {
-  display: flex; align-items: flex-start; gap: 18px; padding: 24px 0 16px;
-  border-top: 1px solid var(--border); cursor: pointer; user-select: none;
-}
+.stage-header { display: flex; align-items: flex-start; gap: 18px; padding: 24px 0 16px; border-top: 1px solid var(--border); cursor: pointer; user-select: none; }
 .stage-header:hover .stage-info h2 { color: var(--accent); }
 .stage-num { font-family: monospace; font-size: 13px; font-weight: 700; color: var(--accent); padding-top: 4px; min-width: 32px; }
 .stage-info { flex: 1; }
@@ -249,105 +153,61 @@ body {
 .stage-progress { font-family: monospace; font-size: 13px; font-weight: 700; color: var(--text-muted); }
 .stage-progress.done { color: var(--success); }
 .stage-chevron { font-size: 12px; color: var(--text-dim); transition: transform 0.2s; }
-
 .stage-body { display: none; padding-left: 50px; }
 .stage-body.open { display: block; animation: fadeIn 0.25s ease; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
 
-/* Lesson Items */
+/* Lessons */
 .lessons-list { display: flex; flex-direction: column; gap: 8px; padding-bottom: 12px; }
-.lesson {
-  display: flex; align-items: center; gap: 16px; padding: 16px 18px;
-  background: var(--bg-elevated); border: 1px solid var(--border);
-  border-radius: var(--radius-sm); transition: all 0.15s;
-}
+.lesson { display: flex; align-items: center; gap: 16px; padding: 16px 18px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-sm); transition: all 0.15s; }
 .lesson:hover { border-color: var(--border-strong); }
 .lesson.completed { background: var(--success-bg); border-color: rgba(16,185,129,0.3); }
 .lesson.completed .lesson-info h3 { text-decoration: line-through; color: var(--text-muted); }
-
 .lesson-check { display: flex; align-items: center; cursor: pointer; position: relative; width: 22px; height: 22px; flex-shrink: 0; }
 .lesson-check input { position: absolute; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
-.checkmark {
-  width: 22px; height: 22px; border: 2px solid var(--border-strong); border-radius: 6px;
-  display: flex; align-items: center; justify-content: center; background: var(--card);
-  transition: all 0.15s; pointer-events: none;
-}
-.checkmark::after {
-  content: ""; width: 4px; height: 9px; border: solid #fff; border-width: 0 2px 2px 0;
-  transform: rotate(45deg) scale(0); transition: transform 0.15s; margin-top: -2px;
-}
+.checkmark { width: 22px; height: 22px; border: 2px solid var(--border-strong); border-radius: 6px; display: flex; align-items: center; justify-content: center; background: var(--card); transition: all 0.15s; pointer-events: none; }
+.checkmark::after { content: ""; width: 4px; height: 9px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg) scale(0); transition: transform 0.15s; margin-top: -2px; }
 .lesson-check input:checked + .checkmark { background: var(--success); border-color: var(--success); }
 .lesson-check input:checked + .checkmark::after { transform: rotate(45deg) scale(1); }
-
 .lesson-info { flex: 1; min-width: 0; }
 .lesson-info h3 { font-size: 15px; font-weight: 600; margin-bottom: 2px; color: var(--text); }
 .lesson-info p { font-size: 13px; color: var(--text-muted); }
-
-.lesson-btn {
-  flex-shrink: 0; padding: 8px 14px; border-radius: 6px;
-  border: 1px solid var(--accent-line); background: var(--accent-glow);
-  color: var(--accent); font-size: 13px; font-weight: 600; cursor: pointer;
-  transition: all 0.15s; font-family: inherit;
-}
+.lesson-btn { flex-shrink: 0; padding: 8px 14px; border-radius: 6px; border: 1px solid var(--accent-line); background: var(--accent-glow); color: var(--accent); font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s; font-family: inherit; }
 .lesson-btn:hover { background: rgba(59,130,246,0.25); border-color: var(--accent); }
 
-/* ============================================================
-   MODAL
-   ============================================================ */
+/* Modal */
 .modal { display: none; position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.8); padding: 20px; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
 .modal.open { display: flex; }
-.modal-content {
-  background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius);
-  width: 100%; max-width: 820px; max-height: 92vh; display: flex; flex-direction: column;
-  padding: 24px; animation: fadeIn 0.2s ease;
-}
+.modal-content { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius); width: 100%; max-width: 820px; max-height: 92vh; display: flex; flex-direction: column; padding: 24px; animation: fadeIn 0.2s ease; }
 .modal-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 8px; }
 .modal-header h3 { font-size: 18px; font-weight: 700; color: var(--text); }
 .modal-close { background: none; border: none; color: var(--text-muted); font-size: 28px; cursor: pointer; }
-.modal-hint { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
-.prompt-textarea {
-  flex: 1; min-height: 320px; max-height: 55vh; width: 100%; resize: vertical;
-  padding: 16px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm);
-  color: var(--text); font-family: monospace; font-size: 13px; line-height: 1.6; outline: none;
-  scrollbar-width: thin; scrollbar-color: var(--border-strong) var(--bg);
-}
-.prompt-textarea::-webkit-scrollbar { width: 10px; height: 10px; }
-.prompt-textarea::-webkit-scrollbar-track { background: var(--bg); border-radius: var(--radius-sm); }
-.prompt-textarea::-webkit-scrollbar-thumb {
-  background: var(--border-strong); border: 2px solid var(--bg); border-radius: 999px;
-}
-.prompt-textarea::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
+.modal-hint { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.5; }
+.prompt-textarea { flex: 1; min-height: 320px; max-height: 55vh; width: 100%; resize: vertical; padding: 16px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); font-family: monospace; font-size: 13px; line-height: 1.6; outline: none; }
 .prompt-textarea:focus { border-color: var(--accent); }
 .modal-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 16px; }
 
-/* ============================================================
-   RESPONSIVE
-   ============================================================ */
 @media (max-width: 960px) {
   .app-layout { grid-template-columns: 1fr; gap: 24px; padding: 24px 16px 60px; }
   .toc { position: static; max-height: none; border-right: none; border-bottom: 1px solid var(--border); padding-right: 0; padding-bottom: 20px; }
   .toc-nav { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
-  .toc-progress { display: none; }
   .toc-footer { display: none; }
   .stage-body { padding-left: 0; }
   .stats-row { grid-template-columns: 1fr; }
   .hero { flex-direction: column; align-items: flex-start; }
   .hero-icon { display: none; }
 }
-
 @media (max-width: 640px) {
   .header-badge { display: none; }
   .toc-nav { grid-template-columns: 1fr; }
   .lesson { flex-wrap: wrap; padding: 14px; }
   .lesson-info { flex-basis: calc(100% - 38px); }
   .lesson-btn { width: 100%; margin-top: 8px; text-align: center; }
-  .modal-content { padding: 16px; }
 }
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <header class="site-header">
   <div class="header-inner">
     <div class="brand">
@@ -362,11 +222,9 @@ body {
 </header>
 
 <div class="app-layout">
-  <!-- SIDEBAR / TOC -->
   <aside class="toc">
     <div class="toc-head">
       <span class="toc-title">Mục lục</span>
-      <span class="toc-count">07 chặng</span>
     </div>
     <nav class="toc-nav" id="toc-nav"></nav>
     <div class="toc-footer">
@@ -374,10 +232,7 @@ body {
     </div>
   </aside>
 
-  <!-- MAIN -->
   <main class="main-content">
-    
-    <!-- NEW HERO SECTION -->
     <div class="workspace-header">
       <div>
         <span class="workspace-title">YOUR LEARNING WORKSPACE</span>
@@ -392,14 +247,10 @@ body {
         <p>Đây là bản đồ chỉ đường, không phải một khóa học nhồi lý thuyết. Đi từng bài, đưa nhiệm vụ cho AI hướng dẫn và đánh dấu khi bạn thật sự làm được.</p>
       </div>
       <div class="hero-icon">
-        <!-- Icon 4 ô vuông -->
-        <svg viewBox="0 0 24 24">
-          <path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+        <svg viewBox="0 0 24 24"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
     </div>
 
-    <!-- NEW STATS CARDS -->
     <div class="stats-row">
       <div class="stat-card">
         <div class="stat-label">Bài đã hoàn thành</div>
@@ -410,9 +261,7 @@ body {
         <div class="stat-label">Tiến độ tổng thể</div>
         <div class="stat-sub">Tự đánh dấu</div>
         <div class="stat-value" id="stat-pct">0%</div>
-        <div class="stat-progress-bar">
-          <div class="stat-progress-fill" id="stat-progress-fill"></div>
-        </div>
+        <div class="stat-progress-bar"><div class="stat-progress-fill" id="stat-progress-fill"></div></div>
       </div>
       <div class="stat-card">
         <div class="stat-label">Chặng đang học</div>
@@ -421,14 +270,11 @@ body {
       </div>
     </div>
 
-    <!-- ROADMAP -->
     <div id="stages-container"></div>
     
-    <!-- Nút reset dưới đáy cho mobile -->
     <div style="margin-top: 32px; display: flex; justify-content: flex-end;">
       <button id="reset-btn" class="btn btn-danger">Đặt lại tiến độ</button>
     </div>
-
   </main>
 </div>
 
@@ -438,7 +284,7 @@ body {
       <h3 id="modal-title">Học bài với AI</h3>
       <button id="modal-close" class="modal-close">&times;</button>
     </div>
-    <p class="modal-hint">Bạn có thể chỉnh sửa prompt bên dưới trước khi sao chép. Sau đó dán vào ChatGPT, DeepSeek hoặc AI bạn muốn dùng.</p>
+    <p class="modal-hint"><strong>Prompt thông minh:</strong> Đã được thiết lập để AI dạy bạn theo từng bước. AI sẽ đưa lý thuyết ngắn, giao bài tập, và <strong>dừng lại</strong> chờ bạn code xong mới đi tiếp. Hãy copy và dán vào ChatGPT/DeepSeek.</p>
     <textarea id="prompt-text" class="prompt-textarea" spellcheck="false"></textarea>
     <div class="modal-actions">
       <button id="copy-btn" class="btn btn-primary">Sao chép prompt</button>
@@ -448,7 +294,7 @@ body {
 </div>
 
 <script>
-/* DỮ LIỆU LỘ TRÌNH */
+/* DỮ LIỆU LỘ TRÌNH (GIỮ NGUYÊN) */
 const ROADMAP = [
   {
     id: 'stage-1', title: 'Nền tảng C++', description: 'Hiểu chương trình và viết được những dòng code đầu tiên.',
@@ -515,55 +361,67 @@ const ROADMAP = [
   }
 ];
 
+/* ============================================================
+   PROMPT TEMPLATE MỚI (ÉP AI CHIA NHỎ BƯỚC & DỪNG LẠI)
+   ============================================================ */
 const PROMPT_TEMPLATE = `# VAI TRÒ
 
-Bạn là giảng viên hướng dẫn C++ chuyên về ứng dụng kỹ thuật, có khả năng dạy người mới bắt đầu bằng phương pháp thực hành.
+Bạn là một Giảng viên C++ Kỹ thuật. Bạn đang hướng dẫn một học viên thực hành từng bước trên VS Code.
 
 # BỐI CẢNH NGƯỜI HỌC
 
-- Đang học C++ theo định hướng kỹ thuật.
-- Đã cài đặt VS Code và trình biên dịch C++.
-- Viết, biên dịch và chạy chương trình trực tiếp trong VS Code.
+- Đã cài VS Code và trình biên dịch C++.
 - Có kiến thức lập trình cơ bản nhưng không mặc định đã thành thạo C++.
-- Muốn học thông qua thực hành thay vì chỉ đọc lý thuyết.
+- Muốn học thông qua thực hành, viết code trực tiếp.
 
-# THÔNG TIN BÀI HỌC
+# THÔNG TIN BÀI HỌC HIỆN TẠI
 
 - Chặng: {STAGE_TITLE}
 - Tên bài: {LESSON_TITLE}
 - Mục tiêu bài học: {LESSON_GOAL}
-- Mô tả nội dung: {LESSON_DESC}
-- Kiến thức trọng tâm:
+- Kiến thức trọng tâm: 
 {LESSON_CONCEPTS}
-- Nhiệm vụ thực hành bắt buộc cuối bài: {LESSON_PRACTICE}
-- Các bài đã đánh dấu hoàn thành (chỉ mang tính tham khảo, không đồng nghĩa đã thành thạo):{COMPLETED}
+- Nhiệm vụ thực hành cuối bài: {LESSON_PRACTICE}
+- Các bài đã đánh dấu hoàn thành (chỉ để tham khảo, KHÔNG mặc định học viên đã nhớ hết):{COMPLETED}
 
-# NGUYÊN TẮC GIẢNG DẠY
+# GIỚI HẠN PHẠM VI KIẾN THỨC (CỰC KỲ QUAN TRỌNG)
 
-1. Không bắt đầu bằng bài kiểm tra đầu vào.
-2. Không yêu cầu người học kể lại kiến thức từ các cuộc trò chuyện trước.
-3. Không giả định rằng bài đã đánh dấu hoàn thành đồng nghĩa với việc đã thành thạo.
-4. Bắt đầu ngay bằng một vấn đề thực tế có thể giải quyết bằng C++.
-5. Giải thích lý thuyết ngắn gọn ngay khi cần sử dụng.
-6. Hướng dẫn theo trình tự: Ý tưởng → Ví dụ → Thực hành → Nhận xét → Mở rộng.
-7. Không đưa toàn bộ code hoàn chỉnh ngay từ đầu.
-8. Để người học tự suy nghĩ và viết code.
-9. Khi người học gặp khó khăn, đưa gợi ý theo từng mức độ.
-10. Khi sửa code, giải thích nguyên nhân lỗi và cách khắc phục.
-11. Ưu tiên ví dụ liên quan đến kỹ thuật, cảm biến, động cơ, robot và tính toán.
-12. Cuối bài phải có một thử thách thực hành tổng hợp.
+1. Bạn CHỈ ĐƯỢC PHÉP giảng dạy các "Kiến thức trọng tâm" đã liệt kê ở trên.
+2. TUYỆT ĐỐI KHÔNG dạy trước kiến thức của các bài sau (Ví dụ: bài này chưa dạy mảng/vector, hãy dùng biến rời; chưa dạy hàm, hãy viết trực tiếp trong main; chưa dạy vòng lặp, hãy dùng if/else).
+3. Không lan man lý thuyết sách vở. Chỉ giải thích vừa đủ để áp dụng cho bài tập.
+
+# QUY TRÌNH GIẢNG DẠY VI MÔ (MICRO-STEPS)
+
+Bạn phải hướng dẫn học viên đi qua đúng 3 bước dưới đây. Mỗi lần phản hồi, bạn CHỈ ĐƯỢC PHÉP thực hiện MỘT bước, sau đó phải DỪNG LẠI chờ học viên.
+
+[BƯỚC 1] Khái niệm tối thiểu & Code mẫu:
+- Giải thích ngắn gọn (dưới 150 chữ) khái niệm cốt lõi.
+- Viết 1 đoạn code mẫu siêu ngắn (5-10 dòng) liên quan đến kỹ thuật.
+- DỪNG LẠI. Yêu cầu học viên copy vào VS Code, chạy thử và báo lại kết quả.
+
+[BƯỚC 2] Thực hành có hướng dẫn:
+- Khi học viên báo đã chạy xong Bước 1, hãy giao 1 bài tập nhỏ (yêu cầu tự sửa/thêm 2-3 dòng code).
+- DỪNG LẠI. Chờ học viên gửi code của họ.
+
+[BƯỚC 3] Thử thách tổng hợp:
+- Khi học viên làm xong Bước 2, giao bài tập cuối cùng: {LESSON_PRACTICE}
+- Đưa ra 2-3 gợi ý (chỉ gợi ý ý tưởng, KHÔNG viết code giải sẵn).
+
+# QUY TẮC DỪNG (STOP CONDITIONS)
+
+- Dừng ngay lập tức sau khi đưa ra yêu cầu thực hành. KHÔNG tự mình viết tiếp code giải.
+- KHÔNG viết code hoàn chỉnh cho Bước 2 và Bước 3. Chỉ cung cấp pseudo-code hoặc giải thích logic.
+- Khi học viên báo lỗi, hãy chỉ ra dòng bị lỗi và giải thích nguyên nhân, KHÔNG viết lại toàn bộ file cho họ.
 
 # MÔI TRƯỜNG
 
-- Sử dụng VS Code.
+- Sử dụng VS Code, biên dịch bằng g++ hoặc extension C/C++.
 - Không hướng dẫn cài đặt lại môi trường.
-- Không sử dụng compiler online.
-- Không sử dụng giả lập hoặc máy chủ.
-- Không yêu cầu cài thêm công cụ nếu không thực sự cần thiết.
+- Không dùng compiler online.
 
 # BẮT ĐẦU
 
-Hãy bắt đầu ngay bằng bài học được cung cấp. Chỉ trình bày lượng kiến thức cần thiết cho bước đầu tiên, sau đó giao nhiệm vụ thực hành để người học tự viết chương trình.`;
+Hãy chào học viên và thực hiện [BƯỚC 1] ngay bây giờ.`;
 
 const STORAGE_KEY = 'cpp-lab-progress-v1';
 let progress = loadProgress();
@@ -598,7 +456,7 @@ function generatePrompt(lesson, stage, completedTitles) {
   const completedText = (completedTitles && completedTitles.length) ? '\n' + completedTitles.map(t => '  - ' + t).join('\n') : ' Chưa có bài nào được đánh dấu.';
   const map = {
     '{STAGE_TITLE}': stage.title, '{LESSON_TITLE}': lesson.title, '{LESSON_GOAL}': lesson.goal,
-    '{LESSON_DESC}': lesson.desc, '{LESSON_CONCEPTS}': conceptsText, '{LESSON_PRACTICE}': lesson.practice, '{COMPLETED}': completedText
+    '{LESSON_CONCEPTS}': conceptsText, '{LESSON_PRACTICE}': lesson.practice, '{COMPLETED}': completedText
   };
   let r = PROMPT_TEMPLATE;
   Object.keys(map).forEach(k => { r = r.split(k).join(map[k]); });
@@ -728,12 +586,10 @@ function updateAllProgress() {
   const done = completedCount();
   const pct = total === 0 ? 0 : Math.round((done / total) * 100);
 
-  // Cập nhật các thẻ Stats mới
   document.getElementById('stat-done').textContent = `${done} / ${total}`;
   document.getElementById('stat-pct').textContent = `${pct}%`;
   document.getElementById('stat-progress-fill').style.width = `${pct}%`;
 
-  // Xác định chặng đang học
   let currentStageName = "Chặng 1";
   for (let i = 0; i < ROADMAP.length; i++) {
     const stage = ROADMAP[i];
@@ -746,7 +602,6 @@ function updateAllProgress() {
   if (done === total && total > 0) currentStageName = "Hoàn thành";
   document.getElementById('stat-current-stage').textContent = currentStageName;
 
-  // Cập nhật tiến độ từng chặng (cho sidebar và section)
   ROADMAP.forEach(stage => {
     const sd = stage.lessons.filter(l => progress[l.id]).length;
     const st = stage.lessons.length;
