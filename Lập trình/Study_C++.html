@@ -255,7 +255,7 @@ body {
       <div class="stat-card">
         <div class="stat-label">Bài đã hoàn thành</div>
         <div class="stat-sub">Trong toàn bộ lộ trình</div>
-        <div class="stat-value" id="stat-done">0 / 28</div>
+        <div class="stat-value" id="stat-done">0 / 12</div>
       </div>
       <div class="stat-card">
         <div class="stat-label">Tiến độ tổng thể</div>
@@ -294,8 +294,8 @@ body {
 </div>
 
 <script>
-/* DỮ LIỆU LỘ TRÌNH (GIỮ NGUYÊN) */
-const ROADMAP = [
+/* Nội dung gốc được ghép thành các bài học tích hợp bên dưới. */
+const LESSON_LIBRARY = [
   {
     id: 'stage-1', title: 'Nền tảng C++', description: 'Hiểu chương trình và viết được những dòng code đầu tiên.',
     lessons: [
@@ -361,6 +361,76 @@ const ROADMAP = [
   }
 ];
 
+const COURSE_PLAN = [
+  {
+    id: 'stage-1', title: 'Nền tảng C++', description: 'Làm quen với chương trình, dữ liệu và cách tương tác qua console.',
+    lessons: [
+      { id: 'bai-1', title: 'Chương trình C++ đầu tiên', desc: 'Tạo, biên dịch và chạy chương trình; hiểu cấu trúc cơ bản của main().', sourceIds: ['bai-1'], practice: 'Tạo chương trình C++ đầu tiên, chạy trong VS Code và chỉnh sửa nội dung in ra màn hình.' },
+      { id: 'bai-2', title: 'Dữ liệu, nhập/xuất và biểu thức', desc: 'Dùng biến, kiểu dữ liệu, nhập xuất và toán tử để giải bài toán số đơn giản.', sourceIds: ['bai-2', 'bai-3', 'bai-4'], practice: 'Viết chương trình nhập tên thiết bị, vận tốc và thời gian; in lời giới thiệu thiết bị, tính quãng đường và công suất từ dữ liệu phù hợp. Thử cả số nguyên lẫn số thực để nhận ra khác biệt khi chia.' }
+    ]
+  },
+  {
+    id: 'stage-2', title: 'Điều kiện và logic', description: 'Kết hợp rẽ nhánh và biểu thức logic để mô tả quy tắc điều khiển.',
+    lessons: [
+      { id: 'bai-5', title: 'Điều kiện và logic điều khiển', desc: 'Gộp if/else, toán tử logic và các quy tắc an toàn vào một bài thực hành.', sourceIds: ['bai-5', 'bai-6', 'bai-7', 'bai-8'], practice: 'Xây dựng chương trình cảnh báo nhiệt độ và quyết định trạng thái động cơ từ nhiệt độ, dòng điện, mã lỗi, nút nhấn và công tắc hành trình. Thử đủ các ngưỡng và tổ hợp tín hiệu, bao gồm trường hợp phải dừng an toàn.' }
+    ]
+  },
+  {
+    id: 'stage-3', title: 'Vòng lặp', description: 'Chọn và sử dụng vòng lặp phù hợp để tự động hóa công việc.',
+    lessons: [
+      { id: 'bai-9', title: 'Vòng lặp và cách chọn for, while, do-while', desc: 'Học các kiểu vòng lặp cùng nhau qua bộ đếm, điều kiện dừng và mô phỏng.', sourceIds: ['bai-9', 'bai-10', 'bai-11', 'bai-12'], practice: 'Dùng for để in bảng đổi nhiệt độ; dùng while hoặc do-while để mô phỏng sạc pin và đọc dữ liệu đến khi gặp giá trị dừng. So sánh khi nào biết trước số lần lặp, khi nào lặp theo điều kiện, rồi mô phỏng vật rơi theo từng giây. Kiểm tra điều kiện dừng để tránh lặp vô hạn.' }
+    ]
+  },
+  {
+    id: 'stage-4', title: 'Hàm và tổ chức chương trình', description: 'Chia bài toán thành các hàm có nhiệm vụ rõ ràng và kết hợp chúng thành ứng dụng.',
+    lessons: [
+      { id: 'bai-13', title: 'Hàm và chương trình theo chức năng', desc: 'Kết hợp khai báo hàm, tham số, giá trị trả về, phạm vi biến và menu ứng dụng.', sourceIds: ['bai-13', 'bai-14', 'bai-15', 'bai-16'], practice: 'Tạo máy tính kỹ thuật có các hàm tính công suất, điện trở và năng lượng. Dùng menu lặp đến khi người dùng chọn thoát; giữ dữ liệu trong phạm vi phù hợp và giải thích vì sao mỗi hàm nhận hoặc trả về giá trị đó.' }
+    ]
+  },
+  {
+    id: 'stage-5', title: 'Dữ liệu và cấu trúc', description: 'Lưu trữ, duyệt và tổng hợp các dạng dữ liệu thường gặp.',
+    lessons: [
+      { id: 'bai-17', title: 'Mảng và thống kê dữ liệu', desc: 'Kết hợp mảng, vòng lặp và điều kiện để xử lý tập dữ liệu.', sourceIds: ['bai-17', 'bai-19'], practice: 'Nhập các giá trị cảm biến vào mảng, sau đó tính min, max, trung bình và đếm số giá trị vượt ngưỡng. Kiểm tra kết quả với một bộ dữ liệu nhỏ có thể tự tính bằng tay.' },
+      { id: 'bai-18', title: 'Chuỗi và struct', desc: 'Xử lý văn bản và gom các thông tin liên quan thành kiểu dữ liệu riêng.', sourceIds: ['bai-18', 'bai-20'], practice: 'Đọc tên thiết bị, phân tích độ dài và ký tự; định nghĩa struct CamBien để lưu nhiều cảm biến, nhập dữ liệu và in báo cáo từng cảm biến.' }
+    ]
+  },
+  {
+    id: 'stage-6', title: 'Viết chương trình tin cậy', description: 'Tìm lỗi, kiểm thử và tổ chức mã nguồn rõ ràng.',
+    lessons: [
+      { id: 'bai-21', title: 'Đọc lỗi và kiểm thử', desc: 'Dùng thông báo lỗi, debug và các trường hợp kiểm thử để xác nhận chương trình.', sourceIds: ['bai-21', 'bai-22'], practice: 'Sửa một chương trình có lỗi biên dịch và lỗi logic; sau đó lập các test case gồm giá trị biên, số âm và trường hợp đặc biệt, ghi lại kết quả mong đợi và thực tế.' },
+      { id: 'bai-23', title: 'Tham chiếu và con trỏ cơ bản', desc: 'Hiểu cách truyền dữ liệu qua tham chiếu và con trỏ ở mức nhập môn.', sourceIds: ['bai-23'], practice: 'Viết hai hàm hoán đổi giá trị: một dùng tham chiếu, một dùng con trỏ. Gọi thử, quan sát kết quả và giải thích sự khác nhau khi truyền tham số.' },
+      { id: 'bai-24', title: 'Tách chương trình thành nhiều tệp', desc: 'Tổ chức khai báo và cài đặt thành các tệp header/source.', sourceIds: ['bai-24'], practice: 'Tách máy tính kỹ thuật thành main.cpp, calc.h và calc.cpp; biên dịch các tệp cùng lúc bằng g++ rồi chạy lại các phép tính.' }
+    ]
+  },
+  {
+    id: 'stage-7', title: 'C++ trong kỹ thuật và robot', description: 'Áp dụng kiến thức vào mô phỏng cảm biến và bộ điều khiển đơn giản.',
+    lessons: [
+      { id: 'bai-25', title: 'Mô phỏng cảm biến và robot dò line', desc: 'Tạo dữ liệu thử và xây dựng logic điều khiển từ tín hiệu cảm biến.', sourceIds: ['bai-25', 'bai-26'], practice: 'Mô phỏng các giá trị nhiệt độ và hai cảm biến dò line. Thống kê nhiệt độ vượt ngưỡng, rồi ánh xạ từng tổ hợp cảm biến sang lệnh đi thẳng, rẽ hoặc dừng. Lặp lại nhiều lượt và xử lý trường hợp đặc biệt an toàn.' },
+      { id: 'bai-27', title: 'Class và dự án bộ điều khiển', desc: 'Đóng gói trạng thái, hành vi và dữ liệu thành một chương trình hoàn chỉnh.', sourceIds: ['bai-27', 'bai-28'], practice: 'Thiết kế class Quat có ngưỡng bật/tắt, trạng thái và các phương thức cập nhật, in trạng thái. Mô phỏng nhiều lần đo nhiệt độ, lưu lịch sử bằng mảng, rồi in báo cáo cuối.' }
+    ]
+  }
+];
+
+const LESSONS_BY_ID = new Map(LESSON_LIBRARY.flatMap(stage => stage.lessons.map(lesson => [lesson.id, lesson])));
+const ROADMAP = COURSE_PLAN.map(stage => ({
+  ...stage,
+  lessons: stage.lessons.map(unit => {
+    const sourceLessons = unit.sourceIds.map(id => LESSONS_BY_ID.get(id));
+    if (sourceLessons.some(lesson => !lesson)) {
+      throw new Error(`Không tìm thấy nội dung bài học nguồn cho "${unit.title}".`);
+    }
+    return {
+      id: unit.id,
+      legacyIds: unit.sourceIds,
+      title: unit.title,
+      desc: unit.desc,
+      goal: sourceLessons.map(lesson => lesson.goal).join(' '),
+      concepts: [...new Set(sourceLessons.flatMap(lesson => lesson.concepts))],
+      practice: unit.practice
+    };
+  })
+}));
+
 /* ============================================================
    PROMPT TEMPLATE MỚI (ÉP AI CHIA NHỎ BƯỚC & DỪNG LẠI)
    ============================================================ */
@@ -423,18 +493,32 @@ Bạn phải hướng dẫn học viên đi qua đúng 3 bước dưới đây. 
 
 Hãy chào học viên và thực hiện [BƯỚC 1] ngay bây giờ.`;
 
-const STORAGE_KEY = 'cpp-lab-progress-v1';
+const STORAGE_KEY = 'cpp-lab-progress-v2';
+const LEGACY_STORAGE_KEY = 'cpp-lab-progress-v1';
 let progress = loadProgress();
 
 function loadProgress() {
-  try { const raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : {}; } 
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+    const legacyRaw = localStorage.getItem(LEGACY_STORAGE_KEY);
+    if (!legacyRaw) return {};
+    const legacyProgress = JSON.parse(legacyRaw) || {};
+    const migrated = {};
+    ROADMAP.forEach(stage => stage.lessons.forEach(lesson => {
+      if (lesson.legacyIds.every(id => legacyProgress[id] === true)) migrated[lesson.id] = true;
+    }));
+    return migrated;
+  }
   catch (e) { return {}; }
 }
 function saveProgress(p) {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(p)); } catch (e) {}
 }
 function totalLessons() { return ROADMAP.reduce((s, st) => s + st.lessons.length, 0); }
-function completedCount() { return Object.keys(progress).filter(id => progress[id] === true).length; }
+function completedCount() {
+  return ROADMAP.reduce((count, stage) => count + stage.lessons.filter(lesson => progress[lesson.id] === true).length, 0);
+}
 function completedLessonTitles() {
   const out = [];
   ROADMAP.forEach(st => st.lessons.forEach(l => { if (progress[l.id]) out.push(l.title); }));
