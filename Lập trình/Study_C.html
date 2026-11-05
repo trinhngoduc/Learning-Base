@@ -1,0 +1,1572 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C Engineering Lab - Lộ Trình Lập Trình C Cho Kỹ Thuật & Nhúng</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0b0f19;
+            --bg-secondary: #111827;
+            --bg-card: #1f2937;
+            --bg-card-hover: #374151;
+            --accent-cyan: #00e5ff;
+            --accent-cyan-dim: rgba(0, 229, 255, 0.15);
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-orange: #f59e0b;
+            --accent-red: #ef4444;
+            --text-main: #f9fafb;
+            --text-muted: #9ca3af;
+            --text-sub: #6b7280;
+            --border-color: #1f2937;
+            --border-highlight: #374151;
+            --sidebar-width: 320px;
+            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+            --font-mono: 'Fira Code', monospace;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --shadow-glow: 0 0 25px rgba(0, 229, 255, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            display: flex;
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #374151;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-cyan);
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 24px 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, rgba(0, 229, 255, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid var(--accent-cyan);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-mono);
+            font-weight: 700;
+            color: var(--accent-cyan);
+            font-size: 18px;
+            box-shadow: 0 0 12px rgba(0, 229, 255, 0.2);
+        }
+
+        .brand-text h1 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.02em;
+        }
+
+        .brand-text p {
+            font-size: 11px;
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+
+        .sidebar-progress {
+            padding: 20px;
+            background: rgba(15, 23, 42, 0.6);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .progress-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .progress-percent {
+            color: var(--accent-cyan);
+            font-family: var(--font-mono);
+            font-weight: 700;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background: #1f2937;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
+            border-radius: 4px;
+            transition: width 0.4s ease;
+            box-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 12px;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-sub);
+            padding: 8px 12px;
+            font-weight: 600;
+        }
+
+        .nav-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 14px;
+            border-radius: var(--radius-sm);
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 13.5px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: 1px solid transparent;
+            gap: 12px;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text-main);
+            border-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-item.active {
+            background: var(--accent-cyan-dim);
+            color: var(--accent-cyan);
+            border-color: rgba(0, 229, 255, 0.3);
+            font-weight: 600;
+        }
+
+        .nav-item-num {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .nav-item.active .nav-item-num {
+            background: var(--accent-cyan);
+            color: var(--bg-primary);
+            font-weight: 700;
+        }
+
+        .nav-item-title {
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .nav-item-status {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid var(--text-sub);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item.completed .nav-item-status {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+        }
+
+        .nav-item.completed .nav-item-status::after {
+            content: "✓";
+            color: #000;
+            font-size: 10px;
+            font-weight: 900;
+        }
+
+        .sidebar-footer {
+            padding: 16px;
+            border-top: 1px solid var(--border-color);
+            font-size: 12px;
+            color: var(--text-sub);
+            text-align: center;
+        }
+
+        /* Main Content Styling */
+        .main-wrapper {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .top-navbar {
+            display: none;
+            padding: 16px 20px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 90;
+        }
+
+        .mobile-menu-btn {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+        }
+
+        .content-container {
+            max-width: 1080px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 40px 32px 80px 32px;
+        }
+
+        /* Header Overview Section */
+        .hero-banner {
+            background: linear-gradient(135deg, rgba(17, 24, 39, 0.9), rgba(15, 23, 42, 0.95));
+            border: 1px solid var(--border-highlight);
+            border-radius: var(--radius-lg);
+            padding: 36px;
+            margin-bottom: 36px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .hero-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(0, 229, 255, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
+            pointer-events: none;
+        }
+
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--accent-cyan-dim);
+            border: 1px solid rgba(0, 229, 255, 0.3);
+            color: var(--accent-cyan);
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .hero-title {
+            font-size: 32px;
+            font-weight: 800;
+            line-height: 1.25;
+            color: var(--text-main);
+            margin-bottom: 14px;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-title span {
+            background: linear-gradient(90deg, #00e5ff, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-desc {
+            font-size: 15px;
+            color: var(--text-muted);
+            max-width: 820px;
+            line-height: 1.7;
+            margin-bottom: 28px;
+        }
+
+        .hero-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .stat-card {
+            background: rgba(31, 41, 55, 0.5);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .stat-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-sm);
+            background: rgba(0, 229, 255, 0.1);
+            color: var(--accent-cyan);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .stat-info .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-main);
+            font-family: var(--font-mono);
+        }
+
+        .stat-info .stat-label {
+            font-size: 12px;
+            color: var(--text-sub);
+            font-weight: 500;
+        }
+
+        /* Flow Overview Section */
+        .workflow-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 24px 28px;
+            margin-bottom: 36px;
+        }
+
+        .section-header-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .workflow-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+        }
+
+        .wf-step {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            position: relative;
+        }
+
+        .wf-step-num {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            background: var(--accent-cyan-dim);
+            padding: 2px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        .wf-step-text {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* Stage Section Styling */
+        .stage-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            margin-bottom: 32px;
+            overflow: hidden;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            scroll-margin-top: 20px;
+        }
+
+        .stage-card:hover {
+            border-color: rgba(0, 229, 255, 0.3);
+        }
+
+        .stage-card.completed {
+            border-color: rgba(16, 185, 129, 0.4);
+        }
+
+        .stage-header {
+            padding: 24px 32px;
+            background: rgba(31, 41, 55, 0.4);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .stage-title-area {
+            flex: 1;
+        }
+
+        .stage-badge-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .stage-badge {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 6px;
+            background: var(--accent-cyan-dim);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(0, 229, 255, 0.3);
+        }
+
+        .stage-card.completed .stage-badge {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-green);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        .stage-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-main);
+            line-height: 1.3;
+        }
+
+        .stage-toggle-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-highlight);
+            color: var(--text-main);
+            padding: 10px 18px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 13.5px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .stage-toggle-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .stage-toggle-btn.is-completed {
+            background: var(--accent-green);
+            color: #000;
+            border-color: var(--accent-green);
+        }
+
+        .stage-body {
+            padding: 32px;
+        }
+
+        .grid-two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 868px) {
+            .grid-two-col {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .info-box {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 20px 24px;
+        }
+
+        .info-box-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .info-box-title.green {
+            color: var(--accent-green);
+        }
+
+        .info-box-title.orange {
+            color: var(--accent-orange);
+        }
+
+        .info-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .info-list li {
+            font-size: 13.5px;
+            color: var(--text-muted);
+            position: relative;
+            padding-left: 20px;
+            line-height: 1.6;
+        }
+
+        .info-list li::before {
+            content: "▹";
+            position: absolute;
+            left: 0;
+            color: var(--accent-cyan);
+            font-size: 14px;
+        }
+
+        .info-box-title.green + .info-list li::before {
+            color: var(--accent-green);
+        }
+
+        .info-box-title.orange + .info-list li::before {
+            color: var(--accent-orange);
+        }
+
+        /* Practice & AI Prompt Box */
+        .practice-box {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 20px 24px;
+            margin-bottom: 28px;
+        }
+
+        /* Prompt Box Styling */
+        .prompt-container {
+            background: #090d16;
+            border: 1px solid rgba(0, 229, 255, 0.25);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .prompt-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .prompt-title-tag {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--accent-cyan);
+        }
+
+        .copy-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--accent-blue), #2563eb);
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .copy-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.4);
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            color: #000;
+        }
+
+        .copy-btn:active {
+            transform: translateY(0);
+        }
+
+        .prompt-content {
+            font-family: var(--font-mono);
+            font-size: 12.5px;
+            color: #d1d5db;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 280px;
+            overflow-y: auto;
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--accent-cyan);
+            color: #040914;
+            padding: 14px 24px;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            font-size: 14px;
+            box-shadow: 0 10px 25px rgba(0, 229, 255, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-wrapper {
+                margin-left: 0;
+            }
+
+            .top-navbar {
+                display: flex;
+            }
+
+            .content-container {
+                padding: 24px 16px;
+            }
+
+            .hero-banner {
+                padding: 24px;
+            }
+
+            .stage-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .stage-body {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <a href="#" class="brand-logo">
+                <div class="brand-icon">C</div>
+                <div class="brand-text">
+                    <h1>C Engineering Lab</h1>
+                    <p>Hệ Thống Nhúng & Kỹ Thuật</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="sidebar-progress">
+            <div class="progress-title-row">
+                <span>TIẾN ĐỘ LỘ TRÌNH</span>
+                <span class="progress-percent" id="sidebar-percent">0%</span>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="sidebar-progress-bar"></div>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-label">6 GIAI ĐOẠN LỚN</div>
+            <ul class="nav-list">
+                <li class="nav-item active" onclick="scrollToStage('stage-1', this)">
+                    <span class="nav-item-num">1</span>
+                    <span class="nav-item-title">Nền tảng ngôn ngữ C</span>
+                    <span class="nav-item-status" id="nav-status-1"></span>
+                </li>
+                <li class="nav-item" onclick="scrollToStage('stage-2', this)">
+                    <span class="nav-item-num">2</span>
+                    <span class="nav-item-title">Tư duy lập trình & Hàm</span>
+                    <span class="nav-item-status" id="nav-status-2"></span>
+                </li>
+                <li class="nav-item" onclick="scrollToStage('stage-3', this)">
+                    <span class="nav-item-num">3</span>
+                    <span class="nav-item-title">Cấu trúc dữ liệu cơ bản</span>
+                    <span class="nav-item-status" id="nav-status-3"></span>
+                </li>
+                <li class="nav-item" onclick="scrollToStage('stage-4', this)">
+                    <span class="nav-item-num">4</span>
+                    <span class="nav-item-title">Con trỏ & Bộ nhớ</span>
+                    <span class="nav-item-status" id="nav-status-4"></span>
+                </li>
+                <li class="nav-item" onclick="scrollToStage('stage-5', this)">
+                    <span class="nav-item-num">5</span>
+                    <span class="nav-item-title">C làm việc với Hệ thống</span>
+                    <span class="nav-item-status" id="nav-status-5"></span>
+                </li>
+                <li class="nav-item" onclick="scrollToStage('stage-6', this)">
+                    <span class="nav-item-num">6</span>
+                    <span class="nav-item-title">C trong Nhúng & Kỹ thuật</span>
+                    <span class="nav-item-status" id="nav-status-6"></span>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="sidebar-footer">
+            Dành cho SV Điện tử - Viễn thông<br>
+            HCMUTE • 2026
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+        <!-- Top Navbar for Mobile -->
+        <header class="top-navbar">
+            <div class="brand-text">
+                <h1 style="font-size: 16px;">C Engineering Lab</h1>
+            </div>
+            <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                ☰ Menu
+            </button>
+        </header>
+
+        <main class="content-container">
+            <!-- Hero Overview Banner -->
+            <section class="hero-banner">
+                <div class="hero-tag">⚡ Lập trình C cho Kỹ thuật & Nhúng</div>
+                <h1 class="hero-title">Lộ Trình Học Lập Trình C <span>Chuyên Sâu 6 Giai Đoạn</span></h1>
+                <p class="hero-desc">
+                    Hệ thống bản đồ học tập tương tác thiết kế riêng cho sinh viên ngành Điện tử – Viễn thông. Lộ trình tập trung vào tư duy lập trình cấp thấp, quản lý bộ nhớ, thao tác bit và ứng dụng thực tế trong xử lý tín hiệu & vi điều khiển. Sử dụng AI làm gia sư cá nhân hóa từng giai đoạn.
+                </p>
+
+                <div class="hero-stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">🎯</div>
+                        <div class="stat-info">
+                            <div class="stat-value">6 Giai Đoạn</div>
+                            <div class="stat-label">Cấu trúc tinh gọn, liên kết</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🤖</div>
+                        <div class="stat-info">
+                            <div class="stat-value">6 Prompt AI</div>
+                            <div class="stat-label">Thiết kế chuẩn C11 & kỹ thuật</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📈</div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="hero-progress-text">0 / 6</div>
+                            <div class="stat-label">Hoàn thành lộ trình</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Workflow Concept -->
+            <section class="workflow-card">
+                <h2 class="section-header-title">📌 Quy Trình Sử Dụng Website & Học C Cùng AI</h2>
+                <div class="workflow-steps">
+                    <div class="wf-step">
+                        <span class="wf-step-num">BƯỚC 1</span>
+                        <div class="wf-step-text">Chọn 1 trong 6 giai đoạn lớn phù hợp với tiến độ hiện tại.</div>
+                    </div>
+                    <div class="wf-step">
+                        <span class="wf-step-num">BƯỚC 2</span>
+                        <div class="wf-step-text">Đọc kĩ Mục tiêu, Kiến thức trọng tâm & Kết quả đầu ra của giai đoạn.</div>
+                    </div>
+                    <div class="wf-step">
+                        <span class="wf-step-num">BƯỚC 3</span>
+                        <div class="wf-step-text">Bấm <b>"Sao chép Prompt AI"</b> và gửi cho AI (ChatGPT/Gemini/Claude).</div>
+                    </div>
+                    <div class="wf-step">
+                        <span class="wf-step-num">BƯỚC 4</span>
+                        <div class="wf-step-text">Học từng buổi nhỏ do AI phân bổ & Đánh dấu hoàn thành trên Web.</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STAGE 1 -->
+            <article class="stage-card" id="stage-1">
+                <header class="stage-header">
+                    <div class="stage-title-area">
+                        <div class="stage-badge-row">
+                            <span class="stage-badge">GIAI ĐOẠN 1</span>
+                            <span class="stage-status-label" id="status-label-1" style="font-size:12px; color:var(--text-sub);">Chưa hoàn thành</span>
+                        </div>
+                        <h2 class="stage-title">Nền tảng ngôn ngữ C</h2>
+                    </div>
+                    <button class="stage-toggle-btn" id="btn-toggle-1" onclick="toggleStageCompletion(1)">
+                        <span>Đánh dấu hoàn thành</span>
+                    </button>
+                </header>
+                <div class="stage-body">
+                    <div class="grid-two-col">
+                        <div class="info-box">
+                            <h3 class="info-box-title">📘 Nội dung kiến thức chính</h3>
+                            <ul class="info-list">
+                                <li>Tổng quan về ngôn ngữ C, cấu trúc file .c, hàm main(), quy trình biên dịch (Preprocessing -> Compiling -> Assembly -> Linking).</li>
+                                <li>Biến, hằng số, các kiểu dữ liệu cơ bản (int, float, double, char) và kiểu dữ liệu cố định kích thước (stdint.h: int8_t, uint32_t,...).</li>
+                                <li>Nhập xuất dữ liệu với <code>printf()</code>, <code>scanf()</code> và các định dạng chuyển đổi (%d, %f, %c, %x).</li>
+                                <li>Toán tử số học, toán tử quan hệ, toán tử logic và biểu thức điều kiện.</li>
+                                <li>Cấu trúc điều kiện (<code>if - else</code>, <code>switch - case</code>) và vòng lặp (<code>for</code>, <code>while</code>, <code>do - while</code>).</li>
+                            </ul>
+                        </div>
+                        <div class="info-box">
+                            <h3 class="info-box-title green">🎯 Mục tiêu đầu ra (Outcomes)</h3>
+                            <ul class="info-list">
+                                <li>Tự viết, biên dịch bằng GCC và thực thi được chương trình C chuẩn C11 trên VS Code mà không bị lỗi cú pháp.</li>
+                                <li>Hiểu rõ quy trình chuyển đổi từ mã nguồn C sang file thực thi nhị phân (.exe / ELF).</li>
+                                <li>Lựa chọn đúng kiểu dữ liệu phù hợp với dải giá trị và tối ưu dung lượng bộ nhớ.</li>
+                                <li>Biết sử dụng kết hợp điều kiện và vòng lặp để giải quyết các thuật toán cơ bản.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="practice-box">
+                        <h3 class="info-box-title orange">🛠️ Thực hành gợi ý</h3>
+                        <ul class="info-list">
+                            <li><b>Bài 1:</b> Viết chương trình tính điện trở tương đương của mạch gồm R1, R2 nối tiếp hoặc song song dựa trên lựa chọn menu của người dùng.</li>
+                            <li><b>Bài 2:</b> Viết chương trình chuyển đổi đơn vị nhiệt độ (Celsius ↔ Fahrenheit ↔ Kelvin) và điện áp ADC (0-1023) sang giá trị Volts (0-5V).</li>
+                            <li><b>Bài 3:</b> Xây dựng Menu console điều khiển tương tác (nhập thông số, tính toán kỹ thuật, thoát chương trình).</li>
+                        </ul>
+                    </div>
+
+                    <div class="prompt-container">
+                        <div class="prompt-header">
+                            <div class="prompt-title-tag">
+                                🤖 PROMPT AI DÀNH RIÊNG CHUYÊN SÂU GIAI ĐOẠN 1
+                            </div>
+                            <button class="copy-btn" onclick="copyPrompt('prompt-text-1')">
+                                📋 Sao chép Prompt AI
+                            </button>
+                        </div>
+                        <pre class="prompt-content" id="prompt-text-1">Bạn là một Chuyên gia Lập trình C và Giảng viên ngành Điện tử – Viễn thông giàu kinh nghiệm. Tôi là sinh viên năm nhất đang bắt đầu học môn Lập trình C trong kỹ thuật.
+
+HIỆN TẠI TÔI ĐANG HỌC GIAI ĐOẠN 1: "NỀN TẢNG NGÔN NGỮ C"
+
+[Nền tảng của tôi]:
+- Đã biết khái niệm máy tính nhưng CHƯA từng viết code C chuẩn.
+- Đang hướng tới ngành Hệ thống nhúng (Embedded Systems) và Điện tử Viễn thông.
+
+[Mục tiêu của Giai đoạn 1]:
+Tôi cần nắm vững: Cấu trúc chương trình C chuẩn C11; Quy trình biên dịch GCC (Preprocessing, Compiling, Assembly, Linking); Biến, hằng, kiểu dữ liệu chuẩn và fixed-width (stdint.h); Nhập xuất printf/scanf; Toán tử & biểu thức; Điều kiện (if-else, switch-case) và Vòng lặp (for, while, do-while).
+
+[Yêu cầu đối với Bạn (AI Mentor)]:
+1. Đóng vai gia sư tương tác: CHỦ ĐỘNG chia Giai đoạn 1 thành các buổi học nhỏ theo thứ tự từ dễ đến khó. Không đưa toàn bộ lý thuyết trong một câu trả lời.
+2. Phương pháp dạy:
+   - Giải thích BẢN CHẤT: Tại sao C cần hàm main(), tại sao phải dùng stdint.h trong kỹ thuật điện tử, cơ chế hoạt động của printf/scanf.
+   - CHỈ DÙNG NGÔN NGỮ C (Chuẩn C11). Tuyệt đối KHÔNG dùng cú pháp C++ (cin, cout, class, namespace, reference &).
+   - Ví dụ & Bài tập liên hệ kỹ thuật: Tính điện trở, chuyển đổi tín hiệu ADC, chia điện áp, tính tần số...
+   - Tương tác: Sau mỗi phần lý thuyết + code mẫu, hãy đặt 1-2 câu hỏi kiểm tra tư duy hoặc 1 bài tập nhỏ. Yêu cầu tôi tự viết code gửi lại. CHƯA đưa đáp án ngay khi tôi chưa thử làm.
+   - Phân tích lỗi: Chỉ ra các lỗi hay gặp như trôi lệnh scanf, tràn số, sai định dạng %d/%f.
+
+Hãy bắt đầu ngay bằng việc chào mừng tôi, giới thiệu tổng quan lộ trình Giai đoạn 1 và tiến hành BUỔI HỌC 1: "Cấu trúc chương trình C & Quy trình biên dịch GCC". Hãy đưa ra mục tiêu buổi 1 và giải thích bản chất cho tôi!</pre>
+                    </div>
+                </div>
+            </article>
+
+            <!-- STAGE 2 -->
+            <article class="stage-card" id="stage-2">
+                <header class="stage-header">
+                    <div class="stage-title-area">
+                        <div class="stage-badge-row">
+                            <span class="stage-badge">GIAI ĐOẠN 2</span>
+                            <span class="stage-status-label" id="status-label-2" style="font-size:12px; color:var(--text-sub);">Chưa hoàn thành</span>
+                        </div>
+                        <h2 class="stage-title">Tư duy lập trình và Hàm</h2>
+                    </div>
+                    <button class="stage-toggle-btn" id="btn-toggle-2" onclick="toggleStageCompletion(2)">
+                        <span>Đánh dấu hoàn thành</span>
+                    </button>
+                </header>
+                <div class="stage-body">
+                    <div class="grid-two-col">
+                        <div class="info-box">
+                            <h3 class="info-box-title">📘 Nội dung kiến thức chính</h3>
+                            <ul class="info-list">
+                                <li>Phương pháp tư duy mô-đun hoá (Modular Programming): Phân tích bài toán kỹ thuật phức tạp thành các bài toán nhỏ.</li>
+                                <li>Thuật toán (Algorithm), lưu đồ thuật toán (Flowchart) và cách chuyển tư duy thành mã nguồn C.</li>
+                                <li>Hàm trong C: Prototype (khai báo), định nghĩa hàm, tham số truyền vào (Pass-by-value) và giá trị trả về.</li>
+                                <li>Phạm vi biến (Scope): Biến cục bộ (Local), biến toàn cục (Global), từ khóa <code>static</code> trong hàm và biến cục bộ.</li>
+                                <li>Đệ quy (Recursion) ở mức độ cơ bản và bản chất Call Stack khi gọi hàm.</li>
+                                <li>Phương pháp kĩ thuật debug: Đặt printf debug, kiểm thử các trường hợp biên (Edge cases).</li>
+                            </ul>
+                        </div>
+                        <div class="info-box">
+                            <h3 class="info-box-title green">🎯 Mục tiêu đầu ra (Outcomes)</h3>
+                            <ul class="info-list">
+                                <li>Xóa bỏ thói quen dồn toàn bộ code vào hàm <code>main()</code>. Biết chia chương trình thành nhiều hàm chức năng chuyên biệt.</li>
+                                <li>Hiểu rõ cơ chế Call Stack, quá trình truyền tham trị và phạm vi tồn tại của từng biến trong bộ nhớ RAM.</li>
+                                <li>Biết cách sử dụng biến <code>static</code> để lưu giữ trạng thái giữa các lần gọi hàm (rất quan trọng cho xử lý sự kiện/nhúng).</li>
+                                <li>Có khả năng tự tìm lỗi logic và kiểm thử mã nguồn độc lập.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="practice-box">
+                        <h3 class="info-box-title orange">🛠️ Thực hành gợi ý</h3>
+                        <ul class="info-list">
+                            <li><b>Bài 1:</b> Xây dựng thư viện các hàm toán học kỹ thuật: Hàm tính công suất điện $P=U \cdot I$, hàm kiểm tra ngưỡng điện áp an toàn, hàm tính giá trị trung bình 3 mẫu đo.</li>
+                            <li><b>Bài 2:</b> Viết chương trình mô phỏng bộ đếm sản phẩm trên dây chuyền sản xuất sử dụng hàm chứa biến <code>static</code>.</li>
+                            <li><b>Bài 3:</b> Viết hàm đệ quy tính lũy thừa và giải thuật Euclide tìm UCLN của 2 tần số xung.</li>
+                        </ul>
+                    </div>
+
+                    <div class="prompt-container">
+                        <div class="prompt-header">
+                            <div class="prompt-title-tag">
+                                🤖 PROMPT AI DÀNH RIÊNG CHUYÊN SÂU GIAI ĐOẠN 2
+                            </div>
+                            <button class="copy-btn" onclick="copyPrompt('prompt-text-2')">
+                                📋 Sao chép Prompt AI
+                            </button>
+                        </div>
+                        <pre class="prompt-content" id="prompt-text-2">Bạn là một Chuyên gia Lập trình C và Giảng viên ngành Điện tử – Viễn thông giàu kinh nghiệm. Tôi đã hoàn thành kiến thức C cơ bản (biến, vòng lặp, điều kiện).
+
+HIỆN TẠI TÔI ĐANG HỌC GIAI ĐOẠN 2: "TƯ DUY LẬP TRÌNH VÀ HÀM"
+
+[Nền tảng của tôi]:
+- Đã biết viết code C cơ bản nhưng vẫn còn thói quen viết tất cả trong hàm main().
+- Chưa hiểu sâu về Call Stack, phạm vi biến (Scope) và biến static.
+
+[Mục tiêu của Giai đoạn 2]:
+Tôi cần nắm vững: Tư duy phân tích bài toán & chia nhỏ chức năng; Khai báo Function Prototype, định nghĩa hàm; Truyền tham trị (Pass-by-value); Phạm vi biến (Global vs Local vs Static); Bản chất bộ nhớ Call Stack khi gọi hàm; Đệ quy cơ bản & Kỹ năng Debug code.
+
+[Yêu cầu đối với Bạn (AI Mentor)]:
+1. Đóng vai gia sư tương tác: Chủ động chia Giai đoạn 2 thành các buổi học nhỏ theo lộ trình logic.
+2. Phương pháp dạy:
+   - Giải thích BẢN CHẤT: Tại sao phải dùng Function Prototype? Bộ nhớ Stack hoạt động ra sao khi hàm được gọi và thoát? Từ khóa `static` có ý nghĩa gì đặc biệt trong lập trình vi điều khiển?
+   - TUYỆT ĐỐI CHỈ DÙNG NGÔN NGỮ C (Chuẩn C11). Không dùng C++.
+   - Ví dụ kỹ thuật: Viết hàm tính toán thông số mạch điện, hàm xử lý tín hiệu đầu vào, bộ đếm xung bằng biến static.
+   - Học qua thực hành: Yêu cầu tôi chia bài toán thành hàm trước khi viết code. Giao bài tập nhỏ cuối mỗi buổi để tôi tự giải và phân tích lỗi.
+
+Hãy bắt đầu ngay bằng việc tóm tắt lộ trình Giai đoạn 2 và tiến hành BUỔI HỌC 1: "Tư duy mô-đun hóa bài toán kỹ thuật & Cấu trúc Hàm trong C". Giải thích bản chất cho tôi!</pre>
+                    </div>
+                </div>
+            </article>
+
+            <!-- STAGE 3 -->
+            <article class="stage-card" id="stage-3">
+                <header class="stage-header">
+                    <div class="stage-title-area">
+                        <div class="stage-badge-row">
+                            <span class="stage-badge">GIAI ĐOẠN 3</span>
+                            <span class="stage-status-label" id="status-label-3" style="font-size:12px; color:var(--text-sub);">Chưa hoàn thành</span>
+                        </div>
+                        <h2 class="stage-title">Cấu trúc dữ liệu cơ bản</h2>
+                    </div>
+                    <button class="stage-toggle-btn" id="btn-toggle-3" onclick="toggleStageCompletion(3)">
+                        <span>Đánh dấu hoàn thành</span>
+                    </button>
+                </header>
+                <div class="stage-body">
+                    <div class="grid-two-col">
+                        <div class="info-box">
+                            <h3 class="info-box-title">📘 Nội dung kiến thức chính</h3>
+                            <ul class="info-list">
+                                <li>Mảng 1 chiều & 2 chiều: Cách quy hoạch và lưu trữ tập hợp dữ liệu liên tiếp trong bộ nhớ RAM.</li>
+                                <li>Các thao tác trên mảng: Duyệt mảng, tìm kiếm (Linear Search), sắp xếp cơ bản (Bubble Sort / Selection Sort), tìm Max/Min.</li>
+                                <li>Chuỗi ký tự (String) trong C: Bản chất mảng char kết thúc bằng ký tự null <code>' '</code>.</li>
+                                <li>Các hàm xử lý chuỗi chuẩn trong <code>string.h</code> (strlen, strcpy, strcmp, strcat) và các hàm xử lý an toàn (snprintf).</li>
+                                <li>Kiểu dữ liệu cấu trúc <code>struct</code>: Định nghĩa, truy xuất thành phần (toán tử dấu chấm <code>.</code>), căn chỉnh bộ nhớ Struct Padding/Alignment cơ bản.</li>
+                                <li>Kết hợp Mảng + Struct + Chuỗi để tạo mô hình dữ liệu phức tạp.</li>
+                            </ul>
+                        </div>
+                        <div class="info-box">
+                            <h3 class="info-box-title green">🎯 Mục tiêu đầu ra (Outcomes)</h3>
+                            <ul class="info-list">
+                                <li>Có khả năng quản lý mảng dữ liệu đo lường kỹ thuật (chuỗi dữ liệu cảm biến theo thời gian).</li>
+                                <li>Thao tác thành thạo với chuỗi ký tự mà không bị lỗi ghi đè ô nhớ hoặc mất ký tự kết thúc <code>' '</code>.</li>
+                                <li>Tạo được các kiểu dữ liệu đại diện cho đối tượng thực tế (ví dụ: đối tượng Cảm biến gồm ID, Giá trị, Đơn vị, Trạng thái).</li>
+                                <li>Tổ chức mảng các Struct để quản lý tập hợp nhiều đối tượng kỹ thuật.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="practice-box">
+                        <h3 class="info-box-title orange">🛠️ Thực hành gợi ý</h3>
+                        <ul class="info-list">
+                            <li><b>Bài 1:</b> Viết chương trình lưu trữ 10 mẫu giá trị điện áp cảm biến thu thập được. Tính giá trị trung bình, tìm mẫu điện áp cao nhất và lọc bỏ nhiễu.</li>
+                            <li><b>Bài 2:</b> Viết chương trình xử lý câu lệnh văn bản nhận được từ cổng nối tiếp (Serial Command Parsing) bằng các hàm trong <code>string.h</code>.</li>
+                            <li><b>Bài 3:</b> Xây dựng chương trình quản lý danh sách Linh kiện Điện tử (Tên, Mã linh kiện, Số lượng, Đơn giá) sử dụng Mảng các Struct.</li>
+                        </ul>
+                    </div>
+
+                    <div class="prompt-container">
+                        <div class="prompt-header">
+                            <div class="prompt-title-tag">
+                                🤖 PROMPT AI DÀNH RIÊNG CHUYÊN SÂU GIAI ĐOẠN 3
+                            </div>
+                            <button class="copy-btn" onclick="copyPrompt('prompt-text-3')">
+                                📋 Sao chép Prompt AI
+                            </button>
+                        </div>
+                        <pre class="prompt-content" id="prompt-text-3">Bạn là một Chuyên gia Lập trình C và Giảng viên ngành Điện tử – Viễn thông giàu kinh nghiệm. Tôi đã nắm vững về Hàm và tư duy lập trình mô-đun.
+
+HIỆN TẠI TÔI ĐANG HỌC GIAI ĐOẠN 3: "CẤU TRÚC DỮ LIỆU CƠ BẢN (MẢNG, CHUỖI & STRUCT)"
+
+[Nền tảng của tôi]:
+- Đã biết cách dùng biến đơn lẻ và hàm.
+- Cần học cách quản lý hàng loạt dữ liệu đo lường kỹ thuật và đối tượng thiết bị.
+
+[Mục tiêu của Giai đoạn 3]:
+Tôi cần nắm vững: Mảng 1D, 2D (lưu mảng dữ liệu cảm biến/ma trận); Chuỗi ký tự (Mảng char & kí tự null ' '); Thư viện string.h & thao tác chuỗi an toàn; Kiểu dữ liệu cấu trúc `struct`; Mảng các Struct để quản lý dữ liệu kỹ thuật.
+
+[Yêu cầu đối với Bạn (AI Mentor)]:
+1. Đóng vai gia sư tương tác: Chia Giai đoạn 3 thành các buổi học phù hợp.
+2. Phương pháp dạy:
+   - Giải thích BẢN CHẤT: Ô nhớ mảng nằm liên tiếp nhau như thế nào? Ký tự null ' ' trong chuỗi C có vai trò sống còn ra sao? Tại sao Struct giúp gom nhóm các đặc tính của một thiết bị điện tử?
+   - CHỈ DÙNG NGÔN NGỮ C CHUẨN C11. Tuyệt đối KHÔNG dùng C++ (string class, vector, cin, cout).
+   - Minh họa trực quan sơ đồ bộ nhớ khi giải thích về Mảng và Chuỗi.
+   - Bài tập thực hành: Xử lý mảng tín hiệu ADC, chuẩn hóa chuỗi dữ liệu GPS/NMEA, quản lý danh sách cảm biến bằng Struct.
+
+Hãy bắt đầu bằng việc tóm tắt Giai đoạn 3 và bắt đầu BUỔI HỌC 1: "Mảng 1 chiều và ứng dụng lưu trữ chuỗi dữ liệu đo lường kỹ thuật". Hướng dẫn tôi chi tiết!</pre>
+                    </div>
+                </div>
+            </article>
+
+            <!-- STAGE 4 -->
+            <article class="stage-card" id="stage-4">
+                <header class="stage-header">
+                    <div class="stage-title-area">
+                        <div class="stage-badge-row">
+                            <span class="stage-badge">GIAI ĐOẠN 4</span>
+                            <span class="stage-status-label" id="status-label-4" style="font-size:12px; color:var(--text-sub);">Chưa hoàn thành</span>
+                        </div>
+                        <h2 class="stage-title">Con trỏ và Quản lý bộ nhớ</h2>
+                    </div>
+                    <button class="stage-toggle-btn" id="btn-toggle-4" onclick="toggleStageCompletion(4)">
+                        <span>Đánh dấu hoàn thành</span>
+                    </button>
+                </header>
+                <div class="stage-body">
+                    <div class="grid-two-col">
+                        <div class="info-box">
+                            <h3 class="info-box-title">📘 Nội dung kiến thức chính</h3>
+                            <ul class="info-list">
+                                <li>Kiến trúc bộ nhớ RAM của chương trình C: Các vùng nhớ Text (Code), Data, BSS, Stack và Heap.</li>
+                                <li>Bản chất con trỏ (Pointer): Biến chứa địa chỉ ô nhớ. Toán tử địa chỉ <code>&amp;</code> và toán tử giải tham chiếu <code>*</code>.</li>
+                                <li>Con trỏ kết hợp với Hàm: Truyền tham chiếu qua con trỏ (Pass-by-reference), thay đổi giá trị biến gốc, trả về nhiều kết quả từ hàm.</li>
+                                <li>Mối liên hệ giữa Con trỏ và Mảng: Phép toán số học con trỏ (Pointer Arithmetic), truy cập phần tử mảng bằng con trỏ.</li>
+                                <li>Con trỏ chỉ tới Struct và toán tử mũi tên <code>-&gt;</code>. Con trỏ hằng (<code>const int *</code>) và Hằng con trỏ (<code>int * const</code>).</li>
+                                <li>Cấp phát bộ nhớ động: <code>malloc()</code>, <code>calloc()</code>, <code>realloc()</code> và giải phóng bộ nhớ <code>free()</code>.</li>
+                                <li>Phân tích &amp; khắc phục lỗi bộ nhớ nghiêm trọng: Dangling Pointer, Memory Leak, Segmentation Fault, Dereference NULL Pointer.</li>
+                            </ul>
+                        </div>
+                        <div class="info-box">
+                            <h3 class="info-box-title green">🎯 Mục tiêu đầu ra (Outcomes)</h3>
+                            <ul class="info-list">
+                                <li>Hiểu thấu đáo cách C truy cập trực tiếp vào từng ô nhớ RAM - nền tảng cốt lõi của lập trình hệ thống và vi điều khiển.</li>
+                                <li>Sử dụng con trỏ an toàn, chính xác; phân biệt rõ địa chỉ và giá trị lưu tại địa chỉ.</li>
+                                <li>Lập trình được các hàm sửa đổi trực tiếp dữ liệu cấu trúc kích thước lớn mà không tốn chi phí copy bộ nhớ.</li>
+                                <li>Quản lý bộ nhớ động hiệu quả, luôn giải phóng bộ nhớ bằng <code>free()</code> và gán <code>NULL</code> để tránh rò rỉ bộ nhớ.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="practice-box">
+                        <h3 class="info-box-title orange">🛠️ Thực hành gợi ý</h3>
+                        <ul class="info-list">
+                            <li><b>Bài 1:</b> Viết hàm <code>swap()</code> hoán đổi 2 giá trị và hàm tính đồng thời cả Giá trị Trung Bình và Giá trị Cực Đại của một mảng thông qua tham số con trỏ.</li>
+                            <li><b>Bài 2:</b> Viết hàm duyệt và đảo ngược một chuỗi ký tự/mảng dữ liệu cảm biến chỉ bằng số học con trỏ (Pointer Arithmetic), không dùng chỉ số <code>[i]</code>.</li>
+                            <li><b>Bài 3:</b> Viết chương trình cấp phát động bộ nhớ cho một mảng chứa $N$ số liệu đo (với $N$ do người dùng nhập từ bàn phím), sau đó giải phóng bộ nhớ an toàn.</li>
+                        </ul>
+                    </div>
+
+                    <div class="prompt-container">
+                        <div class="prompt-header">
+                            <div class="prompt-title-tag">
+                                🤖 PROMPT AI DÀNH RIÊNG CHUYÊN SÂU GIAI ĐOẠN 4
+                            </div>
+                            <button class="copy-btn" onclick="copyPrompt('prompt-text-4')">
+                                📋 Sao chép Prompt AI
+                            </button>
+                        </div>
+                        <pre class="prompt-content" id="prompt-text-4">Bạn là một Chuyên gia Lập trình C và Giảng viên ngành Điện tử – Viễn thông giàu kinh nghiệm. Đây là Giai đoạn QUAN TRỌNG NHẤT trong lộ trình.
+
+HIỆN TẠI TÔI ĐANG HỌC GIAI ĐOẠN 4: "CON TRỎ VÀ QUẢN LÝ BỘ NHỚ (POINTERS & MEMORY MANAGEMENT)"
+
+[Nền tảng của tôi]:
+- Đã làm chủ biến, hàm, mảng và struct.
+- Thường thấy mơ hồ hoặc sợ chủ đề Con trỏ và Cấp phát động. Cần học kỹ BẢN CHẤT BỘ NHỚ.
+
+[Mục tiêu của Giai đoạn 4]:
+Tôi cần nắm vững: Sơ đồ vùng nhớ RAM (Stack, Heap, Data, BSS); Bản chất con trỏ, toán tử & và *; Truyền tham chiếu bằng con trỏ trong hàm; Số học con trỏ (Pointer Arithmetic); Con trỏ trỏ tới Struct và toán tử ->; Cấp phát động malloc/calloc/realloc/free; Phân tích lỗi NULL Pointer, Segmentation Fault, Memory Leak.
+
+[Yêu cầu đối với Bạn (AI Mentor)]:
+1. Đóng vai gia sư tương tác: Chia Giai đoạn 4 thành các buổi học nhỏ tỉ mỉ. Không đi nhanh khi tôi chưa nắm vững.
+2. Phương pháp dạy:
+   - GIẢI THÍCH BẢN CHẤT TRỰC QUAN: Vẽ sơ đồ bảng địa chỉ ô nhớ bằng dạng text (ASCII Table) cho từng dòng lệnh. Chỉ rõ địa chỉ 0x7fff... chứa giá trị gì.
+   - CHỈ DÙNG C CHUẨN C11. Tuyệt đối KHÔNG dùng cú pháp tham chiếu & của C++ (`void func(int &x)` là SAI trong C!).
+   - Nhấn mạnh tại sao con trỏ là "vũ khí tối thượng" trong lập trình Hệ thống nhúng và làm việc với thanh ghi vi điều khiển.
+   - Kiểm tra kỹ năng: Yêu cầu tôi dự đoán kết quả của các đoạn code thao tác con trỏ phức tạp trước khi tự viết code.
+
+Hãy bắt đầu bằng việc mở đầu Giai đoạn 4 và tiến hành BUỔI HỌC 1: "Bản chất Địa chỉ bộ nhớ RAM và Con trỏ cơ bản trong C". Hãy dùng hình vẽ minh họa các ô nhớ cho tôi dễ hình dung!</pre>
+                    </div>
+                </div>
+            </article>
+
+            <!-- STAGE 5 -->
+            <article class="stage-card" id="stage-5">
+                <header class="stage-header">
+                    <div class="stage-title-area">
+                        <div class="stage-badge-row">
+                            <span class="stage-badge">GIAI ĐOẠN 5</span>
+                            <span class="stage-status-label" id="status-label-5" style="font-size:12px; color:var(--text-sub);">Chưa hoàn thành</span>
+                        </div>
+                        <h2 class="stage-title">Lập trình C làm việc với Hệ thống</h2>
+                    </div>
+                    <button class="stage-toggle-btn" id="btn-toggle-5" onclick="toggleStageCompletion(5)">
+                        <span>Đánh dấu hoàn thành</span>
+                    </button>
+                </header>
+                <div class="stage-body">
+                    <div class="grid-two-col">
+                        <div class="info-box">
+                            <h3 class="info-box-title">📘 Nội dung kiến thức chính</h3>
+                            <ul class="info-list">
+                                <li>Biểu diễn dữ liệu cấp thấp: Hệ nhị phân (Binary), Hệ thập lục phân (Hexadecimal), Thứ tự byte (Little-Endian vs Big-Endian).</li>
+                                <li>Các toán tử Bitwise: AND (<code>&amp;</code>), OR (<code>|</code>), XOR (<code>^</code>), NOT (<code>~</code>), Dịch bit sang trái (<code>&lt;&lt;</code>), Dịch bit sang phải (<code>&gt;&gt;</code>).</li>
+                                <li>Kỹ thuật Bit Masking: Bat/Bật bit (Set), Tắt bit (Clear), Đảo bit (Toggle), Kiểm tra trạng thái bit (Check bit) - thao tác nền tảng điều khiển Thanh ghi (Register).</li>
+                                <li>Thao tác với Tệp tin (File I/O): Đọc/ghi file văn bản (Text file) và file nhị phân (Binary file) bằng <code>fopen</code>, <code>fread</code>, <code>fwrite</code>, <code>fprintf</code>.</li>
+                                <li>Tổ chức dự án mã nguồn C đa file: Tách riêng file tiêu đề <code>.h</code> (Interface/Prototypes) và file thực thi <code>.c</code> (Implementation).</li>
+                                <li>Tiền xử lý (Preprocessor directives): <code>#define</code>, <code>#include</code>, Macro có tham số, Header Guards (<code>#ifndef ... #define ... #endif</code>).</li>
+                            </ul>
+                        </div>
+                        <div class="info-box">
+                            <h3 class="info-box-title green">🎯 Mục tiêu đầu ra (Outcomes)</h3>
+                            <ul class="info-list">
+                                <li>Thành thạo các phép toán bitwise để thao tác trực tiếp trên từng bit dữ liệu (mô phỏng bật/tắt LED, đọc cờ ngắt).</li>
+                                <li>Biết cách xây dựng cấu trúc dự án C chuyên nghiệp theo mô-đun hóa đa tệp (.c / .h) có thể mở rộng.</li>
+                                <li>Đọc và ghi dữ liệu cấu trúc vào tệp tin để làm nhật ký (Log file) hoặc cấu hình hệ thống.</li>
+                                <li>Nắm vững quy trình Biên dịch &amp; Linker khi ghép nối nhiều file mã nguồn C.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="practice-box">
+                        <h3 class="info-box-title orange">🛠️ Thực hành gợi ý</h3>
+                        <ul class="info-list">
+                            <li><b>Bài 1:</b> Viết các Macro/Hàm thao tác bitwise: <code>SET_BIT(reg, bit)</code>, <code>CLEAR_BIT(reg, bit)</code>, <code>TOGGLE_BIT(reg, bit)</code>, <code>CHECK_BIT(reg, bit)</code> và mô phỏng thanh ghi 8-bit điều khiển 8 thiết bị.</li>
+                            <li><b>Bài 2:</b> Viết chương trình lưu mảng Struct chứa dữ liệu lịch sử nhiệt độ thu thập được vào file binary <code>sensor_data.bin</code>, sau đó đọc lại file và hiển thị ra màn hình.</li>
+                            <li><b>Bài 3:</b> Tách một dự án C thành 3 file: <code>sensor.h</code> (khai báo struct &amp; hàm), <code>sensor.c</code> (định nghĩa hàm), <code>main.c</code> (chương trình chính). Biên dịch dự án bằng GCC.</li>
+                        </ul>
+                    </div>
+
+                    <div class="prompt-container">
+                        <div class="prompt-header">
+                            <div class="prompt-title-tag">
+                                🤖 PROMPT AI DÀNH RIÊNG CHUYÊN SÂU GIAI ĐOẠN 5
+                            </div>
+                            <button class="copy-btn" onclick="copyPrompt('prompt-text-5')">
+                                📋 Sao chép Prompt AI
+                            </button>
+                        </div>
+                        <pre class="prompt-content" id="prompt-text-5">Bạn là một Chuyên gia Lập trình C và Kỹ sư Hệ thống Nhúng giàu kinh nghiệm. Tôi đã làm chủ Con trỏ và Quản lý bộ nhớ RAM.
+
+HIỆN TẠI TÔI ĐANG HỌC GIAI ĐOẠN 5: "LẬP TRÌNH C LÀM VIỆC VỚI HỆ THỐNG (BITWISE, FILES & DỰ ÁN ĐA FILE)"
+
+[Nền tảng của tôi]:
+- Đã thành thạo con trỏ, mảng, struct và cấp phát động.
+- Cần học kiến thức thao tác cấp thấp (Bitwise) và cách tổ chức dự án C thực tế theo kiến trúc mô-đun (.c / .h).
+
+[Mục tiêu của Giai đoạn 5]:
+Tôi cần nắm vững: Biểu diễn Hex/Binary, Endianness; Các toán tử Bitwise (&, |, ^, ~, <<, >>); Kỹ thuật Bit Masking (Set, Clear, Toggle, Check bit); Đọc/ghi File văn bản & File Binary; Tổ chức chương trình Đa file (.c/.h) và Header Guards (#ifndef); Preprocessor Directives & Macros.
+
+[Yêu cầu đối với Bạn (AI Mentor)]:
+1. Đóng vai gia sư tương tác: Chia Giai đoạn 5 thành các buổi học nhỏ hợp lý.
+2. Phương pháp dạy:
+   - Giải thích BẢN CHẤT: Tại sao trong vi điều khiển / nhúng lại dùng thao tác bit mà không dùng biến boolean? Cơ chế hoạt động của Linker khi gộp các file object (.o) thành file thực thi?
+   - CHỈ DÙNG C CHUẨN C11. Không dùng C++.
+   - Hướng dẫn thực hành thao tác Bitwise mượt mà thông qua bài toán mô phỏng Thanh ghi điều khiển (Register Simulation).
+   - Hướng dẫn cấu trúc file `.h` chuẩn chỉnh (include guards, extern, function prototypes).
+
+Hãy bắt đầu ngay bằng việc tóm tắt lộ trình Giai đoạn 5 và tiến hành BUỔI HỌC 1: "Hệ nhị phân, Hex và Thao tác Bitwise cơ bản trong C". Bắt đầu hướng dẫn tôi!</pre>
+                    </div>
+                </div>
+            </article>
+
+            <!-- STAGE 6 -->
+            <article class="stage-card" id="stage-6">
+                <header class="stage-header">
+                    <div class="stage-title-area">
+                        <div class="stage-badge-row">
+                            <span class="stage-badge">GIAI ĐOẠN 6</span>
+                            <span class="stage-status-label" id="status-label-6" style="font-size:12px; color:var(--text-sub);">Chưa hoàn thành</span>
+                        </div>
+                        <h2 class="stage-title">Ứng dụng C trong Kỹ thuật và Hệ thống Nhúng</h2>
+                    </div>
+                    <button class="stage-toggle-btn" id="btn-toggle-6" onclick="toggleStageCompletion(6)">
+                        <span>Đánh dấu hoàn thành</span>
+                    </button>
+                </header>
+                <div class="stage-body">
+                    <div class="grid-two-col">
+                        <div class="info-box">
+                            <h3 class="info-box-title">📘 Nội dung kiến thức chính</h3>
+                            <ul class="info-list">
+                                <li>Tổng hợp kiến thức C kỹ thuật: Mô phỏng luồng dữ liệu cảm biến (Sensor Data Simulation) và xử lý tín hiệu số cơ bản.</li>
+                                <li>Thuật toán xử lý dữ liệu đo lường: Thuật toán lọc trung bình trượt (Moving Average Filter), phát hiện đỉnh nhiễu, chuyển đổi ADC 10-bit/12-bit sang giá trị vật lý.</li>
+                                <li>Mô hình Máy trạng thái hữu hạn (Finite State Machine - FSM): Thiết kế kiến trúc điều khiển thiết bị bằng <code>enum</code> và <code>switch - case</code>.</li>
+                                <li>Tư duy lập trình Vi điều khiển: Khái niệm Polling (Thăm dò) vs Interrupt (Ngắt), Memory-Mapped I/O và cấu trúc chương trình nhúng <code>while(1)</code>.</li>
+                                <li>Thực hiện Dự án Capstone Tổng hợp: Kết hợp dự án đa file, con trỏ, struct, bitwise, đọc ghi file và FSM.</li>
+                            </ul>
+                        </div>
+                        <div class="info-box">
+                            <h3 class="info-box-title green">🎯 Mục tiêu đầu ra (Outcomes)</h3>
+                            <ul class="info-list">
+                                <li>Vận dụng toàn bộ sức mạnh ngôn ngữ C để xây dựng ứng dụng kỹ thuật mô phỏng hoàn chỉnh.</li>
+                                <li>Lập trình thành thạo mô hình FSM - kiến trúc cốt lõi để điều khiển robot, thiết bị IoT và vi điều khiển trong thực tế.</li>
+                                <li>Sẵn sàng bước tiếp sang học các dòng vi điều khiển thực tế (STM32, ESP32, AVR/Arduino) với nền tảng C vững chắc.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="practice-box">
+                        <h3 class="info-box-title orange">🛠️ Dự án Capstone gợi ý (Chọn 1 hoặc làm lần lượt)</h3>
+                        <ul class="info-list">
+                            <li><b>Dự án 1: Hệ thống Giám sát &amp; Cảnh báo Nhiệt độ Tự động:</b> Giả lập cảm biến sinh dữ liệu nhiệt độ ngẫu nhiên, lọc nhiễu bằng Moving Average, phân tích trạng thái (NORMAL, WARNING, CRITICAL) sử dụng FSM, ghi log sự cố vào tệp tin.</li>
+                            <li><b>Dự án 2: Hệ thống Xử lý Tín hiệu Cảm biến Giả lập:</b> Đọc dữ liệu thô từ file, chuyển đổi ADC sang Volts, lọc nhiễu, tìm cực đại/cực tiểu và tính độ lệch chuẩn.</li>
+                            <li><b>Dự án 3: Mô phỏng Máy Trạng Thái Điều Khiển Đèn Giao Thông / Thiết Bị:</b> Thiết kế FSM điều khiển các trạng thái thiết bị điện tử với cờ báo hiệu dạng Bitwise Mask.</li>
+                        </ul>
+                    </div>
+
+                    <div class="prompt-container">
+                        <div class="prompt-header">
+                            <div class="prompt-title-tag">
+                                🤖 PROMPT AI DÀNH RIÊNG CHUYÊN SÂU GIAI ĐOẠN 6
+                            </div>
+                            <button class="copy-btn" onclick="copyPrompt('prompt-text-6')">
+                                📋 Sao chép Prompt AI
+                            </button>
+                        </div>
+                        <pre class="prompt-content" id="prompt-text-6">Bạn là một Chuyên gia Lập trình C và Chuyên gia Hệ thống Nhúng (Embedded Systems Architect). Tôi đã hoàn thành toàn bộ nền tảng C từ cơ bản, hàm, struct, con trỏ đến làm việc với bitwise & file.
+
+HIỆN TẠI TÔI ĐANG HỌC GIAI ĐOẠN 6: "ỨNG DỤNG C TRONG KỸ THUẬT VÀ HỆ THỐNG NHỨNG (EMBEDDED C FOUNDATIONS)"
+
+[Nền tảng của tôi]:
+- Đã nắm vững toàn bộ cú pháp và bản chất ngôn ngữ C11.
+- Mục tiêu: Vận dụng C giải quyết bài toán kỹ thuật thực tế và chuẩn bị nền tảng làm việc với Vi điều khiển (STM32 / ESP32).
+
+[Mục tiêu của Giai đoạn 6]:
+Tôi cần nắm vững: Thuật toán lọc dữ liệu cảm biến (Moving Average); Chuyển đổi giá trị ADC thô sang đại lượng vật lý; Thiết kế kiến trúc Máy trạng thái hữu hạn (Finite State Machine - FSM); Khái niệm Polling vs Interrupt; Tư duy vòng lặp nhúng while(1); Hoàn thành DỰ ÁN CAPSTONE TỔNG HỢP.
+
+[Yêu cầu đối với Bạn (AI Mentor)]:
+1. Đóng vai Giảng viên Hướng dẫn Đồ án: Hướng dẫn tôi theo từng bước xây dựng một Dự án C Kỹ thuật hoàn chỉnh.
+2. Phương pháp dạy:
+   - Hướng dẫn tư duy thiết kế kiến trúc trước khi gõ code (Vẽ luồng FSM, định nghĩa data structure).
+   - CHỈ DÙNG NGÔN NGỮ C CHUẨN C11.
+   - Hướng dẫn tôi viết code mô phỏng chạy hoàn toàn trên máy tính (sử dụng C console, sinh dữ liệu giả lập).
+   - Đánh giá mã nguồn: Nhận xét về tính tối ưu bộ nhớ, tính mở rộng mã nguồn (Clean Code C).
+   - Đánh giá đầu ra: Chỉ xác nhận tôi hoàn thành lộ trình khi tôi tự viết được Dự án Capstone hoạt động chuẩn xác!
+
+Hãy bắt đầu ngay bằng việc chào mừng tôi đến Giai đoạn cuối, tóm tắt nhiệm vụ Capstone và tiến hành BUỔI HỌC 1: "Thuật toán xử lý dữ liệu cảm biến & Thiết kế Máy Trạng Thái FSM trong C". Bắt đầu hướng dẫn tôi!</pre>
+                    </div>
+                </div>
+            </article>
+
+        </main>
+    </div>
+
+    <!-- Toast Alert Notification -->
+    <div class="toast" id="toast">
+        <span>✓</span>
+        <span id="toast-message">Đã sao chép Prompt AI vào bộ nhớ tạm!</span>
+    </div>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Progress State Management
+        const TOTAL_STAGES = 6;
+        let completedStages = JSON.parse(localStorage.getItem('c_engineering_lab_progress')) || [];
+
+        // Initialize App on DOM Load
+        document.addEventListener('DOMContentLoaded', () => {
+            updateUI();
+            setupScrollSpy();
+        });
+
+        // Update overall UI state
+        function updateUI() {
+            // Calculate progress
+            const count = completedStages.length;
+            const percentage = Math.round((count / TOTAL_STAGES) * 100);
+
+            // Update Progress Bars & Text
+            document.getElementById('sidebar-percent').innerText = `${percentage}%`;
+            document.getElementById('sidebar-progress-bar').style.width = `${percentage}%`;
+            document.getElementById('hero-progress-text').innerText = `${count} / ${TOTAL_STAGES}`;
+
+            // Update Stage Elements
+            for (let i = 1; i <= TOTAL_STAGES; i++) {
+                const card = document.getElementById(`stage-${i}`);
+                const btn = document.getElementById(`btn-toggle-${i}`);
+                const statusLabel = document.getElementById(`status-label-${i}`);
+                const navStatus = document.getElementById(`nav-status-${i}`);
+                const navItem = document.querySelectorAll('.nav-item')[i-1];
+
+                const isDone = completedStages.includes(i);
+
+                if (isDone) {
+                    card.classList.add('completed');
+                    btn.classList.add('is-completed');
+                    btn.innerHTML = '<span>✓ Đã hoàn thành</span>';
+                    statusLabel.innerText = 'Đã hoàn thành';
+                    statusLabel.style.color = 'var(--accent-green)';
+                    if (navStatus) navStatus.parentElement.classList.add('completed');
+                } else {
+                    card.classList.remove('completed');
+                    btn.classList.remove('is-completed');
+                    btn.innerHTML = '<span>Đánh dấu hoàn thành</span>';
+                    statusLabel.innerText = 'Chưa hoàn thành';
+                    statusLabel.style.color = 'var(--text-sub)';
+                    if (navStatus) navStatus.parentElement.classList.remove('completed');
+                }
+            }
+        }
+
+        // Toggle Stage Completion
+        function toggleStageCompletion(stageNum) {
+            const index = completedStages.indexOf(stageNum);
+            if (index > -1) {
+                completedStages.splice(index, 1);
+                showToast(`Đã bỏ đánh dấu Giai đoạn ${stageNum}`);
+            } else {
+                completedStages.push(stageNum);
+                showToast(`🎉 Chúc mừng! Bạn đã hoàn thành Giai đoạn ${stageNum}`);
+            }
+            
+            // Save to LocalStorage
+            localStorage.setItem('c_engineering_lab_progress', JSON.stringify(completedStages));
+            
+            // Re-render UI
+            updateUI();
+        }
+
+        // Copy AI Prompt to Clipboard
+        function copyPrompt(elementId) {
+            const promptText = document.getElementById(elementId).innerText;
+            
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(promptText).then(() => {
+                    showToast('📋 Đã sao chép Prompt AI! Hãy dán vào AI của bạn.');
+                }).catch(err => {
+                    fallbackCopyTextToClipboard(promptText);
+                });
+            } else {
+                fallbackCopyTextToClipboard(promptText);
+            }
+        }
+
+        // Fallback Copy method for older browsers
+        function fallbackCopyTextToClipboard(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.top = "0";
+            textArea.style.left = "0";
+            textArea.style.position = "fixed";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showToast('📋 Đã sao chép Prompt AI!');
+                } else {
+                    showToast('❌ Sao chép thất bại. Vui lòng chọn thủ công.');
+                }
+            } catch (err) {
+                showToast('❌ Không thể sao chép tự động.');
+            }
+            document.body.removeChild(textArea);
+        }
+
+        // Toast Notification Function
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            toastMsg.innerText = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Smooth Scroll to Stage
+        function scrollToStage(stageId, navElement) {
+            const element = document.getElementById(stageId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            // Update Active Class in Nav
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            if (navElement) {
+                navElement.classList.add('active');
+            }
+
+            // Close mobile sidebar if open
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+            }
+        }
+
+        // Toggle Mobile Sidebar
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('open');
+        }
+
+        // ScrollSpy to highlight active menu item on scroll
+        function setupScrollSpy() {
+            window.addEventListener('scroll', () => {
+                let current = '';
+                const stages = document.querySelectorAll('.stage-card');
+                
+                stages.forEach(stage => {
+                    const stageTop = stage.offsetTop;
+                    const stageHeight = stage.clientHeight;
+                    if (pageYOffset >= (stageTop - 200)) {
+                        current = stage.getAttribute('id');
+                    }
+                });
+
+                if (current) {
+                    const stageIndex = parseInt(current.split('-')[1]) - 1;
+                    const navItems = document.querySelectorAll('.nav-item');
+                    navItems.forEach((item, idx) => {
+                        if (idx === stageIndex) {
+                            item.classList.add('active');
+                        } else {
+                            item.classList.remove('active');
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+</body>
+</html>
