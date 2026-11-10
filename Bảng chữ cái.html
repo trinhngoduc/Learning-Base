@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bảng Chữ Cái Tiếng Nhật (Hiragana & Katakana)</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f7f6;
+      color: #2b3a30;
+      margin: 0;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      color: #2e4a38;
+      margin: 0 0 18px;
+      text-align: center;
+    }
+
+    .main-section {
+      width: 100%;
+      max-width: 1400px;
+      margin-bottom: 40px;
+    }
+
+    .table-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+      align-items: start;
+    }
+
+    .table-group {
+      min-width: 0;
+    }
+
+    .alphabet-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .alphabet-tab {
+      min-width: 150px;
+      padding: 12px 20px;
+      border: 2px solid #7ea38b;
+      border-radius: 12px;
+      background: #e4eee7;
+      color: #2e4a38;
+      font: inherit;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .alphabet-tab[aria-pressed="true"] {
+      background: #2e6b45;
+      border-color: #2e6b45;
+      color: #fff;
+    }
+
+    .alphabet-tab:focus-visible {
+      outline: 3px solid #d28a2e;
+      outline-offset: 3px;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .section-title {
+      font-size: 28px;
+      color: #1b3d2b;
+      border-bottom: 2px solid #7ea38b;
+      padding-bottom: 8px;
+      margin: 0 0 18px;
+    }
+
+    .sub-title {
+      font-size: 20px;
+      color: #4a6b56;
+      min-height: 3em;
+      margin: 0 0 10px;
+    }
+
+    .table-container {
+      position: relative;
+      background-color: #d9e6dc;
+      padding: 14px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      width: fit-content;
+      max-width: 100%;
+      overflow-x: auto;
+      margin: 0 auto 20px;
+    }
+
+    table {
+      border-collapse: collapse;
+      text-align: center;
+      background-color: #e4eee7;
+    }
+
+    th, td {
+      border: 1px solid #9cb8a5;
+      width: 48px;
+      height: 54px;
+      font-size: 23px;
+      color: #2b3a30;
+      vertical-align: middle;
+      padding: 4px;
+    }
+
+    th.col-header, td.row-header {
+      font-weight: bold;
+      font-size: 16px;
+      color: #526e5b;
+      background-color: #cdded1;
+    }
+
+    .diagonal-header {
+      background: linear-gradient(to top right, #cdded1 49%, #9cb8a5 50%, #cdded1 51%);
+    }
+
+    .romaji {
+      display: block;
+      font-size: 12px;
+      color: #666;
+      font-weight: normal;
+      line-height: 1;
+      margin-top: 2px;
+    }
+
+    /* Ô đặc biệt cho chữ n (ん / ン) */
+    .extra-cell-container {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 5px;
+    }
+
+    .extra-cell {
+      width: 48px;
+      height: 54px;
+      border: 1px solid #9cb8a5;
+      background-color: #e4eee7;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-size: 23px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    @media (max-width: 900px) {
+      .table-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 16px 12px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      .alphabet-tabs {
+        width: 100%;
+        gap: 8px;
+      }
+
+      .alphabet-tab {
+        min-width: 0;
+        flex: 1;
+        padding: 10px 12px;
+        font-size: 16px;
+      }
+
+      .section-title {
+        font-size: 23px;
+      }
+
+      .table-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .sub-title {
+        min-height: 0;
+      }
+
+      th, td {
+        width: 52px;
+        height: 52px;
+        font-size: 22px;
+      }
+
+      .extra-cell {
+        width: 52px;
+        height: 52px;
+        font-size: 22px;
+      }
+
+      th.col-header, td.row-header {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>BẢNG CHỮ CÁI TIẾNG NHẬT ĐẦY ĐỦ</h1>
+
+  <nav class="alphabet-tabs" aria-label="Chọn bảng chữ cái">
+    <button class="alphabet-tab" type="button" aria-pressed="true" aria-controls="hiragana">Hiragana</button>
+    <button class="alphabet-tab" type="button" aria-pressed="false" aria-controls="katakana">Katakana</button>
+  </nav>
+
+  <!-- ==================== HIRAGANA ==================== -->
+  <div class="main-section" id="hiragana">
+    <h2 class="section-title">1. Bảng Chữ Hiragana (Chữ Mềm)</h2>
+
+    <div class="table-grid">
+      <div class="table-group">
+        <div class="sub-title">1.1. Âm Chuẩn (Gojūon)</div>
+        <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th class="diagonal-header"></th>
+            <th class="col-header">a</th>
+            <th class="col-header">i</th>
+            <th class="col-header">u</th>
+            <th class="col-header">e</th>
+            <th class="col-header">o</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="row-header">-</td><td>あ<span class="romaji">a</span></td><td>い<span class="romaji">i</span></td><td>う<span class="romaji">u</span></td><td>え<span class="romaji">e</span></td><td>お<span class="romaji">o</span></td></tr>
+          <tr><td class="row-header">k</td><td>か<span class="romaji">ka</span></td><td>き<span class="romaji">ki</span></td><td>く<span class="romaji">ku</span></td><td>け<span class="romaji">ke</span></td><td>こ<span class="romaji">ko</span></td></tr>
+          <tr><td class="row-header">s</td><td>さ<span class="romaji">sa</span></td><td>し<span class="romaji">shi</span></td><td>す<span class="romaji">su</span></td><td>せ<span class="romaji">se</span></td><td>そ<span class="romaji">so</span></td></tr>
+          <tr><td class="row-header">t</td><td>た<span class="romaji">ta</span></td><td>ち<span class="romaji">chi</span></td><td>つ<span class="romaji">tsu</span></td><td>て<span class="romaji">te</span></td><td>と<span class="romaji">to</span></td></tr>
+          <tr><td class="row-header">n</td><td>な<span class="romaji">na</span></td><td>に<span class="romaji">ni</span></td><td>ぬ<span class="romaji">nu</span></td><td>ね<span class="romaji">ne</span></td><td>の<span class="romaji">no</span></td></tr>
+          <tr><td class="row-header">h</td><td>は<span class="romaji">ha</span></td><td>ひ<span class="romaji">hi</span></td><td>ふ<span class="romaji">fu</span></td><td>へ<span class="romaji">he</span></td><td>ほ<span class="romaji">ho</span></td></tr>
+          <tr><td class="row-header">m</td><td>ま<span class="romaji">ma</span></td><td>み<span class="romaji">mi</span></td><td>む<span class="romaji">mu</span></td><td>め<span class="romaji">me</span></td><td>も<span class="romaji">mo</span></td></tr>
+          <tr><td class="row-header">y</td><td>や<span class="romaji">ya</span></td><td></td><td>ゆ<span class="romaji">yu</span></td><td></td><td>よ<span class="romaji">yo</span></td></tr>
+          <tr><td class="row-header">r</td><td>ら<span class="romaji">ra</span></td><td>り<span class="romaji">ri</span></td><td>る<span class="romaji">ru</span></td><td>れ<span class="romaji">re</span></td><td>ろ<span class="romaji">ro</span></td></tr>
+          <tr><td class="row-header">w</td><td>わ<span class="romaji">wa</span></td><td></td><td></td><td></td><td>を<span class="romaji">wo</span></td></tr>
+        </tbody>
+      </table>
+      <div class="extra-cell-container">
+        <div class="extra-cell">ん<span class="romaji">n</span></div>
+      </div>
+        </div>
+      </div>
+
+      <div class="table-group">
+        <div class="sub-title">1.2. Âm Đục & Âm Bán Đục (Dakuon / Handakuon)</div>
+        <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th class="diagonal-header"></th>
+            <th class="col-header">a</th>
+            <th class="col-header">i</th>
+            <th class="col-header">u</th>
+            <th class="col-header">e</th>
+            <th class="col-header">o</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="row-header">g</td><td>が<span class="romaji">ga</span></td><td>ぎ<span class="romaji">gi</span></td><td>ぐ<span class="romaji">gu</span></td><td>げ<span class="romaji">ge</span></td><td>ご<span class="romaji">go</span></td></tr>
+          <tr><td class="row-header">z</td><td>ざ<span class="romaji">za</span></td><td>じ<span class="romaji">ji</span></td><td>ず<span class="romaji">zu</span></td><td>ぜ<span class="romaji">ze</span></td><td>ぞ<span class="romaji">zo</span></td></tr>
+          <tr><td class="row-header">d</td><td>だ<span class="romaji">da</span></td><td>ぢ<span class="romaji">ji</span></td><td>づ<span class="romaji">zu</span></td><td>で<span class="romaji">de</span></td><td>ど<span class="romaji">do</span></td></tr>
+          <tr><td class="row-header">b</td><td>ば<span class="romaji">ba</span></td><td>び<span class="romaji">bi</span></td><td>ぶ<span class="romaji">bu</span></td><td>べ<span class="romaji">be</span></td><td>ぼ<span class="romaji">bo</span></td></tr>
+          <tr><td class="row-header">p</td><td>ぱ<span class="romaji">pa</span></td><td>ぴ<span class="romaji">pi</span></td><td>ぷ<span class="romaji">pu</span></td><td>ぺ<span class="romaji">pe</span></td><td>ぽ<span class="romaji">po</span></td></tr>
+        </tbody>
+      </table>
+        </div>
+      </div>
+
+      <div class="table-group">
+        <div class="sub-title">1.3. Âm Ghép (Yōon)</div>
+        <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th class="diagonal-header"></th>
+            <th class="col-header">ya</th>
+            <th class="col-header">yu</th>
+            <th class="col-header">yo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="row-header">k</td><td>きゃ<span class="romaji">kya</span></td><td>きゅ<span class="romaji">kyu</span></td><td>きょ<span class="romaji">kyo</span></td></tr>
+          <tr><td class="row-header">s</td><td>しゃ<span class="romaji">sha</span></td><td>しゅ<span class="romaji">shu</span></td><td>しょ<span class="romaji">sho</span></td></tr>
+          <tr><td class="row-header">c</td><td>ちゃ<span class="romaji">cha</span></td><td>ちゅ<span class="romaji">chu</span></td><td>ちょ<span class="romaji">cho</span></td></tr>
+          <tr><td class="row-header">n</td><td>にゃ<span class="romaji">nya</span></td><td>にゅ<span class="romaji">nyu</span></td><td>にょ<span class="romaji">nyo</span></td></tr>
+          <tr><td class="row-header">h</td><td>ひゃ<span class="romaji">hya</span></td><td>ひゅ<span class="romaji">hyu</span></td><td>ひょ<span class="romaji">hyo</span></td></tr>
+          <tr><td class="row-header">m</td><td>みゃ<span class="romaji">mya</span></td><td>みゅ<span class="romaji">myu</span></td><td>みょ<span class="romaji">myo</span></td></tr>
+          <tr><td class="row-header">r</td><td>りゃ<span class="romaji">rya</span></td><td>りゅ<span class="romaji">ryu</span></td><td>りょ<span class="romaji">ryo</span></td></tr>
+          <tr><td class="row-header">g</td><td>ぎゃ<span class="romaji">gya</span></td><td>ぎゅ<span class="romaji">gyu</span></td><td>ぎょ<span class="romaji">gyo</span></td></tr>
+          <tr><td class="row-header">j</td><td>じゃ<span class="romaji">ja</span></td><td>じゅ<span class="romaji">ju</span></td><td>じょ<span class="romaji">jo</span></td></tr>
+          <tr><td class="row-header">b</td><td>びゃ<span class="romaji">bya</span></td><td>びゅ<span class="romaji">byu</span></td><td>びょ<span class="romaji">byo</span></td></tr>
+          <tr><td class="row-header">p</td><td>ぴゃ<span class="romaji">pya</span></td><td>ぴゅ<span class="romaji">pyu</span></td><td>ぴょ<span class="romaji">pyo</span></td></tr>
+        </tbody>
+      </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== KATAKANA ==================== -->
+  <div class="main-section" id="katakana" hidden>
+    <h2 class="section-title">2. Bảng Chữ Katakana (Chữ Cứng)</h2>
+
+    <div class="table-grid">
+      <div class="table-group">
+        <div class="sub-title">2.1. Âm Chuẩn (Gojūon)</div>
+        <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th class="diagonal-header"></th>
+            <th class="col-header">a</th>
+            <th class="col-header">i</th>
+            <th class="col-header">u</th>
+            <th class="col-header">e</th>
+            <th class="col-header">o</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="row-header">-</td><td>ア<span class="romaji">a</span></td><td>イ<span class="romaji">i</span></td><td>ウ<span class="romaji">u</span></td><td>エ<span class="romaji">e</span></td><td>オ<span class="romaji">o</span></td></tr>
+          <tr><td class="row-header">k</td><td>カ<span class="romaji">ka</span></td><td>キ<span class="romaji">ki</span></td><td>ク<span class="romaji">ku</span></td><td>ケ<span class="romaji">ke</span></td><td>コ<span class="romaji">ko</span></td></tr>
+          <tr><td class="row-header">s</td><td>サ<span class="romaji">sa</span></td><td>シ<span class="romaji">shi</span></td><td>ス<span class="romaji">su</span></td><td>セ<span class="romaji">se</span></td><td>ソ<span class="romaji">so</span></td></tr>
+          <tr><td class="row-header">t</td><td>タ<span class="romaji">ta</span></td><td>チ<span class="romaji">chi</span></td><td>ツ<span class="romaji">tsu</span></td><td>テ<span class="romaji">te</span></td><td>ト<span class="romaji">to</span></td></tr>
+          <tr><td class="row-header">n</td><td>ナ<span class="romaji">na</span></td><td>ニ<span class="romaji">ni</span></td><td>ヌ<span class="romaji">nu</span></td><td>ネ<span class="romaji">ne</span></td><td>ノ<span class="romaji">no</span></td></tr>
+          <tr><td class="row-header">h</td><td>ハ<span class="romaji">ha</span></td><td>ヒ<span class="romaji">hi</span></td><td>フ<span class="romaji">fu</span></td><td>ヘ<span class="romaji">he</span></td><td>ホ<span class="romaji">ho</span></td></tr>
+          <tr><td class="row-header">m</td><td>マ<span class="romaji">ma</span></td><td>ミ<span class="romaji">mi</span></td><td>ム<span class="romaji">mu</span></td><td>メ<span class="romaji">me</span></td><td>モ<span class="romaji">mo</span></td></tr>
+          <tr><td class="row-header">y</td><td>ヤ<span class="romaji">ya</span></td><td></td><td>ユ<span class="romaji">yu</span></td><td></td><td>ヨ<span class="romaji">yo</span></td></tr>
+          <tr><td class="row-header">r</td><td>ラ<span class="romaji">ra</span></td><td>リ<span class="romaji">ri</span></td><td>ル<span class="romaji">ru</span></td><td>レ<span class="romaji">re</span></td><td>ロ<span class="romaji">ro</span></td></tr>
+          <tr><td class="row-header">w</td><td>ワ<span class="romaji">wa</span></td><td></td><td></td><td></td><td>ヲ<span class="romaji">wo</span></td></tr>
+        </tbody>
+      </table>
+      <div class="extra-cell-container">
+        <div class="extra-cell">ン<span class="romaji">n</span></div>
+      </div>
+        </div>
+      </div>
+
+      <div class="table-group">
+        <div class="sub-title">2.2. Âm Đục & Âm Bán Đục (Dakuon / Handakuon)</div>
+        <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th class="diagonal-header"></th>
+            <th class="col-header">a</th>
+            <th class="col-header">i</th>
+            <th class="col-header">u</th>
+            <th class="col-header">e</th>
+            <th class="col-header">o</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="row-header">g</td><td>ガ<span class="romaji">ga</span></td><td>ギ<span class="romaji">gi</span></td><td>グ<span class="romaji">gu</span></td><td>ゲ<span class="romaji">ge</span></td><td>ゴ<span class="romaji">go</span></td></tr>
+          <tr><td class="row-header">z</td><td>ザ<span class="romaji">za</span></td><td>ジ<span class="romaji">ji</span></td><td>ズ<span class="romaji">zu</span></td><td>ゼ<span class="romaji">ze</span></td><td>ゾ<span class="romaji">zo</span></td></tr>
+          <tr><td class="row-header">d</td><td>ダ<span class="romaji">da</span></td><td>ヂ<span class="romaji">ji</span></td><td>ヅ<span class="romaji">zu</span></td><td>デ<span class="romaji">de</span></td><td>ド<span class="romaji">do</span></td></tr>
+          <tr><td class="row-header">b</td><td>バ<span class="romaji">ba</span></td><td>ビ<span class="romaji">bi</span></td><td>ブ<span class="romaji">bu</span></td><td>ベ<span class="romaji">be</span></td><td>ボ<span class="romaji">bo</span></td></tr>
+          <tr><td class="row-header">p</td><td>パ<span class="romaji">pa</span></td><td>ピ<span class="romaji">pi</span></td><td>プ<span class="romaji">pu</span></td><td>ペ<span class="romaji">pe</span></td><td>ポ<span class="romaji">po</span></td></tr>
+        </tbody>
+      </table>
+        </div>
+      </div>
+
+      <div class="table-group">
+        <div class="sub-title">2.3. Âm Ghép (Yōon)</div>
+        <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th class="diagonal-header"></th>
+            <th class="col-header">ya</th>
+            <th class="col-header">yu</th>
+            <th class="col-header">yo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="row-header">k</td><td>キャ<span class="romaji">kya</span></td><td>キュ<span class="romaji">kyu</span></td><td>キョ<span class="romaji">kyo</span></td></tr>
+          <tr><td class="row-header">s</td><td>シャ<span class="romaji">sha</span></td><td>シュ<span class="romaji">shu</span></td><td>ショ<span class="romaji">sho</span></td></tr>
+          <tr><td class="row-header">c</td><td>チャ<span class="romaji">cha</span></td><td>チュ<span class="romaji">chu</span></td><td>チョ<span class="romaji">cho</span></td></tr>
+          <tr><td class="row-header">n</td><td>ニャ<span class="romaji">nya</span></td><td>ニュ<span class="romaji">nyu</span></td><td>ニョ<span class="romaji">nyo</span></td></tr>
+          <tr><td class="row-header">h</td><td>ヒャ<span class="romaji">hya</span></td><td>ヒュ<span class="romaji">hyu</span></td><td>ヒョ<span class="romaji">hyo</span></td></tr>
+          <tr><td class="row-header">m</td><td>ミャ<span class="romaji">mya</span></td><td>ミュ<span class="romaji">myu</span></td><td>ミョ<span class="romaji">myo</span></td></tr>
+          <tr><td class="row-header">r</td><td>リャ<span class="romaji">rya</span></td><td>リュ<span class="romaji">ryu</span></td><td>リョ<span class="romaji">ryo</span></td></tr>
+          <tr><td class="row-header">g</td><td>ギャ<span class="romaji">gya</span></td><td>ギュ<span class="romaji">gyu</span></td><td>ギョ<span class="romaji">gyo</span></td></tr>
+          <tr><td class="row-header">j</td><td>ジャ<span class="romaji">ja</span></td><td>ジュ<span class="romaji">ju</span></td><td>ジョ<span class="romaji">jo</span></td></tr>
+          <tr><td class="row-header">b</td><td>ビャ<span class="romaji">bya</span></td><td>ビュ<span class="romaji">byu</span></td><td>ビョ<span class="romaji">byo</span></td></tr>
+          <tr><td class="row-header">p</td><td>ピャ<span class="romaji">pya</span></td><td>ピュ<span class="romaji">pyu</span></td><td>ピョ<span class="romaji">pyo</span></td></tr>
+        </tbody>
+      </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const alphabetTabs = document.querySelectorAll('.alphabet-tab');
+    const alphabetSections = document.querySelectorAll('.main-section');
+
+    alphabetTabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const selectedSection = tab.getAttribute('aria-controls');
+
+        alphabetTabs.forEach((item) => {
+          item.setAttribute('aria-pressed', String(item === tab));
+        });
+
+        alphabetSections.forEach((section) => {
+          section.hidden = section.id !== selectedSection;
+        });
+      });
+    });
+  </script>
+</body>
+</html>
